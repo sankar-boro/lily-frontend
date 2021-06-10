@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Login from "./components/login/index";
+import Blog from "./components/blog/index";
+import { BasicContext } from "./BasicContextProvider";
 
-function App() {
+const App: React.FC = (): JSX.Element => {
+  const [auth, updateAuth] = useState(false);
+  const [init, setInit] = useState(false);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("auth");
+    if (token && token.length > 0) {
+      updateAuth(true);
+    }
+    setInit(true);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BasicContext.Provider value={{ auth, updateAuth, init }}>
+      {auth ? <Blog /> : <Login />}
+    </BasicContext.Provider>
   );
-}
+};
 
 export default App;
