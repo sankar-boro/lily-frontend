@@ -51,15 +51,14 @@ const Login = () => {
           }}
         />
         <br />
-        <button
-          type="submit"
+        <input
+          type="button"
+          value="Submit"
           onClick={(e) => {
             e.preventDefault();
             login();
           }}
-        >
-          Login
-        </button>
+        />
       </form>
 
       <Link to="/signup">Sign up</Link>

@@ -4,10 +4,10 @@ import { useBasicContext } from "../BasicContextProvider";
 import { Link, useHistory } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("sankar.boro@yahoo.com");
+  const [password, setPassword] = useState("sankar");
+  const [firstname, setFirstname] = useState("Sankar");
+  const [lastname, setLastname] = useState("boro");
   const history = useHistory();
   //
   const signup = () => {
@@ -18,9 +18,14 @@ const Login = () => {
         fname: firstname,
         lname: lastname,
       })
-      .then((res: AxiosResponse<any>) => {
-        history.goBack();
-        console.log("Signup", res);
+      .then((res: AxiosResponse<{ status: number }>) => {
+        if (
+          res.status &&
+          typeof res.status === "number" &&
+          res.status === 200
+        ) {
+          history.goBack();
+        }
       })
       .catch((err: AxiosError<any>) => {
         console.log("SignupError", err);
@@ -36,6 +41,7 @@ const Login = () => {
           placeholder="Email*"
           name="email"
           required
+          defaultValue="sankar.boro@yahoo.com"
           onChange={(e) => {
             e.preventDefault();
             setEmail(e.target.value);
@@ -47,6 +53,7 @@ const Login = () => {
           placeholder="First Name"
           name="firstname"
           required
+          defaultValue="Sankar"
           onChange={(e) => {
             e.preventDefault();
             setFirstname(e.target.value);
@@ -58,6 +65,7 @@ const Login = () => {
           placeholder="Last Name"
           name="lastname"
           required
+          defaultValue="boro"
           onChange={(e) => {
             e.preventDefault();
             setLastname(e.target.value);
@@ -69,20 +77,21 @@ const Login = () => {
           placeholder="Password*"
           name="password"
           required
+          defaultValue="sankar"
           onChange={(e) => {
             e.preventDefault();
             setPassword(e.target.value);
           }}
         />
         <br />
-        <button
-          type="submit"
-          onClick={() => {
+        <input
+          type="button"
+          value="Submit"
+          onClick={(e) => {
+            e.preventDefault();
             signup();
           }}
-        >
-          Sign Up
-        </button>
+        />
       </form>
 
       <Link to="/">Login</Link>
