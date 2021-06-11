@@ -1,21 +1,24 @@
 import React, { useContext, useState } from "react";
 
-//
-export type Basic = {
+/**
+ * @types are the only ones that needs to be declared
+ * when initializing data
+ */
+export type AuthService = {
   auth: boolean;
   authenticateUser: () => void;
   logoutUser: () => void;
 };
 
-//
-export const BasicContext = React.createContext<Basic>({
+// default values
+export const AuthContext = React.createContext<AuthService>({
   auth: false,
   authenticateUser: () => {},
   logoutUser: () => {},
 });
 
 //
-export const useBasicContext = () => useContext(BasicContext);
+export const useAuthContext = () => useContext(AuthContext);
 
 //
 function isAuthUser() {
@@ -26,7 +29,7 @@ function isAuthUser() {
 }
 
 //
-const BasicContextProvider = (props: { children: object }) => {
+const AuthServiceProvider = (props: { children: object }) => {
   const _isauthUser = isAuthUser();
   const [auth, setAuth] = useState(_isauthUser);
   //
@@ -39,7 +42,7 @@ const BasicContextProvider = (props: { children: object }) => {
   };
   //
   return (
-    <BasicContext.Provider
+    <AuthContext.Provider
       value={{
         auth,
         authenticateUser,
@@ -47,9 +50,9 @@ const BasicContextProvider = (props: { children: object }) => {
       }}
     >
       {props.children}
-    </BasicContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
 //
-export default BasicContextProvider;
+export default AuthServiceProvider;

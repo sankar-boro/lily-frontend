@@ -1,9 +1,9 @@
 import React from "react";
-import { useBasicContext, Basic } from "../BasicContextProvider";
+import { useAuthContext, AuthService } from "../AuthServiceProvider";
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
-const logout = (e: OnClickEvent, context: Basic) => {
+const logout = (e: OnClickEvent, context: AuthService) => {
   e.preventDefault();
   if (localStorage.getItem("auth")) {
     localStorage.removeItem("auth");
@@ -12,7 +12,7 @@ const logout = (e: OnClickEvent, context: Basic) => {
 };
 
 const Home = () => {
-  const context = useBasicContext();
+  const context = useAuthContext();
   return (
     <div>
       Home

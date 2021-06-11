@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import BasicContextProvider, { useBasicContext } from "./BasicContextProvider";
+import AuthServiceProvider, { useAuthContext } from "./AuthServiceProvider";
 
 //
 const AuthRoute = () => {
@@ -35,7 +35,7 @@ const NotAuthRoute = () => {
 
 //
 const CurrentComponents = () => {
-  const context = useBasicContext();
+  const context = useAuthContext();
   const { auth } = context;
 
   if (auth) return <AuthRoute />;
@@ -45,9 +45,9 @@ const CurrentComponents = () => {
 //
 const AppRoute = () => {
   return (
-    <BasicContextProvider>
+    <AuthServiceProvider>
       <CurrentComponents />
-    </BasicContextProvider>
+    </AuthServiceProvider>
   );
 };
 

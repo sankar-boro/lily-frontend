@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useBasicContext } from "../BasicContextProvider";
 import { Link, useHistory } from "react-router-dom";
 
 const Login = () => {

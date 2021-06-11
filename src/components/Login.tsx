@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useBasicContext } from "../BasicContextProvider";
+import { useAuthContext } from "../AuthServiceProvider";
 import { Link } from "react-router-dom";
 
 const inputs = {
@@ -22,7 +22,7 @@ const inputs = {
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const context = useBasicContext();
+  const context = useAuthContext();
   //
   const login = () => {
     axios
