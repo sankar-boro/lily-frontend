@@ -1,24 +1,14 @@
-import React, { useState, useEffect } from "react";
-import Login from "./components/login/index";
-import Blog from "./components/blog/index";
-import { BasicContext } from "./BasicContextProvider";
+import React from "react";
+import RouteComponent, { Router } from "./route";
+import Home from "./components/home";
+import Login from "./components/login";
 
-const App: React.FC = (): JSX.Element => {
-  const [auth, updateAuth] = useState(false);
-  const [init, setInit] = useState(false);
-
-  useEffect(() => {
-    const token = sessionStorage.getItem("auth");
-    if (token && token.length > 0) {
-      updateAuth(true);
-    }
-    setInit(true);
-  }, []);
-
+const App = () => {
   return (
-    <BasicContext.Provider value={{ auth, updateAuth, init }}>
-      {auth ? <Blog /> : <Login />}
-    </BasicContext.Provider>
+    <RouteComponent>
+      <Router component={Home} route="/" />
+      <Router component={Login} route="/login" />
+    </RouteComponent>
   );
 };
 
