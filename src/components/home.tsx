@@ -1,19 +1,9 @@
 import React from "react";
 
-const Home = () => {
-  return (
-    <div>
-      Home
-      <a
-        href="#login"
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-      >
-        Take me to login
-      </a>
-    </div>
-  );
-};
+class Home extends React.Component {
+  render() {
+    return <div>Home</div>;
+  }
+}
 
 export default Home;

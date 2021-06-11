@@ -50,10 +50,10 @@ const RouteComponent = (props: any) => {
   const [currentComponent, setCurrentComponent] = useState(firstComponent);
   const [Component, setComponent] = useState<RouteElements>(newElement);
 
-  console.log(currentComponent);
+  let ONE = Component[currentComponent];
   return (
     <RouteContext.Provider value={{ routes: {} }}>
-      {Component[currentComponent]()}
+      <ONE />
     </RouteContext.Provider>
   );
 };
