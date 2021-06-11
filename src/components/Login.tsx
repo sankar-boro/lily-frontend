@@ -3,6 +3,22 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { useBasicContext } from "../BasicContextProvider";
 import { Link } from "react-router-dom";
 
+const inputs = {
+  email: {
+    type: "text",
+    placeholder: "Email*",
+    name: "email",
+    required: true,
+  },
+  password: {
+    type: "password",
+    placeholder: "Password*",
+    name: "password",
+    required: true,
+  },
+};
+
+//
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,10 +46,7 @@ const Login = () => {
     <>
       <form action="#" method="post">
         <input
-          type="text"
-          placeholder="Email*"
-          name="email"
-          required
+          {...inputs.email}
           onChange={(e) => {
             e.preventDefault();
             setEmail(e.target.value);
@@ -41,10 +54,7 @@ const Login = () => {
         />
         <br />
         <input
-          type="password"
-          placeholder="Password*"
-          name="password"
-          required
+          {...inputs.password}
           onChange={(e) => {
             e.preventDefault();
             setPassword(e.target.value);
