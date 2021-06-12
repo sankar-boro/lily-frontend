@@ -26,14 +26,22 @@ const Login = () => {
   //
   const login = () => {
     axios
-      .post("http://localhost:8000/login", {
-        email,
-        password,
-      })
+      .post(
+        "http://localhost:8000/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((res: AxiosResponse<{ token: string }>) => {
         if (res && res.data && res.data.token) {
-          localStorage.setItem("auth", res.data.token);
-          context.authenticateUser();
+          const token = res.data.token;
+          console.log(token);
+          localStorage.setItem("auth", token);
+          context.authenticateUser(token);
         }
       })
       .catch((err: AxiosError<any>) => {
