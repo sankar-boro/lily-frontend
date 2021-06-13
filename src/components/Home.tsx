@@ -5,9 +5,27 @@ import { Link, useHistory } from "react-router-dom";
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
-const logout = (e: OnClickEvent, context: AuthService) => {
+const logout = (e: OnClickEvent, context: AuthService, token: string) => {
   e.preventDefault();
-  context.logoutUser();
+  axios
+    .post(
+      "http://localhost:8000/logout",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res: AxiosResponse<{ status: number }>) => {
+      if (res.status && typeof res.status === "number" && res.status === 200) {
+        context.logoutUser();
+      }
+    })
+    .catch((err: AxiosError<any>) => {
+      console.log("Logout Error", err.response);
+    });
 };
 
 const Home = () => {
@@ -30,7 +48,7 @@ const Home = () => {
         My name is {userInfo?.fname} {userInfo?.lname}{" "}
       </div>
       {NewDocumentForm(sessionToken, userInfo?.userId)}
-      <button onClick={(e) => logout(e, context)}>Logout</button>
+      <button onClick={(e) => logout(e, context, sessionToken)}>Logout</button>
     </div>
   );
 };
@@ -67,7 +85,7 @@ const NewDocumentForm = (token: string, userId: string | undefined) => {
         }
       })
       .catch((err: AxiosError<any>) => {
-        console.log("SignupError", err);
+        console.log("SignupError", err.response);
       });
   };
 
