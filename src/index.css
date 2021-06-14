@@ -1,0 +1,53 @@
+html,
+body,
+#root,
+.app-container {
+    margin: 0;
+    padding: 0;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 15px;
+    height: 100% !important;
+}
+.body-home {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    height: 32px;
+}
+.nav-main-left,
+.nav-main-center,
+.nav-main-right {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+.navbar-left {
+    min-width: 15%;
+    background-color: #f1f1f1;
+}
+.body-container {
+}
+.nav-section {
+    height: 100%;
+    border-left: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 20px;
+}
+.nav-section:hover {
+    cursor: pointer;
+}
+.button-nav {
+    border: none;
+    background-color: white;
+    border-left: 1px solid #ccc;
+}

@@ -1,125 +1,78 @@
-import React, { useContext, useState } from "react";
-import jwt from "jsonwebtoken";
+import React, { useContext, useEffect, useState } from "react";
 import { Option, None, Some } from "ts-results";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
-/**
- * @types are the only ones that needs to be declared
- * when initializing data
- */
-export type AuthService = {
-  auth: boolean;
-  authUserData: Option<{
+export type UserInfo = {
     userId: string;
     fname: string;
     lname: string;
-  }>;
-  authToken: Option<string>;
-  authenticateUser: (token: string) => void;
-  logoutUser: () => void;
+    email: string;
 };
-
-// default values
+export type AuthService = {
+    initializing: boolean;
+    auth: boolean;
+    authUserData: Option<UserInfo>;
+    authToken: Option<string>;
+    authenticateUser: (token: UserInfo) => void;
+    logoutUser: () => void;
+};
 export const AuthContext = React.createContext<AuthService>({
-  auth: false,
-  authUserData: None,
-  authToken: None,
-  authenticateUser: (token: string) => {},
-  logoutUser: () => {},
+    initializing: true,
+    auth: false,
+    authUserData: None,
+    authToken: None,
+    authenticateUser: (token: UserInfo) => {},
+    logoutUser: () => {},
 });
-
-//
 export const useAuthContext = () => useContext(AuthContext);
-
-function getAuthToken(): Option<string> {
-  let token = localStorage.getItem("auth");
-  if (token) return Some(token);
-  return None;
-}
-
-type UserInfo = {
-  userId: string;
-  fname: string;
-  lname: string;
-};
-
-function getSessionData(): [Option<UserInfo>, Option<string>, boolean] {
-  let authToken = getAuthToken();
-  if (authToken.some) {
-    const decode: { [key: string]: any } | string | null = jwt.decode(
-      authToken.val
-    );
-    if (typeof decode === "object" && decode) {
-      console.log("decode", decode);
-      return [
-        Some({
-          userId: decode.id,
-          fname: decode.fname,
-          lname: decode.lname,
-        }),
-        Some(authToken.val),
-        true,
-      ];
-    }
-  }
-  return [None, None, false];
-}
-
-async function decodeAuthToken(token: string): Promise<Option<UserInfo>> {
-  const decode: { [key: string]: any } | string | null = jwt.decode(token);
-  if (typeof decode === "object" && decode) {
-    return Some({
-      userId: decode.id,
-      fname: decode.fname,
-      lname: decode.lname,
-    });
-  }
-  return None;
-}
-
 function clearAllStorage() {
-  localStorage.removeItem("auth");
+    localStorage.removeItem("auth");
 }
-
-//
 const AuthServiceProvider = (props: { children: object }) => {
-  const session = getSessionData();
-  const isAuth = session[2];
-  const userInfo = session[0];
-  const sessionToken = session[1];
-
-  const [authUserData, setAuthUserData] = useState<Option<UserInfo>>(userInfo);
-  const [auth, setAuth] = useState<boolean>(isAuth);
-  const [authToken, setAuthToken] = useState<Option<string>>(sessionToken);
-  //
-  const authenticateUser = async (token: string) => {
-    setAuthToken(Some(token));
-    let decodeToken = await decodeAuthToken(token);
-    console.log("decodeToken", decodeToken);
-    setAuthUserData(decodeToken);
-    setAuth(true);
-  };
-  //
-  const logoutUser = () => {
-    setAuth(false);
-    clearAllStorage();
-    setAuthUserData(None);
-    setAuthToken(None);
-  };
-  //
-  return (
-    <AuthContext.Provider
-      value={{
-        auth,
-        authUserData,
-        authToken,
-        authenticateUser,
-        logoutUser,
-      }}
-    >
-      {props.children}
-    </AuthContext.Provider>
-  );
+    const [initializing, setInitializing] = useState(true);
+    const [authUserData, setAuthUserData] = useState<Option<UserInfo>>(None);
+    const [auth, setAuth] = useState<boolean>(false);
+    const [authToken, setAuthToken] = useState<Option<string>>(None);
+    useEffect(() => {
+        axios
+            .get("http://localhost:8000/user/session", {
+                withCredentials: true,
+            })
+            .then((res: AxiosResponse<UserInfo>) => {
+                if (res && res.data) {
+                    authenticateUser(res.data);
+                    setInitializing(false);
+                    setInitializing(false);
+                }
+            })
+            .catch((err: AxiosError<any>) => {
+                console.log(err);
+                setInitializing(false);
+            });
+    }, []);
+    const authenticateUser = async (userInfo: UserInfo) => {
+        setAuthUserData(Some(userInfo));
+        setAuth(true);
+    };
+    const logoutUser = () => {
+        setAuth(false);
+        clearAllStorage();
+        setAuthUserData(None);
+        setAuthToken(None);
+    };
+    return (
+        <AuthContext.Provider
+            value={{
+                auth,
+                authUserData,
+                authToken,
+                initializing,
+                authenticateUser,
+                logoutUser,
+            }}
+        >
+            {props.children}
+        </AuthContext.Provider>
+    );
 };
-
-//
 export default AuthServiceProvider;
