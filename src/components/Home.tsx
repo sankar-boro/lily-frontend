@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuthContext, AuthService } from "../AuthServiceProvider";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import "./index.css";
+import { documents as docs } from "./data";
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -100,25 +101,25 @@ const Home = () => {
 };
 
 const AllDocuments = () => {
-    const [documents, setDocuments] = useState([]);
-    useEffect(() => {
-        axios
-            .get("http://localhost:8000/post/all", {
-                withCredentials: true,
-            })
-            .then((res: AxiosResponse<[]>) => {
-                if (
-                    res.status &&
-                    typeof res.status === "number" &&
-                    res.status === 200
-                ) {
-                    setDocuments(res.data);
-                }
-            })
-            .catch((err: AxiosError<any>) => {
-                console.log("Failed to get document", err.response);
-            });
-    }, []);
+    const [documents, setDocuments] = useState(docs);
+    // useEffect(() => {
+    //     axios
+    //         .get("http://localhost:8000/post/all", {
+    //             withCredentials: true,
+    //         })
+    //         .then((res: AxiosResponse<[]>) => {
+    //             if (
+    //                 res.status &&
+    //                 typeof res.status === "number" &&
+    //                 res.status === 200
+    //             ) {
+    //                 setDocuments(res.data);
+    //             }
+    //         })
+    //         .catch((err: AxiosError<any>) => {
+    //             console.log("Failed to get document", err.response);
+    //         });
+    // }, []);
     return (
         <>
             {documents.map(
@@ -135,7 +136,9 @@ const AllDocuments = () => {
                                 <div className="document-title">
                                     {data.title}
                                 </div>
-                                <div className="document-body">{data.body}</div>
+                                <div className="document-body">
+                                    {data.body.substr(0, 350)}
+                                </div>
                             </div>
                         </div>
                     );
@@ -209,7 +212,7 @@ const NewDocumentForm = (props: {
                 <textarea
                     id="body"
                     name="Body"
-                    rows={4}
+                    rows={12}
                     cols={50}
                     onChange={(e) => {
                         e.preventDefault();
@@ -219,6 +222,7 @@ const NewDocumentForm = (props: {
                 />
                 <br />
                 <input
+                    className="new-doc-submit-btn"
                     type="button"
                     value="Submit"
                     onClick={(e) => {

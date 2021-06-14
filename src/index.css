@@ -4,7 +4,7 @@ body,
 .app-container {
     margin: 0;
     padding: 0;
-    font-family: "Times New Roman", Times, serif;
+    font-family: serif;
     font-size: 15px;
     height: 100% !important;
 }
@@ -50,4 +50,15 @@ body,
     border: none;
     background-color: white;
     border-left: 1px solid #ccc;
+}
+input,
+textarea {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 8px;
+    min-width: 550px;
+    max-width: 550px;
+}
+.new-doc-submit-btn {
+    min-width: 100px;
 }
