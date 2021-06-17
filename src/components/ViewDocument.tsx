@@ -12,7 +12,7 @@ type Location = {
 };
 const ViewDocument = () => {
     const history: any = useHistory();
-    const [edit, setEdit] = useState(true);
+    const [edit, setEdit] = useState(false);
     const location: Location = history.location;
     const state = location.state;
     const { documentId, title, body, tags } = state;
@@ -44,6 +44,29 @@ const ViewDocument = () => {
             })
             .catch((err: AxiosError<any>) => {
                 console.log("updateerror", err.response);
+            });
+    };
+
+    const deleteDocument = () => {
+        axios
+            .post(
+                `http://localhost:8000/post/delete/${documentId}`,
+                {},
+                {
+                    withCredentials: true,
+                }
+            )
+            .then((res: AxiosResponse<{ status: number }>) => {
+                if (
+                    res.status &&
+                    typeof res.status === "number" &&
+                    res.status === 200
+                ) {
+                    console.log(res);
+                }
+            })
+            .catch((err: AxiosError<any>) => {
+                console.log("deleteerror", err.response);
             });
     };
 
@@ -100,7 +123,15 @@ const ViewDocument = () => {
         );
     return (
         <div className="document-details documents-container" key={documentId}>
-            <div>
+            <div
+                onClick={(e) => {
+                    e.preventDefault();
+                    deleteDocument();
+                }}
+            >
+                Delete
+            </div>
+            <div style={{ width: "60%" }}>
                 <div className="document-title">{title}</div>
                 <div className="document-body">{body.substr(0, 350)}</div>
             </div>
