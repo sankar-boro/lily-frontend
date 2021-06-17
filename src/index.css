@@ -13,7 +13,9 @@ body,
     flex-direction: row;
     height: 100%;
 }
-
+a {
+    text-decoration: none;
+}
 .navbar {
     display: flex;
     flex-direction: row;
@@ -34,6 +36,7 @@ body,
     background-color: #f1f1f1;
 }
 .body-container {
+    width: 100%;
 }
 .nav-section {
     height: 100%;

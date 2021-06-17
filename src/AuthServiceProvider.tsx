@@ -38,25 +38,25 @@ const AuthServiceProvider = (props: { children: object }) => {
             email: "sankar.boro@yahoo.com",
         })
     );
-    const [auth, setAuth] = useState<boolean>(true);
+    const [auth, setAuth] = useState<boolean>(false);
     const [authToken, setAuthToken] = useState<Option<string>>(None);
-    // useEffect(() => {
-    //     axios
-    //         .get("http://localhost:8000/user/session", {
-    //             withCredentials: true,
-    //         })
-    //         .then((res: AxiosResponse<UserInfo>) => {
-    //             if (res && res.data) {
-    //                 authenticateUser(res.data);
-    //                 setInitializing(false);
-    //                 setInitializing(false);
-    //             }
-    //         })
-    //         .catch((err: AxiosError<any>) => {
-    //             console.log(err);
-    //             setInitializing(false);
-    //         });
-    // }, []);
+    useEffect(() => {
+        axios
+            .get("http://localhost:8000/user/session", {
+                withCredentials: true,
+            })
+            .then((res: AxiosResponse<UserInfo>) => {
+                if (res && res.data) {
+                    authenticateUser(res.data);
+                    setInitializing(false);
+                    setInitializing(false);
+                }
+            })
+            .catch((err: AxiosError<any>) => {
+                console.log(err);
+                setInitializing(false);
+            });
+    }, []);
     const authenticateUser = async (userInfo: UserInfo) => {
         setAuthUserData(Some(userInfo));
         setAuth(true);

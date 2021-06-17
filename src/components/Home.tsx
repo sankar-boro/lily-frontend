@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { useAuthContext, AuthService } from "../AuthServiceProvider";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import "./index.css";
 import { documents as docs } from "./data";
+import { useHistory } from "react-router";
+import { Switch, Route, Link } from "react-router-dom";
+import ViewDocument from "./ViewDocument";
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -46,7 +49,9 @@ const Home = () => {
         <div className="app-container">
             <div className="navbar navbar-main">
                 <div className="nav-main-left">
-                    <div className="nav-section">Lily</div>
+                    <div className="nav-section">
+                        <Link to="/">Lily</Link>
+                    </div>
                     <div className="nav-section">Search</div>
                 </div>
                 <div className="nav-main-center"></div>
@@ -83,43 +88,72 @@ const Home = () => {
                         </div>
                         <div className="settings"></div>
                     </div>
-                    {createNewDocument
-                        ? NewDocumentForm({
-                              title,
-                              tags,
-                              body,
-                              setTitle,
-                              setTags,
-                              setBody,
-                          })
-                        : null}
-                    <div className="documents-container">{AllDocuments()}</div>
+
+                    <Switch>
+                        <Route path="/document">
+                            <ViewDocument />
+                        </Route>
+                        <Route path="/">
+                            <HomeDocBody
+                                home={{
+                                    createNewDocument,
+                                    title,
+                                    tags,
+                                    body,
+                                    setTitle,
+                                    setTags,
+                                    setBody,
+                                }}
+                            />
+                        </Route>
+                    </Switch>
                 </div>
             </div>
         </div>
     );
 };
 
+const HomeDocBody = (props: any) => {
+    const { createNewDocument, title, tags, body, setTitle, setBody, setTags } =
+        props;
+    return (
+        <>
+            {createNewDocument
+                ? NewDocumentForm({
+                      title,
+                      tags,
+                      body,
+                      setTitle,
+                      setTags,
+                      setBody,
+                  })
+                : null}
+            <div className="documents-container">{AllDocuments()}</div>
+        </>
+    );
+};
+
 const AllDocuments = () => {
     const [documents, setDocuments] = useState(docs);
-    // useEffect(() => {
-    //     axios
-    //         .get("http://localhost:8000/post/all", {
-    //             withCredentials: true,
-    //         })
-    //         .then((res: AxiosResponse<[]>) => {
-    //             if (
-    //                 res.status &&
-    //                 typeof res.status === "number" &&
-    //                 res.status === 200
-    //             ) {
-    //                 setDocuments(res.data);
-    //             }
-    //         })
-    //         .catch((err: AxiosError<any>) => {
-    //             console.log("Failed to get document", err.response);
-    //         });
-    // }, []);
+    const history = useHistory();
+    useEffect(() => {
+        axios
+            .get("http://localhost:8000/post/all", {
+                withCredentials: true,
+            })
+            .then((res: AxiosResponse<[]>) => {
+                if (
+                    res.status &&
+                    typeof res.status === "number" &&
+                    res.status === 200
+                ) {
+                    setDocuments(res.data);
+                }
+            })
+            .catch((err: AxiosError<any>) => {
+                console.log("Failed to get document", err.response);
+            });
+    }, []);
     return (
         <>
             {documents.map(
@@ -131,7 +165,16 @@ const AllDocuments = () => {
                     title: string;
                 }) => {
                     return (
-                        <div className="document-card" key={data.documentId}>
+                        <div
+                            className="document-card"
+                            key={data.documentId}
+                            onClick={() => {
+                                history.push({
+                                    pathname: "/document",
+                                    state: data,
+                                });
+                            }}
+                        >
                             <div>
                                 <div className="document-title">
                                     {data.title}
