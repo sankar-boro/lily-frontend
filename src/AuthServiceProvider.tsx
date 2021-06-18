@@ -15,6 +15,8 @@ export type AuthService = {
     authToken: Option<string>;
     authenticateUser: (token: UserInfo) => void;
     logoutUser: () => void;
+    read: boolean;
+    toggleRead: () => void;
 };
 export const AuthContext = React.createContext<AuthService>({
     initializing: true,
@@ -23,6 +25,8 @@ export const AuthContext = React.createContext<AuthService>({
     authToken: None,
     authenticateUser: (token: UserInfo) => {},
     logoutUser: () => {},
+    read: false,
+    toggleRead: () => {},
 });
 export const useAuthContext = () => useContext(AuthContext);
 function clearAllStorage() {
@@ -30,6 +34,7 @@ function clearAllStorage() {
 }
 const AuthServiceProvider = (props: { children: object }) => {
     const [initializing, setInitializing] = useState(false);
+    const [read, setRead] = useState(false);
     const [authUserData, setAuthUserData] = useState<Option<UserInfo>>(
         Some({
             userId: "1",
@@ -67,6 +72,9 @@ const AuthServiceProvider = (props: { children: object }) => {
         setAuthUserData(None);
         setAuthToken(None);
     };
+    const toggleRead = () => {
+        setRead(!read);
+    };
     return (
         <AuthContext.Provider
             value={{
@@ -76,6 +84,8 @@ const AuthServiceProvider = (props: { children: object }) => {
                 initializing,
                 authenticateUser,
                 logoutUser,
+                read,
+                toggleRead,
             }}
         >
             {props.children}

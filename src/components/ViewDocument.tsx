@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { useAuthContext } from "../AuthServiceProvider";
 
 type Location = {
     state: {
@@ -11,6 +12,8 @@ type Location = {
     };
 };
 const ViewDocument = () => {
+    const context = useAuthContext();
+    const { toggleRead } = context;
     const history: any = useHistory();
     const [edit, setEdit] = useState(false);
     const location: Location = history.location;
@@ -123,17 +126,42 @@ const ViewDocument = () => {
         );
     return (
         <div className="document-details documents-container" key={documentId}>
-            <div
-                onClick={(e) => {
-                    e.preventDefault();
-                    deleteDocument();
-                }}
-            >
-                Delete
+            <div className="settings-group">
+                <div className="settings-left"></div>
+                <div className="settings-right">
+                    <div
+                        className="settings-section"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            toggleRead();
+                        }}
+                    >
+                        Read
+                    </div>
+                    <div
+                        className="settings-section"
+                        onClick={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
+                        Edit
+                    </div>
+                    <div
+                        className="settings-section"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            deleteDocument();
+                        }}
+                    >
+                        Delete
+                    </div>
+                </div>
             </div>
-            <div style={{ width: "60%" }}>
+            <div>
                 <div className="document-title">{title}</div>
-                <div className="document-body">{body.substr(0, 350)}</div>
+                <div className="document-body">
+                    <div className="read">{body}</div>
+                </div>
             </div>
         </div>
     );

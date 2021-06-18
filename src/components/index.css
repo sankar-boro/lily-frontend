@@ -32,16 +32,43 @@
     margin-right: 18px;
     margin-bottom: 18px;
 }
-.document-card:hover {
-    cursor: pointer;
-}
 .document-title {
     font-weight: bold;
     font-size: 18px;
     margin-bottom: 10px;
     color: rgba(0, 0, 0, 0.87);
 }
+.document-title:hover {
+    cursor: pointer;
+}
 .document-body {
     font-size: 16px;
     color: rgb(50, 50, 50);
+}
+.settings-section {
+    padding: 5px 10px;
+    border-left: 1px solid #ccc;
+}
+.settings-section:hover {
+    cursor: pointer;
+}
+.settings-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.settings-right {
+    border: 1px solid #ccc;
+    display: flex;
+    flex-direction: row;
+}
+.read {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+}
+
+.read:before {
+    content: "";
+    left: 50%;
 }

@@ -6,6 +6,8 @@ import { documents as docs } from "./data";
 import { useHistory } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
 import ViewDocument from "./ViewDocument";
+import Profile from "../components/profile";
+import NewDocument from "../components/form/create";
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -34,23 +36,24 @@ const logout = (e: OnClickEvent, context: AuthService) => {
 };
 
 const Home = () => {
-    const [createNewDocument, toggleCreateNewDocument] = useState(false);
-    const [title, setTitle] = useState("");
-    const [tags, setTags] = useState("");
-    const [body, setBody] = useState("");
     const context = useAuthContext();
+    const read = context.read;
     const userData = context.authUserData;
     let userInfo = null;
     if (context.auth) {
         userInfo = userData.unwrap();
     }
-
     return (
         <div className="app-container">
-            <div className="navbar navbar-main">
+            <div
+                className="navbar navbar-main"
+                style={{ display: read ? "none" : undefined }}
+            >
                 <div className="nav-main-left">
                     <div className="nav-section">
-                        <Link to="/">Lily</Link>
+                        <Link to="/" style={{ width: "100%", height: "100%" }}>
+                            Lily
+                        </Link>
                     </div>
                     <div className="nav-section">Search</div>
                 </div>
@@ -60,13 +63,22 @@ const Home = () => {
                         className="nav-section"
                         onClick={(e) => {
                             e.preventDefault();
-                            toggleCreateNewDocument(!createNewDocument);
                         }}
                     >
-                        New Document
+                        <Link
+                            to="/new/document"
+                            style={{ width: "100%", height: "100%" }}
+                        >
+                            New Document
+                        </Link>
                     </div>
                     <div className="nav-section">
-                        {userInfo?.fname} {userInfo?.lname}
+                        <Link
+                            to="/profile"
+                            style={{ width: "100%", height: "100%" }}
+                        >
+                            {userInfo?.fname} {userInfo?.lname}
+                        </Link>
                     </div>
                     <button
                         className="button-nav nav-section"
@@ -77,9 +89,15 @@ const Home = () => {
                 </div>
             </div>
             <div className="body-home">
-                <div className="navbar-left"></div>
+                <div
+                    className="navbar-left"
+                    style={{ display: read ? "none" : undefined }}
+                ></div>
                 <div className="body-container">
-                    <div className="toolbar">
+                    <div
+                        className="toolbar"
+                        style={{ display: read ? "none" : undefined }}
+                    >
                         <div className="document-categories">
                             <div className="document-section">Novels</div>
                             <div className="document-section">Science</div>
@@ -93,18 +111,14 @@ const Home = () => {
                         <Route path="/document">
                             <ViewDocument />
                         </Route>
+                        <Route path="/profile">
+                            <Profile />
+                        </Route>
+                        <Route path="/new/document">
+                            <NewDocument />
+                        </Route>
                         <Route path="/">
-                            <HomeDocBody
-                                home={{
-                                    createNewDocument,
-                                    title,
-                                    tags,
-                                    body,
-                                    setTitle,
-                                    setTags,
-                                    setBody,
-                                }}
-                            />
+                            <HomeDocBody />
                         </Route>
                     </Switch>
                 </div>
@@ -113,24 +127,8 @@ const Home = () => {
     );
 };
 
-const HomeDocBody = (props: any) => {
-    const { createNewDocument, title, tags, body, setTitle, setBody, setTags } =
-        props;
-    return (
-        <>
-            {createNewDocument
-                ? NewDocumentForm({
-                      title,
-                      tags,
-                      body,
-                      setTitle,
-                      setTags,
-                      setBody,
-                  })
-                : null}
-            <div className="documents-container">{AllDocuments()}</div>
-        </>
-    );
+const HomeDocBody = () => {
+    return <div className="documents-container">{AllDocuments()}</div>;
 };
 
 const AllDocuments = () => {
@@ -188,93 +186,6 @@ const AllDocuments = () => {
                 }
             )}
         </>
-    );
-};
-
-const NewDocumentForm = (props: {
-    title: string;
-    tags: string;
-    body: string;
-    setTitle: any;
-    setTags: any;
-    setBody: any;
-}) => {
-    const { title, tags, body, setTitle, setTags, setBody } = props;
-    const submitDocument = () => {
-        axios
-            .post(
-                "http://localhost:8000/post/create",
-                {
-                    title,
-                    tags,
-                    body,
-                },
-                {
-                    withCredentials: true,
-                }
-            )
-            .then((res: AxiosResponse<{ status: number }>) => {
-                if (
-                    res.status &&
-                    typeof res.status === "number" &&
-                    res.status === 200
-                ) {
-                    console.log(res);
-                }
-            })
-            .catch((err: AxiosError<any>) => {
-                console.log("SignupError", err.response);
-            });
-    };
-
-    return (
-        <div className="new-document">
-            <form action="#" method="post">
-                <input
-                    type="text"
-                    placeholder="Title"
-                    name="title"
-                    required
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setTitle(e.target.value);
-                    }}
-                />
-                <br />
-                <input
-                    type="text"
-                    placeholder="Tags"
-                    name="tags"
-                    required
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setTags(e.target.value);
-                    }}
-                />
-                <br />
-                <textarea
-                    id="body"
-                    name="Body"
-                    rows={12}
-                    cols={50}
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setBody(e.target.value);
-                    }}
-                    placeholder="Body of your document."
-                />
-                <br />
-                <input
-                    className="new-doc-submit-btn"
-                    type="button"
-                    value="Submit"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        submitDocument();
-                    }}
-                />
-            </form>
-        </div>
     );
 };
 
