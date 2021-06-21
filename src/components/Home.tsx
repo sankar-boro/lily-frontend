@@ -5,7 +5,7 @@ import "./index.css";
 import { books as booksCache } from "./data";
 import { useHistory } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
-import ViewDocument from "./ViewDocument";
+import ViewBook from "./home/book";
 import Profile from "../components/profile";
 import NewDocument from "../components/form/create";
 import EditBook from "../components/edit/index";
@@ -91,8 +91,8 @@ const Home = () => {
             </div>
             <div className="body-home">
                 <Switch>
-                    <Route path="/document">
-                        <ViewDocument />
+                    <Route path="/book/view/:bookId">
+                        <ViewBook />
                     </Route>
                     <Route path="/profile">
                         <Profile />
@@ -153,7 +153,7 @@ const AllDocuments = () => {
                             key={data.bookId}
                             onClick={() => {
                                 history.push({
-                                    pathname: "/document",
+                                    pathname: `/book/view/${data.bookId}`,
                                     state: data,
                                 });
                             }}
