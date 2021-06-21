@@ -2,12 +2,13 @@ import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { useAuthContext, AuthService } from "../AuthServiceProvider";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import "./index.css";
-import { documents as docs } from "./data";
+import { books as booksCache } from "./data";
 import { useHistory } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
 import ViewDocument from "./ViewDocument";
 import Profile from "../components/profile";
 import NewDocument from "../components/form/create";
+import EditBook from "../components/edit/index";
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
 
@@ -89,39 +90,23 @@ const Home = () => {
                 </div>
             </div>
             <div className="body-home">
-                <div
-                    className="navbar-left"
-                    style={{ display: read ? "none" : undefined }}
-                ></div>
-                <div className="body-container">
-                    <div
-                        className="toolbar"
-                        style={{ display: read ? "none" : undefined }}
-                    >
-                        <div className="document-categories">
-                            <div className="document-section">Novels</div>
-                            <div className="document-section">Science</div>
-                            <div className="document-section">Maths</div>
-                            <div className="document-section">History</div>
-                        </div>
-                        <div className="settings"></div>
-                    </div>
-
-                    <Switch>
-                        <Route path="/document">
-                            <ViewDocument />
-                        </Route>
-                        <Route path="/profile">
-                            <Profile />
-                        </Route>
-                        <Route path="/new/document">
-                            <NewDocument />
-                        </Route>
-                        <Route path="/">
-                            <HomeDocBody />
-                        </Route>
-                    </Switch>
-                </div>
+                <Switch>
+                    <Route path="/document">
+                        <ViewDocument />
+                    </Route>
+                    <Route path="/profile">
+                        <Profile />
+                    </Route>
+                    <Route path="/new/document">
+                        <NewDocument />
+                    </Route>
+                    <Route path="/book/edit/:bookId">
+                        <EditBook />
+                    </Route>
+                    <Route path="/">
+                        <HomeDocBody />
+                    </Route>
+                </Switch>
             </div>
         </div>
     );
@@ -132,11 +117,11 @@ const HomeDocBody = () => {
 };
 
 const AllDocuments = () => {
-    const [documents, setDocuments] = useState(docs);
+    const [books, setBooks] = useState(booksCache);
     const history = useHistory();
     useEffect(() => {
         axios
-            .get("http://localhost:8000/post/all", {
+            .get("http://localhost:8000/book/all", {
                 withCredentials: true,
             })
             .then((res: AxiosResponse<[]>) => {
@@ -145,27 +130,27 @@ const AllDocuments = () => {
                     typeof res.status === "number" &&
                     res.status === 200
                 ) {
-                    setDocuments(res.data);
+                    setBooks(res.data);
                 }
             })
             .catch((err: AxiosError<any>) => {
                 console.log("Failed to get document", err.response);
             });
     }, []);
+    console.log("books", books);
     return (
         <>
-            {documents.map(
+            {books.map(
                 (data: {
                     authorId: string;
-                    body: string;
-                    documentId: string;
-                    tags: string;
+                    description: string;
+                    bookId: string;
                     title: string;
                 }) => {
                     return (
                         <div
                             className="document-card"
-                            key={data.documentId}
+                            key={data.bookId}
                             onClick={() => {
                                 history.push({
                                     pathname: "/document",
@@ -178,7 +163,7 @@ const AllDocuments = () => {
                                     {data.title}
                                 </div>
                                 <div className="document-body">
-                                    {data.body.substr(0, 350)}
+                                    {data.description}
                                 </div>
                             </div>
                         </div>

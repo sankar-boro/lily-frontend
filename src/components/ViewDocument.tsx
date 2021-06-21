@@ -5,10 +5,9 @@ import { useAuthContext } from "../AuthServiceProvider";
 
 type Location = {
     state: {
-        documentId: string;
+        bookId: string;
         title: string;
-        body: string;
-        tags: string;
+        description: string;
     };
 };
 const ViewDocument = () => {
@@ -18,18 +17,16 @@ const ViewDocument = () => {
     const [edit, setEdit] = useState(false);
     const location: Location = history.location;
     const state = location.state;
-    const { documentId, title, body, tags } = state;
+    const { bookId, title, description } = state;
     const [newtitle, setTitle] = useState(title);
-    const [newbody, setBody] = useState(body);
-    const [newtags, setTags] = useState(tags);
+    const [newbody, setBody] = useState(description);
 
     const updateDocument = () => {
         axios
             .post(
-                `http://localhost:8000/post/update/${documentId}`,
+                `http://localhost:8000/book/update/${bookId}`,
                 {
                     title: newtitle,
-                    tags: newtags,
                     body: newbody,
                 },
                 {
@@ -53,7 +50,7 @@ const ViewDocument = () => {
     const deleteDocument = () => {
         axios
             .post(
-                `http://localhost:8000/post/delete/${documentId}`,
+                `http://localhost:8000/book/delete/${bookId}`,
                 {},
                 {
                     withCredentials: true,
@@ -75,10 +72,7 @@ const ViewDocument = () => {
 
     if (edit)
         return (
-            <div
-                className="document-details documents-container"
-                key={documentId}
-            >
+            <div className="document-details documents-container" key={bookId}>
                 <div>
                     <input
                         type="text"
@@ -87,16 +81,6 @@ const ViewDocument = () => {
                         onChange={(e) => {
                             e.preventDefault();
                             setTitle(e.target.value);
-                        }}
-                    />
-                    <br />
-                    <input
-                        type="text"
-                        name="tags"
-                        value={newtags}
-                        onChange={(e) => {
-                            e.preventDefault();
-                            setTags(e.target.value);
                         }}
                     />
                     <br />
@@ -125,7 +109,7 @@ const ViewDocument = () => {
             </div>
         );
     return (
-        <div className="document-details documents-container" key={documentId}>
+        <div className="document-details documents-container" key={bookId}>
             <div className="settings-group">
                 <div className="settings-left"></div>
                 <div className="settings-right">
@@ -142,6 +126,11 @@ const ViewDocument = () => {
                         className="settings-section"
                         onClick={(e) => {
                             e.preventDefault();
+                            history.push({
+                                pathname: `/book/edit/${bookId}`,
+                                state,
+                            });
+                            // setEdit(true);
                         }}
                     >
                         Edit
@@ -160,7 +149,7 @@ const ViewDocument = () => {
             <div>
                 <div className="document-title">{title}</div>
                 <div className="document-body">
-                    <div className="read">{body}</div>
+                    <div className="read">{description}</div>
                 </div>
             </div>
         </div>
