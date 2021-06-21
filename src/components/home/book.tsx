@@ -53,6 +53,18 @@ function sortAll(data: Book[], parentId: string) {
             });
         }
     });
+    newData.forEach((d: any) => {
+        let child = d.child;
+        child.forEach((c: any) => {
+            c["child"] = [];
+            data.forEach((dd: any) => {
+                if (dd.parentId === c.uniqueId) {
+                    c.child.push(dd);
+                }
+            });
+        });
+    });
+    console.log("newData", newData);
     return newData;
 }
 
