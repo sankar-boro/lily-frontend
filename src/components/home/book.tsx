@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 const LeftComponent = (props: any) => {
-    const { title, setActiveId, allPages } = props;
+    const { title, setActiveId, allPages, setSectionId } = props;
     let someView = [];
     return (
         <div>
@@ -16,10 +16,25 @@ const LeftComponent = (props: any) => {
                         onClick={(e) => {
                             e.preventDefault();
                             setActiveId(someData.uniqueId);
+                            // setSectionId(null);
                         }}
                         key={someData.title}
                     >
                         {someData.title}
+                        {someData.child &&
+                            someData.child.map((c: any) => {
+                                return (
+                                    <div
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setSectionId(c.uniqueId);
+                                        }}
+                                        key={c.uniqueId}
+                                    >
+                                        t {c.title}
+                                    </div>
+                                );
+                            })}
                     </div>
                 );
             })}
@@ -64,7 +79,6 @@ function sortAll(data: Book[], parentId: string) {
             });
         });
     });
-    console.log("newData", newData);
     return newData;
 }
 
@@ -85,6 +99,8 @@ const ViewBook = () => {
     const { title, description: body, bookId } = state;
     const [allPages, setAllPages] = useState<any>([]);
     const [activeId, setActiveId] = useState<string>(bookId);
+    const [sectionId, setSectionId] = useState<string | null>(null);
+    const [level, setLevel] = useState(1);
     useEffect(() => {
         axios
             .get(`http://localhost:8000/book/getall/${bookId}`, {
@@ -109,6 +125,10 @@ const ViewBook = () => {
             });
     }, []);
 
+    const callMe = (bc: any) => {
+        setSectionId(bc);
+    };
+
     if (allPages && allPages.length > 0) {
         let currentData: { title: string; body: string } = {
             title: "",
@@ -126,16 +146,47 @@ const ViewBook = () => {
                         title={title}
                         allPages={allPages}
                         setActiveId={setActiveId}
+                        setLevel={setLevel}
+                        setSectionId={callMe}
                     />
                 }
             >
-                <div>{currentData.title}</div>
-                <div>{currentData.body}</div>
+                <RenderBody currentData={currentData} sectionId={sectionId} />
             </BodyComponent>
         );
     }
 
     return null;
+};
+
+const RenderBody = (props: any) => {
+    const { currentData, sectionId } = props;
+    let thisData = currentData;
+    if (sectionId && currentData.child && currentData.child.length > 0) {
+        currentData.child.forEach((a: any) => {
+            if (a.uniqueId === sectionId) {
+                thisData = a;
+            }
+        });
+    }
+    // console.log(thisData);
+    console.log(thisData.title);
+    return (
+        <>
+            <div>{thisData.title}</div>
+            <div>{thisData.body}</div>
+            {thisData.child &&
+                thisData.child.length > 0 &&
+                thisData.child.map((x: any) => {
+                    return (
+                        <div key={x.uniqueId}>
+                            <div>{x.title}</div>
+                            <div>{x.body}</div>
+                        </div>
+                    );
+                })}
+        </>
+    );
 };
 
 export default ViewBook;
