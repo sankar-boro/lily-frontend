@@ -12,15 +12,16 @@ const LeftComponent = (props: any) => {
             {Object.entries(allPages).map((value: any, index: number) => {
                 let someData = value[1];
                 return (
-                    <div
-                        onClick={(e) => {
-                            e.preventDefault();
-                            setActiveId(someData.uniqueId);
-                            // setSectionId(null);
-                        }}
-                        key={someData.title}
-                    >
-                        {someData.title}
+                    <div key={someData.title}>
+                        <div
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setActiveId(someData.uniqueId);
+                                setSectionId(null);
+                            }}
+                        >
+                            {someData.title}
+                        </div>
                         {someData.child &&
                             someData.child.map((c: any) => {
                                 return (
@@ -30,8 +31,9 @@ const LeftComponent = (props: any) => {
                                             setSectionId(c.uniqueId);
                                         }}
                                         key={c.uniqueId}
+                                        style={{ marginLeft: 15 }}
                                     >
-                                        t {c.title}
+                                        {c.title}
                                     </div>
                                 );
                             })}
@@ -89,14 +91,14 @@ const ViewBook = () => {
                 bookId: string;
                 authorId: string;
                 title: string;
-                description: string;
+                body: string;
             };
         };
     } = useHistory();
 
     const { location } = history;
     const { state } = location;
-    const { title, description: body, bookId } = state;
+    const { title, body, bookId } = state;
     const [allPages, setAllPages] = useState<any>([]);
     const [activeId, setActiveId] = useState<string>(bookId);
     const [sectionId, setSectionId] = useState<string | null>(null);
@@ -112,6 +114,7 @@ const ViewBook = () => {
                     typeof res.status === "number" &&
                     res.status === 200
                 ) {
+                    console.log("res", res);
                     let a = [{ title, body, uniqueId: bookId }];
                     let x = sortAll(res.data, bookId);
                     x.forEach((x: any) => {
@@ -150,6 +153,8 @@ const ViewBook = () => {
                         setSectionId={callMe}
                     />
                 }
+                bookId={bookId}
+                allPages={allPages}
             >
                 <RenderBody currentData={currentData} sectionId={sectionId} />
             </BodyComponent>
@@ -169,13 +174,12 @@ const RenderBody = (props: any) => {
             }
         });
     }
-    // console.log(thisData);
-    console.log(thisData.title);
     return (
         <>
             <div>{thisData.title}</div>
             <div>{thisData.body}</div>
-            {thisData.child &&
+            {sectionId &&
+                thisData.child &&
                 thisData.child.length > 0 &&
                 thisData.child.map((x: any) => {
                     return (

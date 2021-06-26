@@ -5,9 +5,10 @@ import "./index.css";
 import { books as booksCache } from "./data";
 import { useHistory } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
-import ViewBook from "./home/book";
+import ViewBook from "./read/book";
 import Profile from "../components/profile";
-import NewDocument from "../components/form/create";
+import NewBook from "./form/book";
+import NewBlog from "./form/blog";
 import EditBook from "../components/edit/index";
 
 type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
@@ -60,18 +61,15 @@ const Home = () => {
                 </div>
                 <div className="nav-main-center"></div>
                 <div className="nav-main-right">
-                    <div
-                        className="nav-section"
-                        onClick={(e) => {
-                            e.preventDefault();
-                        }}
-                    >
-                        <Link
-                            to="/new/document"
-                            style={{ width: "100%", height: "100%" }}
-                        >
-                            New Document
-                        </Link>
+                    <div className="dropdown">
+                        <button className="dropbtn">
+                            Create
+                            <i className="fa fa-caret-down"></i>
+                        </button>
+                        <div className="dropdown-content">
+                            <Link to="/new/blog">Blog</Link>
+                            <Link to="/new/book">Book</Link>
+                        </div>
                     </div>
                     <div className="nav-section">
                         <Link
@@ -97,8 +95,11 @@ const Home = () => {
                     <Route path="/profile">
                         <Profile />
                     </Route>
-                    <Route path="/new/document">
-                        <NewDocument />
+                    <Route path="/new/book">
+                        <NewBook />
+                    </Route>
+                    <Route path="/new/blog">
+                        <NewBlog />
                     </Route>
                     <Route path="/book/edit/:bookId">
                         <EditBook />
@@ -143,7 +144,7 @@ const AllDocuments = () => {
             {books.map(
                 (data: {
                     authorId: string;
-                    description: string;
+                    body: string;
                     bookId: string;
                     title: string;
                 }) => {
@@ -163,7 +164,7 @@ const AllDocuments = () => {
                                     {data.title}
                                 </div>
                                 <div className="document-body">
-                                    {data.description}
+                                    {data.body.substr(0, 250)}...
                                 </div>
                             </div>
                         </div>

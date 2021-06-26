@@ -2,14 +2,19 @@ import React, { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import "./index.css";
 
-const submitDocument = (props: { title: string; description: string }) => {
-    const { title, description } = props;
+const submitBook = (props: {
+    title: string;
+    body: string;
+    identity: number | null;
+}) => {
+    const { title, body, identity } = props;
     axios
         .post(
-            "http://localhost:8000/book/create",
+            "http://localhost:8000/book/create/new/book",
             {
                 title,
-                description,
+                body,
+                identity,
             },
             {
                 withCredentials: true,
@@ -29,9 +34,10 @@ const submitDocument = (props: { title: string; description: string }) => {
         });
 };
 
-const NewDocumentForm = () => {
+const NewBookForm = () => {
     const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
+    const [body, setDescription] = useState("");
+    const [identity, setIdentity] = useState<number | null>(null);
 
     return (
         <div className="form-container">
@@ -49,16 +55,31 @@ const NewDocumentForm = () => {
                             }}
                         />
                         <br />
-                        <input
-                            type="text"
-                            placeholder="About your book."
-                            name="description"
-                            required
+                        <textarea
+                            rows={30}
+                            cols={50}
+                            placeholder="About your book"
                             onChange={(e) => {
                                 e.preventDefault();
                                 setDescription(e.target.value);
                             }}
-                        />
+                            required
+                        ></textarea>
+                        <br />
+                        <select
+                            name="identity"
+                            onChange={(e) => {
+                                e.preventDefault();
+                                setIdentity(parseInt(e.target.value));
+                            }}
+                        >
+                            <option value="101">FRONT COVER</option>
+                            <option value="102">BACK COVER</option>
+                            <option value="103">SINGLE PAGE</option>
+                            <option value="104">CHAPTER</option>
+                            <option value="105">SECTION</option>
+                            <option value="106">SUB-SECTION</option>
+                        </select>
                         <br />
                         <input
                             className="new-doc-submit-btn"
@@ -66,10 +87,13 @@ const NewDocumentForm = () => {
                             value="Submit"
                             onClick={(e) => {
                                 e.preventDefault();
-                                submitDocument({
-                                    title,
-                                    description,
-                                });
+                                if (title && body && identity) {
+                                    submitBook({
+                                        title,
+                                        body,
+                                        identity,
+                                    });
+                                }
                             }}
                         />
                     </form>
@@ -77,10 +101,10 @@ const NewDocumentForm = () => {
             </div>
             <div>
                 <div>{title}</div>
-                <div>{description}</div>
+                <div>{body}</div>
             </div>
         </div>
     );
 };
 
-export default NewDocumentForm;
+export default NewBookForm;
