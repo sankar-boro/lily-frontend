@@ -3,7 +3,6 @@ import { useHistory } from "react-router";
 const BodyComponent = (props: any) => {
     const history = useHistory();
     const { bookId, allPages } = props;
-    console.log("props", props);
     return (
         <>
             <div className="navbar-left">{props.leftComponent}</div>

@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 const LeftComponent = (props: any) => {
     const { title, setActiveId, allPages, setSectionId } = props;
+    console.log("allpages___", allPages);
     let someView = [];
     return (
         <div>
@@ -49,50 +50,57 @@ type Book = {
     body: string;
     identity: number;
     title: string;
-    parentId: string;
+    parentId: string | null;
     uniqueId: string;
+    authorId: string;
+    authorName: string;
+    createdAt: string;
+    updatedAt: string;
 };
 
 function sortAll(data: Book[], parentId: string) {
+    console.log("book", data);
+    console.log("parentId", parentId);
     let lastParentId = parentId;
     let newData: any = [];
     data.forEach((b) => {
-        if (b.parentId === lastParentId && b.identity === 1) {
-            newData.push({ ...b, child: [] });
+        if (b.identity === 101) {
+            newData.push({ ...b });
         }
     });
     data.forEach((d) => {
-        if (d.identity === 2) {
-            newData.forEach((n: any) => {
-                if (n.uniqueId === d.parentId) {
-                    n.child.push(d);
-                }
-            });
+        if (d.identity === 104) {
+            newData.push({ ...d, child: [] });
         }
     });
-    newData.forEach((d: any) => {
-        let child = d.child;
-        child.forEach((c: any) => {
-            c["child"] = [];
-            data.forEach((dd: any) => {
-                if (dd.parentId === c.uniqueId) {
-                    c.child.push(dd);
-                }
-            });
-        });
-    });
+    // data.forEach((d) => {
+    //     if (d.identity === 105) {
+    //         newData.forEach((n: any) => {
+    //             if (n.uniqueId === d.parentId) {
+    //                 n.child.push(d);
+    //             }
+    //         });
+    //     }
+    // });
+    // newData.forEach((d: any) => {
+    //     let child = d.child;
+    //     child.forEach((c: any) => {
+    //         c["child"] = [];
+    //         data.forEach((dd: any) => {
+    //             if (dd.parentId === c.uniqueId) {
+    //                 c.child.push(dd);
+    //             }
+    //         });
+    //     });
+    // });
+    console.log("newData", newData);
     return newData;
 }
 
 const ViewBook = () => {
     const history: {
         location: {
-            state: {
-                bookId: string;
-                authorId: string;
-                title: string;
-                body: string;
-            };
+            state: Book;
         };
     } = useHistory();
 
@@ -114,13 +122,14 @@ const ViewBook = () => {
                     typeof res.status === "number" &&
                     res.status === 200
                 ) {
-                    console.log("res", res);
-                    let a = [{ title, body, uniqueId: bookId }];
-                    let x = sortAll(res.data, bookId);
-                    x.forEach((x: any) => {
-                        a.push(x);
-                    });
-                    setAllPages(a);
+                    let dataRes: Book[] = res.data;
+                    // console.log("res", res);
+                    // let a = [state];
+                    let x = sortAll(dataRes, bookId);
+                    // x.forEach((x: any) => {
+                    //     a.push(x);
+                    // });
+                    setAllPages(x);
                 }
             })
             .catch((err: AxiosError<any>) => {
@@ -168,7 +177,7 @@ const RenderBody = (props: any) => {
     const { currentData, sectionId } = props;
     let thisData = currentData;
     if (sectionId && currentData.child && currentData.child.length > 0) {
-        currentData.child.forEach((a: any) => {
+        currentData.child.forEach((a: Book) => {
             if (a.uniqueId === sectionId) {
                 thisData = a;
             }
@@ -181,7 +190,7 @@ const RenderBody = (props: any) => {
             {sectionId &&
                 thisData.child &&
                 thisData.child.length > 0 &&
-                thisData.child.map((x: any) => {
+                thisData.child.map((x: Book) => {
                     return (
                         <div key={x.uniqueId}>
                             <div>{x.title}</div>

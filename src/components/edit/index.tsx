@@ -5,6 +5,41 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Form101 from "./Form101";
 import Form102 from "./Form102";
+import Form103 from "./Form103";
+import Form104 from "./Form104";
+import Form105 from "./Form105";
+import Form106 from "./Form106";
+
+function sortAll(data: Book[], parentId: string) {
+    let lastParentId = parentId;
+    let newData: any = [];
+    data.forEach((b) => {
+        if (b.parentId === lastParentId && b.identity === 1) {
+            newData.push({ ...b, child: [] });
+        }
+    });
+    data.forEach((d) => {
+        if (d.identity === 2) {
+            newData.forEach((n: any) => {
+                if (n.uniqueId === d.parentId) {
+                    n.child.push(d);
+                }
+            });
+        }
+    });
+    newData.forEach((d: any) => {
+        let child = d.child;
+        child.forEach((c: any) => {
+            c["child"] = [];
+            data.forEach((dd: any) => {
+                if (dd.parentId === c.uniqueId) {
+                    c.child.push(dd);
+                }
+            });
+        });
+    });
+    return newData;
+}
 
 const LeftComponent = (props: any) => {
     const { title, setCurrentFormType } = props;
@@ -15,7 +50,7 @@ const LeftComponent = (props: any) => {
             <div
                 onClick={(e) => {
                     e.preventDefault();
-                    setCurrentFormType(101);
+                    setCurrentFormType(103);
                 }}
             >
                 Add new Page
@@ -23,7 +58,7 @@ const LeftComponent = (props: any) => {
             <div
                 onClick={(e) => {
                     e.preventDefault();
-                    setCurrentFormType(101);
+                    setCurrentFormType(104);
                 }}
             >
                 Add new Chapter
@@ -34,8 +69,14 @@ const LeftComponent = (props: any) => {
 type Book = {
     bookId: string;
     authorId: string;
+    authorName: string;
     title: string;
     body: string;
+    parentId: string;
+    uniqueId: string;
+    createdAt: string;
+    updatedAt: string;
+    identity: number;
 };
 const EditBook = () => {
     const history: {
@@ -46,11 +87,11 @@ const EditBook = () => {
             };
         };
     } = useHistory();
-
+    console.log(history.location.state);
     const { location } = history;
     const { state } = location;
     const { title, body, bookId } = state.main;
-    const [allPages, setAllPages] = useState(state.allPages);
+    const [allPages, setAllPages] = useState(sortAll(state.allPages, bookId));
     const [activeId, setActiveId] = useState<string>(bookId);
     const [level, setLevel] = useState(1);
     const [sectionId, setSectionId] = useState<string | null>(null);
@@ -96,6 +137,8 @@ const EditBook = () => {
                     editBody={currentData.body}
                     currentFormType={currentFormType}
                     setCurrentFormType={setCurrentFormType}
+                    allPages={allPages}
+                    bookId={bookId}
                 />
             </BodyComponent>
         );
@@ -171,6 +214,18 @@ const Form = (props: any) => {
 
     if (currentFormType === 102) {
         return <Form102 {...props} />;
+    }
+    if (currentFormType === 103) {
+        return <Form103 {...props} />;
+    }
+    if (currentFormType === 104) {
+        return <Form104 {...props} />;
+    }
+    if (currentFormType === 105) {
+        return <Form105 {...props} />;
+    }
+    if (currentFormType === 106) {
+        return <Form106 {...props} />;
     }
     return null;
 };

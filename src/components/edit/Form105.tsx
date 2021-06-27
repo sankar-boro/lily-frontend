@@ -6,7 +6,7 @@ const Form102 = (props: any) => {
     const [_body, setBody] = useState(editBody);
     return (
         <div>
-            <div>Create Back Cover</div>
+            <div>Create New Section</div>
             <form action="#" method="post">
                 <input
                     type="text"

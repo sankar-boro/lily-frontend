@@ -117,6 +117,19 @@ const HomeDocBody = () => {
     return <div className="documents-container">{AllDocuments()}</div>;
 };
 
+type Book = {
+    bookId: string;
+    body: string;
+    identity: number;
+    title: string;
+    parentId: string | null;
+    uniqueId: string;
+    authorId: string;
+    authorName: string;
+    createdAt: string;
+    updatedAt: string;
+};
+
 const AllDocuments = () => {
     const [books, setBooks] = useState(booksCache);
     const history = useHistory();
@@ -139,15 +152,12 @@ const AllDocuments = () => {
             });
     }, []);
     console.log("books", books);
+
     return (
         <>
-            {books.map(
-                (data: {
-                    authorId: string;
-                    body: string;
-                    bookId: string;
-                    title: string;
-                }) => {
+            {books
+                .filter((a: any) => a.identity !== 104)
+                .map((data: any) => {
                     return (
                         <div
                             className="document-card"
@@ -169,8 +179,7 @@ const AllDocuments = () => {
                             </div>
                         </div>
                     );
-                }
-            )}
+                })}
         </>
     );
 };

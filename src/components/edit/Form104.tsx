@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 type Book = {
     bookId: string;
@@ -13,14 +14,51 @@ type Book = {
     updatedAt: string;
 };
 
-const Form101 = (props: { allPages: Book[] }) => {
-    console.log("form101", props);
+const createNewChapter = (props: {
+    title: string;
+    body: string;
+    identity: number | null;
+    parentId: string;
+    bookId: string;
+}) => {
+    const { title, body, identity, parentId, bookId } = props;
+    axios
+        .post(
+            "http://localhost:8000/book/create/new/chapter",
+            {
+                title,
+                body,
+                identity,
+                parentId,
+                bookId,
+            },
+            {
+                withCredentials: true,
+            }
+        )
+        .then((res: AxiosResponse<{ status: number }>) => {
+            if (
+                res.status &&
+                typeof res.status === "number" &&
+                res.status === 200
+            ) {
+                console.log(res);
+            }
+        })
+        .catch((err: AxiosError<any>) => {
+            console.log("SignupError", err.response);
+        });
+};
+
+const Form102 = (props: { allPages: Book[]; bookId: string }) => {
+    const { allPages, bookId } = props;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
-    const { allPages } = props;
+    const [parentId, setParentId] = useState("");
+    console.log("props__", props);
     return (
         <div>
-            <div>Create Front Cover</div>
+            <div>Create New Chapter</div>
             <form action="#" method="post">
                 <input
                     type="text"
@@ -52,7 +90,7 @@ const Form101 = (props: { allPages: Book[] }) => {
                     name="identity"
                     onChange={(e) => {
                         e.preventDefault();
-                        console.log(e.target.value);
+                        setParentId(e.target.value);
                     }}
                 >
                     <option>Select next to</option>
@@ -71,7 +109,13 @@ const Form101 = (props: { allPages: Book[] }) => {
                     value="Submit"
                     onClick={(e) => {
                         e.preventDefault();
-                        // submitDocument();
+                        createNewChapter({
+                            title,
+                            body,
+                            parentId,
+                            identity: 104,
+                            bookId,
+                        });
                     }}
                 />
             </form>
@@ -79,4 +123,4 @@ const Form101 = (props: { allPages: Book[] }) => {
     );
 };
 
-export default Form101;
+export default Form102;
