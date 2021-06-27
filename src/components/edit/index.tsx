@@ -3,15 +3,31 @@ import BodyComponent from "../ui/BodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
+import Form101 from "./Form101";
+import Form102 from "./Form102";
 
 const LeftComponent = (props: any) => {
-    const { title } = props;
+    const { title, setCurrentFormType } = props;
     return (
         <div>
             {title}
             <hr />
-            <div>Add new Page</div>
-            <div>Add new Chapter</div>
+            <div
+                onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentFormType(101);
+                }}
+            >
+                Add new Page
+            </div>
+            <div
+                onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentFormType(101);
+                }}
+            >
+                Add new Chapter
+            </div>
         </div>
     );
 };
@@ -38,6 +54,9 @@ const EditBook = () => {
     const [activeId, setActiveId] = useState<string>(bookId);
     const [level, setLevel] = useState(1);
     const [sectionId, setSectionId] = useState<string | null>(null);
+    const [editTitle, setEditTitle] = useState<string | null>(null);
+    const [editBody, setEditBody] = useState<string | null>(null);
+    const [currentFormType, setCurrentFormType] = useState<number | null>(null);
 
     const callMe = (bc: any) => {
         setSectionId(bc);
@@ -62,12 +81,22 @@ const EditBook = () => {
                         setActiveId={setActiveId}
                         setLevel={setLevel}
                         setSectionId={callMe}
+                        setCurrentFormType={setCurrentFormType}
                     />
                 }
                 bookId={bookId}
                 allPages={allPages}
             >
-                <RenderBody currentData={currentData} sectionId={sectionId} />
+                <RenderBody
+                    currentData={currentData}
+                    sectionId={sectionId}
+                    setEditTitle={setEditTitle}
+                    setEditBody={setEditBody}
+                    editTitle={currentData.title}
+                    editBody={currentData.body}
+                    currentFormType={currentFormType}
+                    setCurrentFormType={setCurrentFormType}
+                />
             </BodyComponent>
         );
     }
@@ -76,7 +105,14 @@ const EditBook = () => {
 };
 
 const RenderBody = (props: any) => {
-    const { currentData, sectionId } = props;
+    const {
+        currentData,
+        sectionId,
+        setEditTitle,
+        setEditBody,
+        editTitle,
+        setCurrentFormType,
+    } = props;
     let thisData = currentData;
     if (sectionId && currentData.child && currentData.child.length > 0) {
         currentData.child.forEach((a: any) => {
@@ -85,11 +121,19 @@ const RenderBody = (props: any) => {
             }
         });
     }
-    const [current, setCurrent] = useState<any | null>(null);
-
     return (
         <div className="flex-container">
             <div className="c-left">
+                <div
+                    onClick={(e) => {
+                        e.preventDefault();
+                        setEditTitle(thisData.title);
+                        setEditBody(thisData.body);
+                        setCurrentFormType(102);
+                    }}
+                >
+                    Edit
+                </div>
                 <div>{thisData.title}</div>
                 <div>{thisData.body}</div>
                 {sectionId &&
@@ -98,59 +142,37 @@ const RenderBody = (props: any) => {
                     thisData.child.map((x: any) => {
                         return (
                             <div key={x.uniqueId}>
+                                <div
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setEditTitle(x.title);
+                                        setEditBody(x.body);
+                                        setCurrentFormType(102);
+                                    }}
+                                >
+                                    Edit
+                                </div>
                                 <div>{x.title}</div>
                                 <div>{x.body}</div>
                             </div>
                         );
                     })}
             </div>
-            <div className="c-right">
-                {current && <Form current={current} />}
-            </div>
+            <div className="c-right">{editTitle && <Form {...props} />}</div>
         </div>
     );
 };
 
 const Form = (props: any) => {
-    const { current } = props;
-    return (
-        <form action="#" method="post">
-            <input
-                type="text"
-                placeholder="Title"
-                name="title"
-                required
-                onChange={(e) => {
-                    e.preventDefault();
-                    // setTitle(e.target.value);
-                }}
-                value={current && current.title}
-            />
-            <br />
-            <textarea
-                id="body"
-                name="Body"
-                rows={12}
-                cols={50}
-                onChange={(e) => {
-                    e.preventDefault();
-                    // setBody(e.target.value);
-                }}
-                placeholder="Body of your document."
-                value={current && current.body}
-            />
-            <br />
-            <input
-                className="new-doc-submit-btn"
-                type="button"
-                value="Submit"
-                onClick={(e) => {
-                    e.preventDefault();
-                    // submitDocument();
-                }}
-            />
-        </form>
-    );
+    const { currentFormType } = props;
+    if (currentFormType === 101) {
+        return <Form101 {...props} />;
+    }
+
+    if (currentFormType === 102) {
+        return <Form102 {...props} />;
+    }
+    return null;
 };
 
 export default EditBook;
