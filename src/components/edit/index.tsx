@@ -3,81 +3,16 @@ import BodyComponent from "../ui/BodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import Form101 from "./Form101";
-import Form102 from "./Form102";
-import Form103 from "./Form103";
-import Form104 from "./Form104";
-import Form105 from "./Form105";
-import Form106 from "./Form106";
+import Form101 from "./forms/Form101";
+import Form102 from "./forms/Form102";
+import Form103 from "./forms/Form103";
+import Form104 from "./forms/Form104";
+import Form105 from "./forms/Form105";
+import Form106 from "./forms/Form106";
+import { sortAll, Book } from "./util";
+import { BookNavigation } from "./BookNavigation";
+import "./edit.css";
 
-function sortAll(data: Book[], parentId: string) {
-    let lastParentId = parentId;
-    let newData: any = [];
-    data.forEach((b) => {
-        if (b.parentId === lastParentId && b.identity === 1) {
-            newData.push({ ...b, child: [] });
-        }
-    });
-    data.forEach((d) => {
-        if (d.identity === 2) {
-            newData.forEach((n: any) => {
-                if (n.uniqueId === d.parentId) {
-                    n.child.push(d);
-                }
-            });
-        }
-    });
-    newData.forEach((d: any) => {
-        let child = d.child;
-        child.forEach((c: any) => {
-            c["child"] = [];
-            data.forEach((dd: any) => {
-                if (dd.parentId === c.uniqueId) {
-                    c.child.push(dd);
-                }
-            });
-        });
-    });
-    return newData;
-}
-
-const LeftComponent = (props: any) => {
-    const { title, setCurrentFormType } = props;
-    return (
-        <div>
-            {title}
-            <hr />
-            <div
-                onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentFormType(103);
-                }}
-            >
-                Add new Page
-            </div>
-            <div
-                onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentFormType(104);
-                }}
-            >
-                Add new Chapter
-            </div>
-        </div>
-    );
-};
-type Book = {
-    bookId: string;
-    authorId: string;
-    authorName: string;
-    title: string;
-    body: string;
-    parentId: string;
-    uniqueId: string;
-    createdAt: string;
-    updatedAt: string;
-    identity: number;
-};
 const EditBook = () => {
     const history: {
         location: {
@@ -87,11 +22,11 @@ const EditBook = () => {
             };
         };
     } = useHistory();
-    console.log(history.location.state);
+    console.log("state", history.location.state);
     const { location } = history;
     const { state } = location;
     const { title, body, bookId } = state.main;
-    const [allPages, setAllPages] = useState(sortAll(state.allPages, bookId));
+    const [allPages, setAllPages] = useState(state.allPages);
     const [activeId, setActiveId] = useState<string>(bookId);
     const [level, setLevel] = useState(1);
     const [sectionId, setSectionId] = useState<string | null>(null);
@@ -113,10 +48,11 @@ const EditBook = () => {
                 currentData = a;
             }
         });
+        console.log("allPages", allPages);
         return (
             <BodyComponent
                 leftComponent={
-                    <LeftComponent
+                    <BookNavigation
                         title={title}
                         allPages={allPages}
                         setActiveId={setActiveId}
@@ -155,6 +91,7 @@ const RenderBody = (props: any) => {
         setEditBody,
         editTitle,
         setCurrentFormType,
+        currentFormType,
     } = props;
     let thisData = currentData;
     if (sectionId && currentData.child && currentData.child.length > 0) {
@@ -163,6 +100,11 @@ const RenderBody = (props: any) => {
                 thisData = a;
             }
         });
+    }
+    console.log("thisData", thisData);
+
+    if (currentFormType === 105) {
+        return <Form105 {...props} />;
     }
     return (
         <div className="flex-container">
@@ -180,6 +122,7 @@ const RenderBody = (props: any) => {
                 <div>{thisData.title}</div>
                 <div>{thisData.body}</div>
                 {sectionId &&
+                    thisData &&
                     thisData.child &&
                     thisData.child.length > 0 &&
                     thisData.child.map((x: any) => {
@@ -200,6 +143,18 @@ const RenderBody = (props: any) => {
                             </div>
                         );
                     })}
+                {sectionId && (
+                    <div>
+                        <Form106
+                            {...props}
+                            sectionProps={{
+                                sectionId,
+                                sectionChildren:
+                                    (thisData && thisData.child) || [],
+                            }}
+                        />
+                    </div>
+                )}
             </div>
             <div className="c-right">{editTitle && <Form {...props} />}</div>
         </div>

@@ -156,7 +156,7 @@ const AllDocuments = () => {
     return (
         <>
             {books
-                .filter((a: any) => a.identity !== 104)
+                .filter((a: any) => a.identity === 101)
                 .map((data: any) => {
                     return (
                         <div

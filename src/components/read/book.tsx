@@ -6,7 +6,6 @@ import { useEffect } from "react";
 
 const LeftComponent = (props: any) => {
     const { title, setActiveId, allPages, setSectionId } = props;
-    console.log("allpages___", allPages);
     let someView = [];
     return (
         <div>
@@ -20,6 +19,7 @@ const LeftComponent = (props: any) => {
                                 setActiveId(someData.uniqueId);
                                 setSectionId(null);
                             }}
+                            className="chapter-nav"
                         >
                             {someData.title}
                         </div>
@@ -31,6 +31,7 @@ const LeftComponent = (props: any) => {
                                             e.preventDefault();
                                             setSectionId(c.uniqueId);
                                         }}
+                                        className="chapter-nav"
                                         key={c.uniqueId}
                                         style={{ marginLeft: 15 }}
                                     >
@@ -59,8 +60,6 @@ type Book = {
 };
 
 function sortAll(data: Book[], parentId: string) {
-    console.log("book", data);
-    console.log("parentId", parentId);
     let lastParentId = parentId;
     let newData: any = [];
     data.forEach((b) => {
@@ -73,27 +72,28 @@ function sortAll(data: Book[], parentId: string) {
             newData.push({ ...d, child: [] });
         }
     });
-    // data.forEach((d) => {
-    //     if (d.identity === 105) {
-    //         newData.forEach((n: any) => {
-    //             if (n.uniqueId === d.parentId) {
-    //                 n.child.push(d);
-    //             }
-    //         });
-    //     }
-    // });
-    // newData.forEach((d: any) => {
-    //     let child = d.child;
-    //     child.forEach((c: any) => {
-    //         c["child"] = [];
-    //         data.forEach((dd: any) => {
-    //             if (dd.parentId === c.uniqueId) {
-    //                 c.child.push(dd);
-    //             }
-    //         });
-    //     });
-    // });
-    console.log("newData", newData);
+    data.forEach((d) => {
+        if (d.identity === 105) {
+            newData.forEach((n: any) => {
+                if (n.uniqueId === d.parentId) {
+                    n.child.push({ ...d, child: [] });
+                }
+            });
+        }
+    });
+    newData.forEach((d: any) => {
+        if (d.identity === 104) {
+            const { child } = d;
+            child.forEach((c: any) => {
+                c["child"] = [];
+                data.forEach((dd: any) => {
+                    if (dd.parentId === c.uniqueId) {
+                        c.child.push(dd);
+                    }
+                });
+            });
+        }
+    });
     return newData;
 }
 
