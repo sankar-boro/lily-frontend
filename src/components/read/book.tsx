@@ -31,7 +31,6 @@ const LeftComponent = (props: any) => {
                                             e.preventDefault();
                                             setSectionId(c.uniqueId);
                                         }}
-                                        className="chapter-nav"
                                         key={c.uniqueId}
                                         style={{ marginLeft: 15 }}
                                     >
@@ -184,21 +183,24 @@ const RenderBody = (props: any) => {
         });
     }
     return (
-        <>
-            <div>{thisData.title}</div>
-            <div>{thisData.body}</div>
-            {sectionId &&
-                thisData.child &&
-                thisData.child.length > 0 &&
-                thisData.child.map((x: Book) => {
-                    return (
-                        <div key={x.uniqueId}>
-                            <div>{x.title}</div>
-                            <div>{x.body}</div>
-                        </div>
-                    );
-                })}
-        </>
+        <div className="container">
+            <div className="col-8">
+                <h3>{thisData.title}</h3>
+                <div>{thisData.body}</div>
+                {sectionId &&
+                    thisData.child &&
+                    thisData.child.length > 0 &&
+                    thisData.child.map((x: Book) => {
+                        return (
+                            <div key={x.uniqueId}>
+                                <h4>{x.title}</h4>
+                                <div>{x.body}</div>
+                            </div>
+                        );
+                    })}
+            </div>
+            <div className="col-4">Divider</div>
+        </div>
     );
 };
 

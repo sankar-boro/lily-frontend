@@ -61,8 +61,8 @@ textarea {
     border: 1px solid #ccc;
     margin-bottom: 10px;
     padding: 8px;
-    min-width: 550px;
-    max-width: 550px;
+    /* min-width: 550px;
+    max-width: 550px; */
     background-color: white;
 }
 .new-doc-submit-btn {
@@ -77,4 +77,42 @@ textarea {
 }
 .c-right {
     flex: 1;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+.link {
+    color: #0077cc;
+}
+.nav-link {
+    color: #3c4146;
+}
+.dropdown:hover,
+.dropbtn:hover {
+    cursor: pointer;
+}
+.col-8 {
+    display: inline-block;
+    width: 71%;
+    padding: 10px 2%;
+    vertical-align: text-top;
+}
+.col-4 {
+    display: inline-block;
+    width: 25%;
+    vertical-align: text-top;
+    padding: 10px 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 8px 0px;
+    padding: 0;
 }

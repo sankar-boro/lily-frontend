@@ -6,13 +6,13 @@ import { Link } from "react-router-dom";
 const inputs = {
     email: {
         type: "text",
-        placeholder: "Email*",
+        // placeholder: "Email*",
         name: "email",
         required: true,
     },
     password: {
         type: "password",
-        placeholder: "Password*",
+        // placeholder: "Password*",
         name: "password",
         required: true,
     },
@@ -51,36 +51,50 @@ const Login = () => {
 
     //
     return (
-        <>
+        <div className="login-container">
+            <div className="header">Login</div>
             <form action="#" method="post">
-                <input
-                    {...inputs.email}
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setEmail(e.target.value);
-                    }}
-                />
-                <br />
-                <input
-                    {...inputs.password}
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setPassword(e.target.value);
-                    }}
-                />
-                <br />
-                <input
-                    type="button"
-                    value="Submit"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        login();
-                    }}
-                />
+                <div>
+                    <div className="email-label">Email*</div>
+                    <input
+                        {...inputs.email}
+                        onChange={(e) => {
+                            e.preventDefault();
+                            setEmail(e.target.value);
+                        }}
+                        className="login-input"
+                        value={email}
+                    />
+                </div>
+                <div>
+                    <div className="password-label">Password*</div>
+                    <input
+                        {...inputs.password}
+                        onChange={(e) => {
+                            e.preventDefault();
+                            setPassword(e.target.value);
+                        }}
+                        className="login-input"
+                        value={password}
+                    />
+                </div>
+                <div style={{ marginTop: 20 }}>
+                    <input
+                        type="button"
+                        value="Login"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            login();
+                        }}
+                        className="login-button"
+                    />
+                </div>
             </form>
 
-            <Link to="/signup">Sign up</Link>
-        </>
+            <Link to="/signup" className="link">
+                Sign up
+            </Link>
+        </div>
     );
 };
 

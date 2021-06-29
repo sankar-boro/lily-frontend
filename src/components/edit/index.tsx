@@ -22,7 +22,6 @@ const EditBook = () => {
             };
         };
     } = useHistory();
-    console.log("state", history.location.state);
     const { location } = history;
     const { state } = location;
     const { title, body, bookId } = state.main;
@@ -48,7 +47,6 @@ const EditBook = () => {
                 currentData = a;
             }
         });
-        console.log("allPages", allPages);
         return (
             <BodyComponent
                 leftComponent={
@@ -59,6 +57,8 @@ const EditBook = () => {
                         setLevel={setLevel}
                         setSectionId={callMe}
                         setCurrentFormType={setCurrentFormType}
+                        activeId={activeId}
+                        sectionId={sectionId}
                     />
                 }
                 bookId={bookId}
@@ -101,15 +101,14 @@ const RenderBody = (props: any) => {
             }
         });
     }
-    console.log("thisData", thisData);
 
     if (currentFormType === 105) {
         return <Form105 {...props} />;
     }
     return (
-        <div className="flex-container">
-            <div className="c-left">
-                <div
+        <div className="container">
+            <div className="col-8">
+                {/* <div
                     onClick={(e) => {
                         e.preventDefault();
                         setEditTitle(thisData.title);
@@ -118,8 +117,8 @@ const RenderBody = (props: any) => {
                     }}
                 >
                     Edit
-                </div>
-                <div>{thisData.title}</div>
+                </div> */}
+                <h3>{thisData.title}</h3>
                 <div>{thisData.body}</div>
                 {sectionId &&
                     thisData &&
@@ -128,7 +127,7 @@ const RenderBody = (props: any) => {
                     thisData.child.map((x: any) => {
                         return (
                             <div key={x.uniqueId}>
-                                <div
+                                {/* <div
                                     onClick={(e) => {
                                         e.preventDefault();
                                         setEditTitle(x.title);
@@ -137,8 +136,8 @@ const RenderBody = (props: any) => {
                                     }}
                                 >
                                     Edit
-                                </div>
-                                <div>{x.title}</div>
+                                </div> */}
+                                <h4>{x.title}</h4>
                                 <div>{x.body}</div>
                             </div>
                         );
@@ -156,7 +155,7 @@ const RenderBody = (props: any) => {
                     </div>
                 )}
             </div>
-            <div className="c-right">{editTitle && <Form {...props} />}</div>
+            {/* <div className="col-4">{editTitle && <Form {...props} />}</div> */}
         </div>
     );
 };

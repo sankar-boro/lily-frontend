@@ -53,7 +53,7 @@ const Home = () => {
             >
                 <div className="nav-main-left">
                     <div className="nav-section">
-                        <Link to="/" style={{ width: "100%", height: "100%" }}>
+                        <Link to="/" className="nav-link">
                             Lily
                         </Link>
                     </div>
@@ -72,10 +72,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="nav-section">
-                        <Link
-                            to="/profile"
-                            style={{ width: "100%", height: "100%" }}
-                        >
+                        <Link to="/profile" className="nav-link">
                             {userInfo?.fname} {userInfo?.lname}
                         </Link>
                     </div>
