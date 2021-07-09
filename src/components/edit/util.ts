@@ -46,8 +46,38 @@ function sortAll(data: Book[], parentId: string) {
             });
         }
     });
+    console.log("newData", newData);
     return newData;
 }
 
-export { sortAll };
+const activeChBg = (c: any, a: string) => {
+    let color = "white";
+    if (c.uniqueId === a) {
+        color = "#ccc";
+    }
+    return {
+        backgroundColor: color,
+    };
+};
+const activeScBg = (c: any, a: string) => {
+    if (c.uniqueId === a) {
+        return {
+            borderLeft: `5px solid black`,
+            paddingLeft: "5px",
+            backgroundColor: "#f1f1f1",
+        };
+    }
+    return {};
+};
+const displayNone = (c: any, a: string) => {
+    let display = "none";
+    if (c.uniqueId === a) {
+        display = "block";
+    }
+    return {
+        display,
+    };
+};
+
+export { sortAll, activeChBg, activeScBg, displayNone };
 export type { Book };

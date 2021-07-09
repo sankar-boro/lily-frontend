@@ -1,4 +1,5 @@
 .chapter-nav,
+.section-nav,
 .create-nav-button {
     padding: 5px;
 }
@@ -6,10 +7,12 @@
     color: #2f3337;
     font-weight: bold;
 }
-.chapter-nav:hover {
+.chapter-nav:hover,
+.section-nav:hover {
     cursor: pointer;
     background-color: #eff0f1;
 }
+
 .create-nav-button {
 }
 .create-nav-button:hover {

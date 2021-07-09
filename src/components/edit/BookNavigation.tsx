@@ -1,3 +1,5 @@
+import { activeChBg, activeScBg, displayNone } from "./util";
+
 const BookNavigation = (props: any) => {
     const {
         title,
@@ -20,25 +22,6 @@ const BookNavigation = (props: any) => {
             sections: child,
         };
     };
-
-    const getBgStyles = (c: any) => {
-        let color = "white";
-        if (c.uniqueId === activeId) {
-            color = "#ccc";
-        }
-        return {
-            backgroundColor: color,
-        };
-    };
-    const getDisplayStyles = (c: any) => {
-        let display = "none";
-        if (c.uniqueId === activeId) {
-            display = "block";
-        }
-        return {
-            display,
-        };
-    };
     return (
         <div>
             {allPages.map((value: any, index: number) => {
@@ -52,11 +35,11 @@ const BookNavigation = (props: any) => {
                                 setSectionId(null);
                             }}
                             className="chapter-nav"
-                            style={getBgStyles(chapter)}
+                            style={activeChBg(chapter, activeId)}
                         >
                             {chapter.title}
                         </div>
-                        <div style={getDisplayStyles(chapter)}>
+                        <div style={displayNone(chapter, activeId)}>
                             <div
                                 className="add-section"
                                 onClick={(e) => {
@@ -74,7 +57,11 @@ const BookNavigation = (props: any) => {
                                             setSectionId(c.uniqueId);
                                         }}
                                         key={c.uniqueId}
-                                        style={{ marginLeft: 15 }}
+                                        style={{
+                                            marginLeft: 15,
+                                            ...activeScBg(c, sectionId),
+                                        }}
+                                        className="section-nav"
                                     >
                                         {c.title}
                                     </div>

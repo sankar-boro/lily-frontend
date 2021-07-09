@@ -93,6 +93,22 @@ function sortAll(data: Book[], parentId: string) {
             });
         }
     });
+    newData.forEach((d: any) => {
+        if (d.identity === 104) {
+            const { child } = d;
+            child.forEach((c: any) => {
+                if (c.child) {
+                    c.child.forEach((a: any) => {
+                        data.forEach((dd: any) => {
+                            if (dd.parentId === a.uniqueId) {
+                                c.child.push(dd);
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    });
     return newData;
 }
 
