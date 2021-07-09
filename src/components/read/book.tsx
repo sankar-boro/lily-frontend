@@ -3,28 +3,41 @@ import BodyComponent from "../ui/BodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
+import { Book, sortAll, activeChBg, activeScBg, displayNone } from "./util";
 
 const LeftComponent = (props: any) => {
-    const { title, setActiveId, allPages, setSectionId } = props;
-    let someView = [];
+    const { title, setActiveId, allPages, setSectionId, activeId, sectionId } =
+        props;
+    const doSome = (data: any) => {
+        let child = [];
+        if (data && data.child && Array.isArray(data.child)) {
+            child = data.child;
+        }
+
+        return {
+            chapter: data,
+            sections: child,
+        };
+    };
     return (
         <div>
-            {Object.entries(allPages).map((value: any, index: number) => {
-                let someData = value[1];
+            {allPages.map((value: any, index: number) => {
+                const { chapter, sections } = doSome(value);
                 return (
-                    <div key={someData.title}>
+                    <div key={chapter.title}>
                         <div
                             onClick={(e) => {
                                 e.preventDefault();
-                                setActiveId(someData.uniqueId);
+                                setActiveId(chapter.uniqueId);
                                 setSectionId(null);
                             }}
                             className="chapter-nav"
+                            style={activeChBg(chapter, activeId)}
                         >
-                            {someData.title}
+                            {chapter.title}
                         </div>
-                        {someData.child &&
-                            someData.child.map((c: any) => {
+                        <div style={displayNone(chapter, activeId)}>
+                            {sections.map((c: any) => {
                                 return (
                                     <div
                                         onClick={(e) => {
@@ -32,87 +45,23 @@ const LeftComponent = (props: any) => {
                                             setSectionId(c.uniqueId);
                                         }}
                                         key={c.uniqueId}
-                                        style={{ marginLeft: 15 }}
+                                        style={{
+                                            marginLeft: 15,
+                                            ...activeScBg(c, sectionId),
+                                        }}
+                                        className="section-nav"
                                     >
                                         {c.title}
                                     </div>
                                 );
                             })}
+                        </div>
                     </div>
                 );
             })}
         </div>
     );
 };
-
-type Book = {
-    bookId: string;
-    body: string;
-    identity: number;
-    title: string;
-    parentId: string | null;
-    uniqueId: string;
-    authorId: string;
-    authorName: string;
-    createdAt: string;
-    updatedAt: string;
-};
-
-function sortAll(data: Book[], parentId: string) {
-    let lastParentId = parentId;
-    let newData: any = [];
-    data.forEach((b) => {
-        if (b.identity === 101) {
-            newData.push({ ...b });
-        }
-    });
-    data.forEach((d) => {
-        if (d.identity === 104) {
-            newData.push({ ...d, child: [] });
-        }
-    });
-    data.forEach((d) => {
-        if (d.identity === 105) {
-            newData.forEach((n: any) => {
-                if (n.uniqueId === d.parentId) {
-                    n.child.push({ ...d, child: [] });
-                }
-            });
-        }
-    });
-    newData.forEach((d: any) => {
-        if (d.identity === 104) {
-            const { child } = d;
-            child.forEach((c: any) => {
-                c["child"] = [];
-                data.forEach((dd: any) => {
-                    if (dd.parentId === c.uniqueId) {
-                        c.child.push(dd);
-                    }
-                });
-            });
-        }
-    });
-    newData.forEach((d: any) => {
-        if (d.identity === 104) {
-            const { child } = d;
-            child.forEach((c: any) => {
-                if (c.child) {
-                    data.forEach((dd: any) => {
-                        if (dd.identity === 106) {
-                            c.child.forEach((a: any) => {
-                                if (dd.parentId === a.uniqueId) {
-                                    c.child.push(dd);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    });
-    return newData;
-}
 
 const ViewBook = () => {
     const history: {
@@ -177,6 +126,8 @@ const ViewBook = () => {
                         setActiveId={setActiveId}
                         setLevel={setLevel}
                         setSectionId={callMe}
+                        sectionId={sectionId}
+                        activeId={activeId}
                     />
                 }
                 bookId={bookId}
