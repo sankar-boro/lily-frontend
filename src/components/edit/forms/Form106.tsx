@@ -38,7 +38,6 @@ const createNewSubSection = (props: {
 };
 
 const Form102 = (props: any) => {
-    console.log("props", props);
     const { sectionProps, bookId } = props;
     const { sectionId, sectionChildren } = sectionProps;
     const [title, setTitle] = useState("");

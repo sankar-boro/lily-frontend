@@ -98,12 +98,14 @@ function sortAll(data: Book[], parentId: string) {
             const { child } = d;
             child.forEach((c: any) => {
                 if (c.child) {
-                    c.child.forEach((a: any) => {
-                        data.forEach((dd: any) => {
-                            if (dd.parentId === a.uniqueId) {
-                                c.child.push(dd);
-                            }
-                        });
+                    data.forEach((dd: any) => {
+                        if (dd.identity === 106) {
+                            c.child.forEach((a: any) => {
+                                if (dd.parentId === a.uniqueId) {
+                                    c.child.push(dd);
+                                }
+                            });
+                        }
                     });
                 }
             });

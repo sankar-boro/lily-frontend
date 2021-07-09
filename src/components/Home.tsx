@@ -148,7 +148,6 @@ const AllDocuments = () => {
                 console.log("Failed to get document", err.response);
             });
     }, []);
-    console.log("books", books);
 
     return (
         <>

@@ -55,7 +55,6 @@ const Form102 = (props: { allPages: Book[]; bookId: string }) => {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [parentId, setParentId] = useState("");
-    console.log("props__", props);
     return (
         <div>
             <div>Create New Chapter</div>
