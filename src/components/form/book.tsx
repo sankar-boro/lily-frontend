@@ -5,7 +5,7 @@ import "./index.css";
 const submitBook = (props: {
     title: string;
     body: string;
-    identity: number | null;
+    identity: number;
 }) => {
     const { title, body, identity } = props;
     axios
@@ -37,7 +37,6 @@ const submitBook = (props: {
 const NewBookForm = () => {
     const [title, setTitle] = useState("");
     const [body, setDescription] = useState("");
-    const [identity, setIdentity] = useState<number | null>(null);
 
     return (
         <div className="form-container">
@@ -66,32 +65,17 @@ const NewBookForm = () => {
                             required
                         ></textarea>
                         <br />
-                        <select
-                            name="identity"
-                            onChange={(e) => {
-                                e.preventDefault();
-                                setIdentity(parseInt(e.target.value));
-                            }}
-                        >
-                            <option value="101">FRONT COVER</option>
-                            <option value="102">BACK COVER</option>
-                            <option value="103">SINGLE PAGE</option>
-                            <option value="104">CHAPTER</option>
-                            <option value="105">SECTION</option>
-                            <option value="106">SUB-SECTION</option>
-                        </select>
-                        <br />
                         <input
                             className="new-doc-submit-btn"
                             type="button"
                             value="Submit"
                             onClick={(e) => {
                                 e.preventDefault();
-                                if (title && body && identity) {
+                                if (title && body) {
                                     submitBook({
                                         title,
                                         body,
-                                        identity,
+                                        identity: 101,
                                     });
                                 }
                             }}

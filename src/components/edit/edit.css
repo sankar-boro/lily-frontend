@@ -1,7 +1,6 @@
 .chapter-nav,
 .section-nav,
 .create-nav-button {
-    padding: 5px;
 }
 .chapter-nav {
     color: #2f3337;
@@ -20,7 +19,6 @@
     background-color: white;
 }
 .add-section {
-    padding-left: 10px;
 }
 .add-section:hover {
     cursor: pointer;

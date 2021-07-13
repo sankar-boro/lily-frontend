@@ -27,10 +27,8 @@ const EditBook = () => {
     const { title, body, bookId } = state.main;
     const [allPages, setAllPages] = useState(state.allPages);
     const [activeId, setActiveId] = useState<string>(bookId);
-    const [level, setLevel] = useState(1);
+    const [parentId, setParentId] = useState<string | null>(null);
     const [sectionId, setSectionId] = useState<string | null>(null);
-    const [editTitle, setEditTitle] = useState<string | null>(null);
-    const [editBody, setEditBody] = useState<string | null>(null);
     const [currentFormType, setCurrentFormType] = useState<number | null>(null);
 
     const callMe = (bc: any) => {
@@ -54,11 +52,11 @@ const EditBook = () => {
                         title={title}
                         allPages={allPages}
                         setActiveId={setActiveId}
-                        setLevel={setLevel}
                         setSectionId={callMe}
                         setCurrentFormType={setCurrentFormType}
                         activeId={activeId}
                         sectionId={sectionId}
+                        setParentId={setParentId}
                     />
                 }
                 bookId={bookId}
@@ -67,14 +65,11 @@ const EditBook = () => {
                 <RenderBody
                     currentData={currentData}
                     sectionId={sectionId}
-                    setEditTitle={setEditTitle}
-                    setEditBody={setEditBody}
-                    editTitle={currentData.title}
-                    editBody={currentData.body}
                     currentFormType={currentFormType}
                     setCurrentFormType={setCurrentFormType}
                     allPages={allPages}
                     bookId={bookId}
+                    parentId={parentId}
                 />
             </BodyComponent>
         );
@@ -84,15 +79,7 @@ const EditBook = () => {
 };
 
 const RenderBody = (props: any) => {
-    const {
-        currentData,
-        sectionId,
-        setEditTitle,
-        setEditBody,
-        editTitle,
-        setCurrentFormType,
-        currentFormType,
-    } = props;
+    const { currentData, sectionId, currentFormType } = props;
     let thisData = currentData;
     if (sectionId && currentData.child && currentData.child.length > 0) {
         currentData.child.forEach((a: any) => {
@@ -102,22 +89,12 @@ const RenderBody = (props: any) => {
         });
     }
 
-    if (currentFormType === 105) {
-        return <Form105 {...props} />;
+    if (currentFormType) {
+        return Form(props);
     }
     return (
         <div className="container">
             <div className="col-8">
-                {/* <div
-                    onClick={(e) => {
-                        e.preventDefault();
-                        setEditTitle(thisData.title);
-                        setEditBody(thisData.body);
-                        setCurrentFormType(102);
-                    }}
-                >
-                    Edit
-                </div> */}
                 <h3>{thisData.title}</h3>
                 <div>{thisData.body}</div>
                 {sectionId &&
@@ -127,16 +104,6 @@ const RenderBody = (props: any) => {
                     thisData.child.map((x: any) => {
                         return (
                             <div key={x.uniqueId}>
-                                {/* <div
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setEditTitle(x.title);
-                                        setEditBody(x.body);
-                                        setCurrentFormType(102);
-                                    }}
-                                >
-                                    Edit
-                                </div> */}
                                 <h4>{x.title}</h4>
                                 <div>{x.body}</div>
                             </div>
@@ -155,7 +122,6 @@ const RenderBody = (props: any) => {
                     </div>
                 )}
             </div>
-            {/* <div className="col-4">{editTitle && <Form {...props} />}</div> */}
         </div>
     );
 };

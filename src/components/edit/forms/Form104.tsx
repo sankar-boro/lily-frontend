@@ -50,11 +50,14 @@ const createNewChapter = (props: {
         });
 };
 
-const Form102 = (props: { allPages: Book[]; bookId: string }) => {
-    const { allPages, bookId } = props;
+const Form104 = (props: {
+    allPages: Book[];
+    bookId: string;
+    parentId: string;
+}) => {
+    const { allPages, bookId, parentId } = props;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
-    const [parentId, setParentId] = useState("");
     return (
         <div>
             <div>Create New Chapter</div>
@@ -84,24 +87,6 @@ const Form102 = (props: { allPages: Book[]; bookId: string }) => {
                     value={body}
                 />
                 <br />
-                <label>Next to</label>
-                <select
-                    name="identity"
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setParentId(e.target.value);
-                    }}
-                >
-                    <option>Select next to</option>
-                    {allPages.map((page: Book) => {
-                        return (
-                            <option key={page.uniqueId} value={page.uniqueId}>
-                                {page.title}
-                            </option>
-                        );
-                    })}
-                </select>
-                <br />
                 <input
                     className="new-doc-submit-btn"
                     type="button"
@@ -122,4 +107,4 @@ const Form102 = (props: { allPages: Book[]; bookId: string }) => {
     );
 };
 
-export default Form102;
+export default Form104;

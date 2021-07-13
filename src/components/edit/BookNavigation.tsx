@@ -6,6 +6,7 @@ const BookNavigation = (props: any) => {
         setActiveId,
         allPages,
         setSectionId,
+        setParentId,
         setCurrentFormType,
         activeId,
         sectionId,
@@ -26,70 +27,80 @@ const BookNavigation = (props: any) => {
         <div>
             {allPages.map((value: any, index: number) => {
                 const { chapter, sections } = doSome(value);
+                console.log("chapter", chapter);
+                console.log("sections", sections);
                 return (
-                    <div key={chapter.title}>
+                    <div>
+                        <div key={chapter.title}>
+                            <div
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setActiveId(chapter.uniqueId);
+                                    setCurrentFormType(null);
+                                    setSectionId(null);
+                                }}
+                                className="chapter-nav"
+                                style={activeChBg(chapter, activeId)}
+                            >
+                                {chapter.title}
+                            </div>
+                            <div style={displayNone(chapter, activeId)}>
+                                {chapter.parentId ? (
+                                    <div
+                                        className="add-section"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setCurrentFormType(105);
+                                            setParentId(chapter.uniqueId);
+                                        }}
+                                    >
+                                        + section
+                                    </div>
+                                ) : null}
+                                {sections.map((c: any) => {
+                                    return (
+                                        <div>
+                                            <div
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setSectionId(c.uniqueId);
+                                                    setParentId(c.uniqueId);
+                                                }}
+                                                key={c.uniqueId}
+                                                style={{
+                                                    ...activeScBg(c, sectionId),
+                                                }}
+                                                className="section-nav"
+                                            >
+                                                {c.title}
+                                            </div>
+                                            <div
+                                                className="add-section"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setCurrentFormType(105);
+                                                }}
+                                            >
+                                                + section
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                         <div
                             onClick={(e) => {
                                 e.preventDefault();
-                                setActiveId(chapter.uniqueId);
-                                setSectionId(null);
+                                setCurrentFormType(104);
+                                setParentId(chapter.uniqueId);
                             }}
-                            className="chapter-nav"
-                            style={activeChBg(chapter, activeId)}
+                            className="create-nav-button"
                         >
-                            {chapter.title}
-                        </div>
-                        <div style={displayNone(chapter, activeId)}>
-                            <div
-                                className="add-section"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setCurrentFormType(105);
-                                }}
-                            >
-                                Add section
-                            </div>
-                            {sections.map((c: any) => {
-                                return (
-                                    <div
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setSectionId(c.uniqueId);
-                                        }}
-                                        key={c.uniqueId}
-                                        style={{
-                                            marginLeft: 15,
-                                            ...activeScBg(c, sectionId),
-                                        }}
-                                        className="section-nav"
-                                    >
-                                        {c.title}
-                                    </div>
-                                );
-                            })}
+                            Add new Chapter
                         </div>
                     </div>
                 );
             })}
-            <hr />
-            <div
-                onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentFormType(103);
-                }}
-                className="create-nav-button"
-            >
-                Add new Page
-            </div>
-            <div
-                onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentFormType(104);
-                }}
-                className="create-nav-button"
-            >
-                Add new Chapter
-            </div>
         </div>
     );
 };

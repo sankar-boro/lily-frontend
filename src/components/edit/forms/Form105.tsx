@@ -53,8 +53,7 @@ const createNewSection = (props: {
 const Form102 = (props: any) => {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
-    const [parentId, setParentId] = useState<string | null>(null);
-    const { allPages, bookId } = props;
+    const { bookId, parentId } = props;
     return (
         <div>
             <div>Create New Section</div>
@@ -84,23 +83,6 @@ const Form102 = (props: any) => {
                     value={body}
                 />
                 <br />
-                <label>Next to</label>
-                <select
-                    name="identity"
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setParentId(e.target.value);
-                    }}
-                >
-                    <option>Add Section on Chapter</option>
-                    {allPages.map((page: Book) => {
-                        return (
-                            <option key={page.uniqueId} value={page.uniqueId}>
-                                {page.title}
-                            </option>
-                        );
-                    })}
-                </select>
                 <input
                     className="new-doc-submit-btn"
                     type="button"
