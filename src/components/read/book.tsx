@@ -19,6 +19,7 @@ const LeftComponent = (props: any) => {
             sections: child,
         };
     };
+    console.log("allPages", allPages);
     return (
         <div>
             {allPages.map((value: any, index: number) => {

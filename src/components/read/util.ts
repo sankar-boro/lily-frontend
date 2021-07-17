@@ -49,12 +49,11 @@ const sortAll = (data: Book[], parentId: string) => {
     });
     newData.forEach((d: any) => {
         if (d.identity === 104) {
-            const { child } = d;
+            let { child } = d;
             child.forEach((c: any) => {
-                c["child"] = [];
                 data.forEach((dd: any) => {
-                    if (dd.parentId === c.uniqueId) {
-                        c.child.push(dd);
+                    if (dd.parentId === c.uniqueId && dd.identity === 105) {
+                        child.push({ ...dd, child: [] });
                     }
                 });
             });
@@ -64,17 +63,18 @@ const sortAll = (data: Book[], parentId: string) => {
         if (d.identity === 104) {
             const { child } = d;
             child.forEach((c: any) => {
-                if (c.child) {
-                    data.forEach((dd: any) => {
-                        if (dd.identity === 106) {
-                            c.child.forEach((a: any) => {
-                                if (dd.parentId === a.uniqueId) {
-                                    c.child.push(dd);
-                                }
-                            });
-                        }
-                    });
-                }
+                let currentParentId = c.uniqueId;
+                console.log("cccc", currentParentId);
+
+                data.forEach((dd: any) => {
+                    if (
+                        dd.identity === 106 &&
+                        dd.parentId === currentParentId
+                    ) {
+                        c.child.push(dd);
+                        currentParentId = dd.uniqueId;
+                    }
+                });
             });
         }
     });
