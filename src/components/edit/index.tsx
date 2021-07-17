@@ -9,6 +9,7 @@ import Form103 from "./forms/Form103";
 import Form104 from "./forms/Form104";
 import Form105 from "./forms/Form105";
 import Form106 from "./forms/Form106";
+import Form107 from "./forms/Form107";
 import { sortAll, Book } from "./util";
 import { BookNavigation } from "./BookNavigation";
 import "./edit.css";
@@ -92,6 +93,7 @@ const RenderBody = (props: {
     bookId: string;
     parentId: string | null;
 }) => {
+    console.log("RenderBody", props.bookId);
     const { currentData, sectionId, currentFormType } = props;
     let thisData = currentData;
     if (sectionId && currentData.child && currentData.child.length > 0) {
@@ -164,6 +166,9 @@ const FormView = (props: {
     }
     if (currentFormType.formType === 106) {
         return <Form106 {...props} />;
+    }
+    if (currentFormType.formType === 107) {
+        return <Form107 {...props} />;
     }
     return null;
 };

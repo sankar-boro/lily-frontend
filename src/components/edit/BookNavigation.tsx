@@ -66,11 +66,32 @@ const BookNavigation = (props: {
                                         className="add-section"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            setCurrentFormType({
-                                                formType: 105,
-                                                formData: None,
-                                            });
-                                            setParentId(chapter.uniqueId);
+                                            console.log(
+                                                "uId",
+                                                chapter.uniqueId
+                                            );
+                                            if (sections.length > 0) {
+                                                let topUniqueId =
+                                                    chapter.uniqueId;
+                                                let botUniqueId =
+                                                    sections[0].uniqueId;
+                                                console.log(topUniqueId);
+                                                console.log(botUniqueId);
+                                                setCurrentFormType({
+                                                    formType: 107,
+                                                    formData: Some({
+                                                        topUniqueId,
+                                                        botUniqueId,
+                                                        identity: 105,
+                                                    }),
+                                                });
+                                            } else {
+                                                setParentId(chapter.uniqueId);
+                                                setCurrentFormType({
+                                                    formType: 105,
+                                                    formData: None,
+                                                });
+                                            }
                                         }}
                                     >
                                         + section
@@ -101,28 +122,32 @@ const BookNavigation = (props: {
                                                 className="add-section"
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    setCurrentFormType({
-                                                        formType: 105,
-                                                        formData: None,
-                                                    });
-
                                                     let lastIndex =
-                                                        allPages.length - 1;
-                                                    if (index < lastIndex) {
+                                                        sections.length - 1;
+                                                    if (_index < lastIndex) {
                                                         let nextPageUpdateInfo =
-                                                            allPages[index + 1];
+                                                            sections[
+                                                                _index + 1
+                                                            ];
                                                         let parentPageInfo =
-                                                            allPages[index];
+                                                            sections[_index];
                                                         let topUniqueId =
                                                             parentPageInfo.uniqueId;
                                                         let botUniqueId =
                                                             nextPageUpdateInfo.uniqueId;
                                                         setCurrentFormType({
-                                                            formType: 105,
+                                                            formType: 107,
                                                             formData: Some({
                                                                 topUniqueId,
                                                                 botUniqueId,
+                                                                identity: 106,
                                                             }),
+                                                        });
+                                                    } else {
+                                                        setParentId(c.uniqueId);
+                                                        setCurrentFormType({
+                                                            formType: 105,
+                                                            formData: None,
                                                         });
                                                     }
                                                 }}
@@ -139,6 +164,7 @@ const BookNavigation = (props: {
                                 e.preventDefault();
                                 let lastIndex = allPages.length - 1;
                                 if (index < lastIndex) {
+                                    console.log("wwwwwww");
                                     let nextPageUpdateInfo =
                                         allPages[index + 1];
                                     let parentPageInfo = allPages[index];
@@ -146,11 +172,18 @@ const BookNavigation = (props: {
                                     let botUniqueId =
                                         nextPageUpdateInfo.uniqueId;
                                     setCurrentFormType({
-                                        formType: 104,
+                                        formType: 107,
                                         formData: Some({
                                             topUniqueId: topUniqueId,
                                             botUniqueId: botUniqueId,
+                                            identity: 104,
                                         }),
+                                    });
+                                    setParentId(chapter.uniqueId);
+                                } else {
+                                    setCurrentFormType({
+                                        formType: 104,
+                                        formData: None,
                                     });
                                     setParentId(chapter.uniqueId);
                                 }

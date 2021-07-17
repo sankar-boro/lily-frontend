@@ -20,9 +20,10 @@ const createNewSubSection = (props: {
         topUniqueId,
         botUniqueId,
     } = props;
+    console.log("props", props);
     axios
         .post(
-            "http://localhost:8000/book/create/update/section",
+            "http://localhost:8000/book/create/update/chapter",
             {
                 title,
                 body,
@@ -51,29 +52,31 @@ const createNewSubSection = (props: {
 };
 
 const Form107 = (props: {
-    sectionProps: any;
+    // sectionProps: any;
     bookId: string;
     currentFormType: Form;
 }) => {
-    const { sectionProps, bookId, currentFormType } = props;
-    const { sectionId, sectionChildren } = sectionProps;
+    const { bookId, currentFormType } = props;
+    // const { sectionId, sectionChildren } = sectionProps;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
-    let parentId = sectionId;
-    if (sectionChildren.length > 0) {
-        parentId = sectionChildren[sectionChildren.length - 1].uniqueId;
-    }
+    // let parentId = sectionId;
+    // if (sectionChildren.length > 0) {
+    //     parentId = sectionChildren[sectionChildren.length - 1].uniqueId;
+    // }
 
     let topUniqueId: string = "";
     let botUniqueId: string = "";
+    let identity = 0;
 
     if (currentFormType.formData && currentFormType.formData.some) {
         topUniqueId = currentFormType.formData.val.topUniqueId;
         botUniqueId = currentFormType.formData.val.botUniqueId;
+        identity = currentFormType.formData.val.identity;
     }
     return (
         <div>
-            <div>Create New Sub-Section</div>
+            <div>Create New Chapter - Form107</div>
             <form action="#" method="post">
                 <input
                     type="text"
@@ -110,8 +113,8 @@ const Form107 = (props: {
                             bookId,
                             title,
                             body,
-                            parentId,
-                            identity: 106,
+                            parentId: topUniqueId,
+                            identity,
                             topUniqueId,
                             botUniqueId,
                         });

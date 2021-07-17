@@ -21,6 +21,7 @@ const createNewSection = (props: {
     parentId: string | null;
     bookId: string;
 }) => {
+    console.log("props", props);
     const { title, body, identity, parentId, bookId } = props;
     axios
         .post(

@@ -55,6 +55,7 @@ const Form104 = (props: {
     bookId: string;
     parentId: string | null;
 }) => {
+    console.log("Form104", props);
     const { allPages, bookId, parentId } = props;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");

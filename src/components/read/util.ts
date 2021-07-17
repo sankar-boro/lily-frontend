@@ -12,18 +12,32 @@ type Book = {
 };
 
 const sortAll = (data: Book[], parentId: string) => {
-    let lastParentId = parentId;
     let newData: any = [];
+    let parentNodeId = "";
     data.forEach((b) => {
         if (b.identity === 101) {
             newData.push({ ...b });
+            parentNodeId = b.uniqueId;
         }
     });
+    let totalLength = 1;
     data.forEach((d) => {
         if (d.identity === 104) {
-            newData.push({ ...d, child: [] });
+            // newData.push({ ...d, child: [] });
+            totalLength += 1;
         }
     });
+    let looped = 1;
+    while (looped !== totalLength) {
+        // eslint-disable-next-line no-loop-func
+        data.forEach((d) => {
+            if (d.identity === 104 && d.parentId === parentNodeId) {
+                newData.push({ ...d, child: [] });
+                parentNodeId = d.uniqueId;
+            }
+        });
+        looped += 1;
+    }
     data.forEach((d) => {
         if (d.identity === 105) {
             newData.forEach((n: any) => {
