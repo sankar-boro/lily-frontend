@@ -1,6 +1,20 @@
-import { activeChBg, activeScBg, displayNone } from "./util";
+import { activeChBg, activeScBg, displayNone, Form } from "./util";
+import { None, Some } from "ts-results";
+import { Dispatch, SetStateAction } from "react";
 
-const BookNavigation = (props: any) => {
+type SetCurrentFormType = (a: Form) => void;
+
+const BookNavigation = (props: {
+    title: string;
+    setActiveId: Dispatch<SetStateAction<string>>;
+    allPages: any;
+    setSectionId: Dispatch<SetStateAction<string | null>>;
+    setParentId: Dispatch<SetStateAction<string | null>>;
+    setCurrentFormType: Dispatch<SetStateAction<Form>>;
+    activeId: string;
+    // bookId: string | null;
+    sectionId: string | null;
+}) => {
     const {
         title,
         setActiveId,
@@ -10,6 +24,7 @@ const BookNavigation = (props: any) => {
         setCurrentFormType,
         activeId,
         sectionId,
+        // bookId,
     } = props;
 
     const doSome = (data: any) => {
@@ -27,16 +42,17 @@ const BookNavigation = (props: any) => {
         <div>
             {allPages.map((value: any, index: number) => {
                 const { chapter, sections } = doSome(value);
-                console.log("chapter", chapter);
-                console.log("sections", sections);
                 return (
-                    <div>
+                    <div key={`${index}`}>
                         <div key={chapter.title}>
                             <div
                                 onClick={(e) => {
                                     e.preventDefault();
                                     setActiveId(chapter.uniqueId);
-                                    setCurrentFormType(null);
+                                    setCurrentFormType({
+                                        formType: 404,
+                                        formData: None,
+                                    });
                                     setSectionId(null);
                                 }}
                                 className="chapter-nav"
@@ -50,21 +66,28 @@ const BookNavigation = (props: any) => {
                                         className="add-section"
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            setCurrentFormType(105);
+                                            setCurrentFormType({
+                                                formType: 105,
+                                                formData: None,
+                                            });
                                             setParentId(chapter.uniqueId);
                                         }}
                                     >
                                         + section
                                     </div>
                                 ) : null}
-                                {sections.map((c: any) => {
+                                {sections.map((c: any, _index: number) => {
                                     return (
-                                        <div>
+                                        <div key={`${_index}`}>
                                             <div
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     setSectionId(c.uniqueId);
                                                     setParentId(c.uniqueId);
+                                                    setCurrentFormType({
+                                                        formType: 404,
+                                                        formData: None,
+                                                    });
                                                 }}
                                                 key={c.uniqueId}
                                                 style={{
@@ -78,7 +101,30 @@ const BookNavigation = (props: any) => {
                                                 className="add-section"
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    setCurrentFormType(105);
+                                                    setCurrentFormType({
+                                                        formType: 105,
+                                                        formData: None,
+                                                    });
+
+                                                    let lastIndex =
+                                                        allPages.length - 1;
+                                                    if (index < lastIndex) {
+                                                        let nextPageUpdateInfo =
+                                                            allPages[index + 1];
+                                                        let parentPageInfo =
+                                                            allPages[index];
+                                                        let topUniqueId =
+                                                            parentPageInfo.uniqueId;
+                                                        let botUniqueId =
+                                                            nextPageUpdateInfo.uniqueId;
+                                                        setCurrentFormType({
+                                                            formType: 105,
+                                                            formData: Some({
+                                                                topUniqueId,
+                                                                botUniqueId,
+                                                            }),
+                                                        });
+                                                    }
                                                 }}
                                             >
                                                 + section
@@ -91,8 +137,23 @@ const BookNavigation = (props: any) => {
                         <div
                             onClick={(e) => {
                                 e.preventDefault();
-                                setCurrentFormType(104);
-                                setParentId(chapter.uniqueId);
+                                let lastIndex = allPages.length - 1;
+                                if (index < lastIndex) {
+                                    let nextPageUpdateInfo =
+                                        allPages[index + 1];
+                                    let parentPageInfo = allPages[index];
+                                    let topUniqueId = parentPageInfo.uniqueId;
+                                    let botUniqueId =
+                                        nextPageUpdateInfo.uniqueId;
+                                    setCurrentFormType({
+                                        formType: 104,
+                                        formData: Some({
+                                            topUniqueId: topUniqueId,
+                                            botUniqueId: botUniqueId,
+                                        }),
+                                    });
+                                    setParentId(chapter.uniqueId);
+                                }
                             }}
                             className="create-nav-button"
                         >

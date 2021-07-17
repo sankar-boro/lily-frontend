@@ -12,6 +12,8 @@ import Form106 from "./forms/Form106";
 import { sortAll, Book } from "./util";
 import { BookNavigation } from "./BookNavigation";
 import "./edit.css";
+import { Some, Option, None } from "ts-results";
+import { Form } from "./util";
 
 const EditBook = () => {
     const history: {
@@ -29,7 +31,10 @@ const EditBook = () => {
     const [activeId, setActiveId] = useState<string>(bookId);
     const [parentId, setParentId] = useState<string | null>(null);
     const [sectionId, setSectionId] = useState<string | null>(null);
-    const [currentFormType, setCurrentFormType] = useState<number | null>(null);
+    const [currentFormType, setCurrentFormType] = useState<Form>({
+        formType: 404,
+        formData: None,
+    });
 
     const callMe = (bc: any) => {
         setSectionId(bc);
@@ -78,7 +83,15 @@ const EditBook = () => {
     return null;
 };
 
-const RenderBody = (props: any) => {
+const RenderBody = (props: {
+    currentData: any;
+    sectionId: string | null;
+    currentFormType: Form;
+    setCurrentFormType: Function;
+    allPages: any;
+    bookId: string;
+    parentId: string | null;
+}) => {
     const { currentData, sectionId, currentFormType } = props;
     let thisData = currentData;
     if (sectionId && currentData.child && currentData.child.length > 0) {
@@ -89,8 +102,8 @@ const RenderBody = (props: any) => {
         });
     }
 
-    if (currentFormType) {
-        return Form(props);
+    if (currentFormType.formType !== 404) {
+        return FormView(props);
     }
     return (
         <div className="container">
@@ -126,25 +139,30 @@ const RenderBody = (props: any) => {
     );
 };
 
-const Form = (props: any) => {
+const FormView = (props: {
+    currentFormType: Form;
+    allPages: any;
+    bookId: string;
+    parentId: string | null;
+}) => {
     const { currentFormType } = props;
-    if (currentFormType === 101) {
+    if (currentFormType.formType === 101) {
         return <Form101 {...props} />;
     }
 
-    if (currentFormType === 102) {
+    if (currentFormType.formType === 102) {
         return <Form102 {...props} />;
     }
-    if (currentFormType === 103) {
+    if (currentFormType.formType === 103) {
         return <Form103 {...props} />;
     }
-    if (currentFormType === 104) {
+    if (currentFormType.formType === 104) {
         return <Form104 {...props} />;
     }
-    if (currentFormType === 105) {
+    if (currentFormType.formType === 105) {
         return <Form105 {...props} />;
     }
-    if (currentFormType === 106) {
+    if (currentFormType.formType === 106) {
         return <Form106 {...props} />;
     }
     return null;

@@ -1,3 +1,5 @@
+import { Some, Option, None } from "ts-results";
+
 type Book = {
     bookId: string;
     authorId: string;
@@ -9,6 +11,16 @@ type Book = {
     createdAt: string;
     updatedAt: string;
     identity: number;
+};
+
+type FormData = {
+    topUniqueId: string;
+    botUniqueId: string;
+};
+
+type Form = {
+    formType: number;
+    formData: Option<FormData>;
 };
 
 const sortAll = (data: Book[], parentId: string) => {
@@ -67,17 +79,17 @@ const sortAll = (data: Book[], parentId: string) => {
     return newData;
 };
 
-const activeChBg = (c: any, a: string) => {
+const activeChBg = (c: any, a: string | null) => {
     let color = "white";
-    if (c.uniqueId === a) {
+    if (a && c.uniqueId === a) {
         color = "#ccc";
     }
     return {
         backgroundColor: color,
     };
 };
-const activeScBg = (c: any, a: string) => {
-    if (c.uniqueId === a) {
+const activeScBg = (c: any, a: string | null) => {
+    if (a && c.uniqueId === a) {
         return {
             borderLeft: `5px solid black`,
             paddingLeft: "5px",
@@ -97,4 +109,4 @@ const displayNone = (c: any, a: string) => {
 };
 
 export { sortAll, activeChBg, activeScBg, displayNone };
-export type { Book };
+export type { Book, Form, FormData };

@@ -1,36 +1,36 @@
 import { useState } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
+import { Form } from "../util";
 
-type Book = {
-    bookId: string;
+const createNewSubSection = (props: {
+    title: string;
     body: string;
     identity: number;
-    title: string;
-    parentId: string | null;
-    uniqueId: string;
-    authorId: string;
-    authorName: string;
-    createdAt: string;
-    updatedAt: string;
-};
-
-const createNewChapter = (props: {
-    title: string;
-    body: string;
-    identity: number | null;
-    parentId: string | null;
+    parentId: string;
     bookId: string;
+    topUniqueId: string;
+    botUniqueId: string;
 }) => {
-    const { title, body, identity, parentId, bookId } = props;
+    const {
+        title,
+        body,
+        identity,
+        parentId,
+        bookId,
+        topUniqueId,
+        botUniqueId,
+    } = props;
     axios
         .post(
-            "http://localhost:8000/book/create/new/chapter",
+            "http://localhost:8000/book/create/update/section",
             {
                 title,
                 body,
                 identity,
                 parentId,
                 bookId,
+                topUniqueId,
+                botUniqueId,
             },
             {
                 withCredentials: true,
@@ -50,17 +50,30 @@ const createNewChapter = (props: {
         });
 };
 
-const Form104 = (props: {
-    allPages: Book[];
+const Form107 = (props: {
+    sectionProps: any;
     bookId: string;
-    parentId: string | null;
+    currentFormType: Form;
 }) => {
-    const { allPages, bookId, parentId } = props;
+    const { sectionProps, bookId, currentFormType } = props;
+    const { sectionId, sectionChildren } = sectionProps;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
+    let parentId = sectionId;
+    if (sectionChildren.length > 0) {
+        parentId = sectionChildren[sectionChildren.length - 1].uniqueId;
+    }
+
+    let topUniqueId: string = "";
+    let botUniqueId: string = "";
+
+    if (currentFormType.formData && currentFormType.formData.some) {
+        topUniqueId = currentFormType.formData.val.topUniqueId;
+        botUniqueId = currentFormType.formData.val.botUniqueId;
+    }
     return (
         <div>
-            <div>Create New Chapter</div>
+            <div>Create New Sub-Section</div>
             <form action="#" method="post">
                 <input
                     type="text"
@@ -93,12 +106,14 @@ const Form104 = (props: {
                     value="Submit"
                     onClick={(e) => {
                         e.preventDefault();
-                        createNewChapter({
+                        createNewSubSection({
+                            bookId,
                             title,
                             body,
                             parentId,
-                            identity: 104,
-                            bookId,
+                            identity: 106,
+                            topUniqueId,
+                            botUniqueId,
                         });
                     }}
                 />
@@ -107,4 +122,4 @@ const Form104 = (props: {
     );
 };
 
-export default Form104;
+export default Form107;
