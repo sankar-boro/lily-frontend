@@ -2,11 +2,6 @@
 .section-nav,
 .create-nav-button {
 }
-.chapter-nav {
-    color: #2f3337;
-    font-weight: bold;
-    padding: 4px 14px;
-}
 .chapter-nav:hover,
 .section-nav:hover {
     cursor: pointer;
@@ -14,6 +9,8 @@
 }
 
 .create-nav-button {
+    padding: 4px 14px;
+    font-size: 12px;
 }
 .create-nav-button:hover {
     cursor: pointer;
@@ -24,4 +21,9 @@
 .add-section:hover {
     cursor: pointer;
     background-color: #eff0f1;
+}
+.section-nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

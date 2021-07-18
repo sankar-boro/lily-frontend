@@ -92,8 +92,6 @@ const activeChBg = (c: any, a: string | null) => {
 const activeScBg = (c: any, a: string | null) => {
     if (a && c.uniqueId === a) {
         return {
-            borderLeft: `5px solid black`,
-            paddingLeft: "5px",
             backgroundColor: "#f1f1f1",
         };
     }

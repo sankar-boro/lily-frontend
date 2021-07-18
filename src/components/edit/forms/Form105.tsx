@@ -56,7 +56,7 @@ const Form102 = (props: any) => {
     const [body, setBody] = useState("");
     const { bookId, parentId } = props;
     return (
-        <div>
+        <div className="lg-container">
             <div>Create New Section</div>
             <form action="#" method="post">
                 <input

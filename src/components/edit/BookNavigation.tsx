@@ -3,8 +3,7 @@ import { None, Some } from "ts-results";
 import { Dispatch, SetStateAction } from "react";
 
 type SetCurrentFormType = (a: Form) => void;
-
-const BookNavigation = (props: {
+type BookNavigationProps = {
     title: string;
     setActiveId: Dispatch<SetStateAction<string>>;
     allPages: any;
@@ -14,7 +13,8 @@ const BookNavigation = (props: {
     activeId: string;
     // bookId: string | null;
     sectionId: string | null;
-}) => {
+};
+const BookNavigation = (props: BookNavigationProps) => {
     const {
         title,
         setActiveId,
@@ -44,7 +44,10 @@ const BookNavigation = (props: {
                 const { chapter, sections } = doSome(value);
                 return (
                     <div key={`${index}`}>
-                        <div key={chapter.title}>
+                        <div
+                            className="chapter-nav"
+                            // style={activeChBg(chapter, activeId)}
+                        >
                             <div
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -55,141 +58,64 @@ const BookNavigation = (props: {
                                     });
                                     setSectionId(null);
                                 }}
-                                className="chapter-nav"
-                                style={activeChBg(chapter, activeId)}
+                                className="chapter-nav-title"
                             >
                                 {chapter.title}
                             </div>
-                            <div>
-                                {chapter.parentId ? (
-                                    <div
-                                        className="add-section"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            console.log(
-                                                "uId",
-                                                chapter.uniqueId
-                                            );
-                                            if (sections.length > 0) {
-                                                let topUniqueId =
-                                                    chapter.uniqueId;
-                                                let botUniqueId =
-                                                    sections[0].uniqueId;
-                                                console.log(topUniqueId);
-                                                console.log(botUniqueId);
-                                                setCurrentFormType({
-                                                    formType: 107,
-                                                    formData: Some({
-                                                        topUniqueId,
-                                                        botUniqueId,
-                                                        identity: 105,
-                                                    }),
-                                                });
-                                            } else {
-                                                setParentId(chapter.uniqueId);
-                                                setCurrentFormType({
-                                                    formType: 105,
-                                                    formData: None,
-                                                });
-                                            }
-                                        }}
-                                    >
-                                        + section
-                                    </div>
-                                ) : null}
-                                {sections.map((c: any, _index: number) => {
-                                    return (
-                                        <div key={`${_index}`}>
+                            <div
+                                onClick={(e) =>
+                                    addNewChapter(e, props, index, chapter)
+                                }
+                            >
+                                +
+                            </div>
+                        </div>
+                        <div>
+                            {sections.map((c: any, _index: number) => {
+                                return (
+                                    <div key={`${_index}`}>
+                                        <div
+                                            key={c.uniqueId}
+                                            style={{
+                                                marginLeft: 16,
+                                                ...activeScBg(c, sectionId),
+                                            }}
+                                            className="section-nav"
+                                        >
                                             <div
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     setSectionId(c.uniqueId);
+                                                    setActiveId(
+                                                        chapter.uniqueId
+                                                    );
                                                     setParentId(c.uniqueId);
                                                     setCurrentFormType({
                                                         formType: 404,
                                                         formData: None,
                                                     });
                                                 }}
-                                                key={c.uniqueId}
-                                                style={{
-                                                    ...activeScBg(c, sectionId),
-                                                }}
-                                                className="section-nav"
+                                                className="section-nav-title"
                                             >
                                                 {c.title}
                                             </div>
                                             <div
-                                                className="add-section"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    let lastIndex =
-                                                        sections.length - 1;
-                                                    if (_index < lastIndex) {
-                                                        let nextPageUpdateInfo =
-                                                            sections[
-                                                                _index + 1
-                                                            ];
-                                                        let parentPageInfo =
-                                                            sections[_index];
-                                                        let topUniqueId =
-                                                            parentPageInfo.uniqueId;
-                                                        let botUniqueId =
-                                                            nextPageUpdateInfo.uniqueId;
-                                                        setCurrentFormType({
-                                                            formType: 107,
-                                                            formData: Some({
-                                                                topUniqueId,
-                                                                botUniqueId,
-                                                                identity: 106,
-                                                            }),
-                                                        });
-                                                    } else {
-                                                        setParentId(c.uniqueId);
-                                                        setCurrentFormType({
-                                                            formType: 105,
-                                                            formData: None,
-                                                        });
-                                                    }
-                                                }}
+                                                onClick={(e: any) =>
+                                                    addNewSection(
+                                                        e,
+                                                        props,
+                                                        sections,
+                                                        c,
+                                                        _index
+                                                    )
+                                                }
                                             >
-                                                + section
+                                                +
                                             </div>
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                        <div
-                            onClick={(e) => {
-                                e.preventDefault();
-                                let lastIndex = allPages.length - 1;
-                                if (index < lastIndex) {
-                                    let nextPageUpdateInfo =
-                                        allPages[index + 1];
-                                    let parentPageInfo = allPages[index];
-                                    let topUniqueId = parentPageInfo.uniqueId;
-                                    let botUniqueId =
-                                        nextPageUpdateInfo.uniqueId;
-                                    setCurrentFormType({
-                                        formType: 107,
-                                        formData: Some({
-                                            topUniqueId: topUniqueId,
-                                            botUniqueId: botUniqueId,
-                                            identity: 104,
-                                        }),
-                                    });
-                                    setParentId(chapter.uniqueId);
-                                } else {
-                                    setCurrentFormType({
-                                        formType: 104,
-                                        formData: None,
-                                    });
-                                    setParentId(chapter.uniqueId);
-                                }
-                            }}
-                            className="create-nav-button"
-                        >
-                            Add new Chapter
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 );
@@ -198,4 +124,67 @@ const BookNavigation = (props: {
     );
 };
 
+const addNewChapter = (
+    e: any,
+    props: BookNavigationProps,
+    index: number,
+    chapter: any
+) => {
+    const { setCurrentFormType, setParentId, allPages } = props;
+    e.preventDefault();
+    let lastIndex = allPages.length - 1;
+    if (index < lastIndex) {
+        let nextPageUpdateInfo = allPages[index + 1];
+        let parentPageInfo = allPages[index];
+        let topUniqueId = parentPageInfo.uniqueId;
+        let botUniqueId = nextPageUpdateInfo.uniqueId;
+        setCurrentFormType({
+            formType: 107,
+            formData: Some({
+                topUniqueId: topUniqueId,
+                botUniqueId: botUniqueId,
+                identity: 104,
+            }),
+        });
+        setParentId(chapter.uniqueId);
+    } else {
+        setCurrentFormType({
+            formType: 104,
+            formData: None,
+        });
+        setParentId(chapter.uniqueId);
+    }
+};
+
+const addNewSection = (
+    e: any,
+    props: BookNavigationProps,
+    sections: any,
+    c: any,
+    _index: number
+) => {
+    const { setCurrentFormType, setParentId } = props;
+    e.preventDefault();
+    let lastIndex = sections.length - 1;
+    if (_index < lastIndex) {
+        let nextPageUpdateInfo = sections[_index + 1];
+        let parentPageInfo = sections[_index];
+        let topUniqueId = parentPageInfo.uniqueId;
+        let botUniqueId = nextPageUpdateInfo.uniqueId;
+        setCurrentFormType({
+            formType: 107,
+            formData: Some({
+                topUniqueId,
+                botUniqueId,
+                identity: 106,
+            }),
+        });
+    } else {
+        setParentId(c.uniqueId);
+        setCurrentFormType({
+            formType: 105,
+            formData: None,
+        });
+    }
+};
 export { BookNavigation };

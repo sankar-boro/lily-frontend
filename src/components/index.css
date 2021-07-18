@@ -180,10 +180,19 @@
     cursor: pointer;
 }
 .chapter-nav {
-    padding: 4px 12px;
+    color: #2f3337;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 .section-nav {
-    padding: 4px 12px;
+}
+.chapter-nav-title {
+    flex: 1;
+}
+.section-nav-title {
+    flex: 1;
 }
 .theme {
     --white: #fff;

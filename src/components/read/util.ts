@@ -64,7 +64,6 @@ const sortAll = (data: Book[], parentId: string) => {
             const { child } = d;
             child.forEach((c: any) => {
                 let currentParentId = c.uniqueId;
-                console.log("cccc", currentParentId);
 
                 data.forEach((dd: any) => {
                     if (
@@ -93,8 +92,6 @@ const activeChBg = (c: any, a: string) => {
 const activeScBg = (c: any, a: string) => {
     if (c.uniqueId === a) {
         return {
-            borderLeft: `5px solid black`,
-            paddingLeft: "5px",
             backgroundColor: "#f1f1f1",
         };
     }

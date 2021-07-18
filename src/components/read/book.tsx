@@ -42,11 +42,12 @@ const LeftComponent = (props: any) => {
                                     <div
                                         onClick={(e) => {
                                             e.preventDefault();
+                                            setActiveId(chapter.uniqueId);
                                             setSectionId(c.uniqueId);
                                         }}
                                         key={c.uniqueId}
                                         style={{
-                                            marginLeft: 15,
+                                            marginLeft: 16,
                                             ...activeScBg(c, sectionId),
                                         }}
                                         className="section-nav"
