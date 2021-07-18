@@ -1,3 +1,23 @@
+.container {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+}
+.lg-container {
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+}
+.md-container {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+}
+.sm-container {
+    width: 75%;
+    margin-right: auto;
+    margin-left: auto;
+}
 .toolbar {
     display: flex;
     flex-direction: row;
@@ -158,6 +178,12 @@
 }
 .login-button:hover {
     cursor: pointer;
+}
+.chapter-nav {
+    padding: 4px 12px;
+}
+.section-nav {
+    padding: 4px 12px;
 }
 .theme {
     --white: #fff;

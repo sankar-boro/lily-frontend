@@ -5,6 +5,7 @@
 .chapter-nav {
     color: #2f3337;
     font-weight: bold;
+    padding: 4px 14px;
 }
 .chapter-nav:hover,
 .section-nav:hover {

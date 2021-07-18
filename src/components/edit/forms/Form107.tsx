@@ -75,7 +75,7 @@ const Form107 = (props: {
         identity = currentFormType.formData.val.identity;
     }
     return (
-        <div>
+        <div className="lg-container">
             <div>Create New Chapter - Form107</div>
             <form action="#" method="post">
                 <input

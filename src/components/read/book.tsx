@@ -19,7 +19,6 @@ const LeftComponent = (props: any) => {
             sections: child,
         };
     };
-    console.log("allPages", allPages);
     return (
         <div>
             {allPages.map((value: any, index: number) => {
@@ -37,7 +36,7 @@ const LeftComponent = (props: any) => {
                         >
                             {chapter.title}
                         </div>
-                        <div style={displayNone(chapter, activeId)}>
+                        <div>
                             {sections.map((c: any) => {
                                 return (
                                     <div
@@ -90,12 +89,7 @@ const ViewBook = () => {
                     res.status === 200
                 ) {
                     let dataRes: Book[] = res.data;
-                    // console.log("res", res);
-                    // let a = [state];
                     let x = sortAll(dataRes, bookId);
-                    // x.forEach((x: any) => {
-                    //     a.push(x);
-                    // });
                     setAllPages(x);
                 }
             })
@@ -153,7 +147,7 @@ const RenderBody = (props: any) => {
         });
     }
     return (
-        <div className="container">
+        <div className="lg-container">
             <div className="col-8">
                 <h3>{thisData.title}</h3>
                 <div>{thisData.body}</div>

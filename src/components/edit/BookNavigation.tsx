@@ -60,7 +60,7 @@ const BookNavigation = (props: {
                             >
                                 {chapter.title}
                             </div>
-                            <div style={displayNone(chapter, activeId)}>
+                            <div>
                                 {chapter.parentId ? (
                                     <div
                                         className="add-section"
@@ -164,7 +164,6 @@ const BookNavigation = (props: {
                                 e.preventDefault();
                                 let lastIndex = allPages.length - 1;
                                 if (index < lastIndex) {
-                                    console.log("wwwwwww");
                                     let nextPageUpdateInfo =
                                         allPages[index + 1];
                                     let parentPageInfo = allPages[index];

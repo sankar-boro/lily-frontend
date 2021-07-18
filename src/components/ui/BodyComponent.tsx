@@ -8,12 +8,7 @@ const BodyComponent = (props: any) => {
             <div className="navbar-left">{props.leftComponent}</div>
             <div className="body-container">
                 <div className="toolbar">
-                    <div className="document-categories">
-                        <div className="document-section">Novels</div>
-                        <div className="document-section">Science</div>
-                        <div className="document-section">Maths</div>
-                        <div className="document-section">History</div>
-                    </div>
+                    <div className="document-categories"></div>
                     <div className="settings">
                         <div
                             className="document-section"

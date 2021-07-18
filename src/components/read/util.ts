@@ -84,7 +84,7 @@ const sortAll = (data: Book[], parentId: string) => {
 const activeChBg = (c: any, a: string) => {
     let color = "white";
     if (c.uniqueId === a) {
-        color = "#ccc";
+        color = "#eff0f1";
     }
     return {
         backgroundColor: color,

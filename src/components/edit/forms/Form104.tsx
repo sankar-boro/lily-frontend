@@ -55,13 +55,12 @@ const Form104 = (props: {
     bookId: string;
     parentId: string | null;
 }) => {
-    console.log("Form104", props);
     const { allPages, bookId, parentId } = props;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     return (
-        <div>
-            <div>Create New Chapter</div>
+        <div className="lg-container">
+            <div>Create New Chapter Form104</div>
             <form action="#" method="post">
                 <input
                     type="text"

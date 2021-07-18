@@ -108,7 +108,7 @@ const RenderBody = (props: {
         return FormView(props);
     }
     return (
-        <div className="container">
+        <div className="lg-container">
             <div className="col-8">
                 <h3>{thisData.title}</h3>
                 <div>{thisData.body}</div>
