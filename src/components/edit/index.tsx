@@ -1,8 +1,6 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
 import BodyComponent from "../ui/BodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
-import { useEffect } from "react";
 import Form101 from "./forms/Form101";
 import Form102 from "./forms/Form102";
 import Form103 from "./forms/Form103";
@@ -10,10 +8,10 @@ import Form104 from "./forms/Form104";
 import Form105 from "./forms/Form105";
 import Form106 from "./forms/Form106";
 import Form107 from "./forms/Form107";
-import { sortAll, Book } from "./util";
-import { BookNavigation } from "./BookNavigation";
+import { Book } from "./util";
+import { EditBookNavigation } from "./EditBookNavigation";
 import "./edit.css";
-import { Some, Option, None } from "ts-results";
+import { None } from "ts-results";
 import { Form } from "./util";
 
 const EditBook = () => {
@@ -27,7 +25,7 @@ const EditBook = () => {
     } = useHistory();
     const { location } = history;
     const { state } = location;
-    const { title, body, bookId } = state.main;
+    const { title, bookId } = state.main;
     const [allPages, setAllPages] = useState(state.allPages);
     const [activeId, setActiveId] = useState<string>(bookId);
     const [parentId, setParentId] = useState<string | null>(null);
@@ -54,7 +52,7 @@ const EditBook = () => {
         return (
             <BodyComponent
                 leftComponent={
-                    <BookNavigation
+                    <EditBookNavigation
                         title={title}
                         allPages={allPages}
                         setActiveId={setActiveId}

@@ -1,8 +1,7 @@
-import { activeChBg, activeScBg, displayNone, Form } from "./util";
+import { activeScBg, Form } from "./util";
 import { None, Some } from "ts-results";
 import { Dispatch, SetStateAction } from "react";
 
-type SetCurrentFormType = (a: Form) => void;
 type BookNavigationProps = {
     title: string;
     setActiveId: Dispatch<SetStateAction<string>>;
@@ -11,20 +10,16 @@ type BookNavigationProps = {
     setParentId: Dispatch<SetStateAction<string | null>>;
     setCurrentFormType: Dispatch<SetStateAction<Form>>;
     activeId: string;
-    // bookId: string | null;
     sectionId: string | null;
 };
-const BookNavigation = (props: BookNavigationProps) => {
+const EditBookNavigation = (props: BookNavigationProps) => {
     const {
-        title,
         setActiveId,
         allPages,
         setSectionId,
         setParentId,
         setCurrentFormType,
-        activeId,
         sectionId,
-        // bookId,
     } = props;
 
     const doSome = (data: any) => {
@@ -187,4 +182,4 @@ const addNewSection = (
         });
     }
 };
-export { BookNavigation };
+export { EditBookNavigation };

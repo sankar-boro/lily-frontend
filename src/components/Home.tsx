@@ -1,11 +1,11 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuthContext, AuthService } from "../AuthServiceProvider";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import "./index.css";
+import "./component.css";
 import { books as booksCache } from "./data";
 import { useHistory } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
-import ViewBook from "./read/book";
+import ViewBook from "./read";
 import Profile from "../components/profile";
 import NewBook from "./form/book";
 import NewBlog from "./form/blog";

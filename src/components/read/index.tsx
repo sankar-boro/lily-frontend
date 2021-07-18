@@ -3,66 +3,8 @@ import BodyComponent from "../ui/BodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Book, sortAll, activeChBg, activeScBg, displayNone } from "./util";
-
-const LeftComponent = (props: any) => {
-    const { title, setActiveId, allPages, setSectionId, activeId, sectionId } =
-        props;
-    const doSome = (data: any) => {
-        let child = [];
-        if (data && data.child && Array.isArray(data.child)) {
-            child = data.child;
-        }
-
-        return {
-            chapter: data,
-            sections: child,
-        };
-    };
-    return (
-        <div>
-            {allPages.map((value: any, index: number) => {
-                const { chapter, sections } = doSome(value);
-                return (
-                    <div key={chapter.title}>
-                        <div
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setActiveId(chapter.uniqueId);
-                                setSectionId(null);
-                            }}
-                            className="chapter-nav"
-                            style={activeChBg(chapter, activeId)}
-                        >
-                            {chapter.title}
-                        </div>
-                        <div>
-                            {sections.map((c: any) => {
-                                return (
-                                    <div
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setActiveId(chapter.uniqueId);
-                                            setSectionId(c.uniqueId);
-                                        }}
-                                        key={c.uniqueId}
-                                        style={{
-                                            marginLeft: 16,
-                                            ...activeScBg(c, sectionId),
-                                        }}
-                                        className="section-nav"
-                                    >
-                                        {c.title}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                );
-            })}
-        </div>
-    );
-};
+import { Book, sortAll } from "./util";
+import ReadBookNavigation from "./ReadBookNavigation";
 
 const ViewBook = () => {
     const history: {
@@ -73,11 +15,10 @@ const ViewBook = () => {
 
     const { location } = history;
     const { state } = location;
-    const { title, body, bookId } = state;
+    const { title, bookId } = state;
     const [allPages, setAllPages] = useState<any>([]);
     const [activeId, setActiveId] = useState<string>(bookId);
     const [sectionId, setSectionId] = useState<string | null>(null);
-    const [level, setLevel] = useState(1);
     useEffect(() => {
         axios
             .get(`http://localhost:8000/book/getall/${bookId}`, {
@@ -116,11 +57,10 @@ const ViewBook = () => {
         return (
             <BodyComponent
                 leftComponent={
-                    <LeftComponent
+                    <ReadBookNavigation
                         title={title}
                         allPages={allPages}
                         setActiveId={setActiveId}
-                        setLevel={setLevel}
                         setSectionId={callMe}
                         sectionId={sectionId}
                         activeId={activeId}
