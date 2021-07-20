@@ -81,21 +81,16 @@ const sortAll = (data: Book[], parentId: string) => {
 };
 
 const activeChBg = (c: any, a: string) => {
-    let color = "white";
     if (c.uniqueId === a) {
-        color = "#eff0f1";
+        return "active-nav";
     }
-    return {
-        backgroundColor: color,
-    };
+    return "no-active-nav";
 };
 const activeScBg = (c: any, a: string) => {
     if (c.uniqueId === a) {
-        return {
-            backgroundColor: "#f1f1f1",
-        };
+        return "active-nav";
     }
-    return {};
+    return "no-active-nav";
 };
 const displayNone = (c: any, a: string) => {
     let display = "none";

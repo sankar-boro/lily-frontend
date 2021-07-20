@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Book, sortAll } from "./util";
 import ReadBookNavigation from "./ReadBookNavigation";
+import "./read.css";
 
 const ViewBook = () => {
     const history: {

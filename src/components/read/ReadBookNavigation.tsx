@@ -14,7 +14,7 @@ const ReadBookNavigation = (props: any) => {
         };
     };
     return (
-        <div>
+        <div style={{ marginTop: 16 }}>
             {allPages.map((value: any, index: number) => {
                 const { chapter, sections } = doSome(value);
                 return (
@@ -25,8 +25,10 @@ const ReadBookNavigation = (props: any) => {
                                 setActiveId(chapter.uniqueId);
                                 setSectionId(null);
                             }}
-                            className="chapter-nav"
-                            style={activeChBg(chapter, activeId)}
+                            className={`chapter-nav hover ${activeChBg(
+                                chapter,
+                                activeId
+                            )}`}
                         >
                             {chapter.title}
                         </div>
@@ -40,11 +42,10 @@ const ReadBookNavigation = (props: any) => {
                                             setSectionId(c.uniqueId);
                                         }}
                                         key={c.uniqueId}
-                                        style={{
-                                            marginLeft: 16,
-                                            ...activeScBg(c, sectionId),
-                                        }}
-                                        className="section-nav"
+                                        className={`section-nav hover ${activeScBg(
+                                            c,
+                                            sectionId
+                                        )}`}
                                     >
                                         {c.title}
                                     </div>

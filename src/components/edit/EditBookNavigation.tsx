@@ -53,7 +53,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                     });
                                     setSectionId(null);
                                 }}
-                                className="chapter-nav-title"
+                                className="chapter-nav-title hover"
                             >
                                 {chapter.title}
                             </div>
@@ -61,11 +61,28 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                 onClick={(e) =>
                                     addNewChapter(e, props, index, chapter)
                                 }
+                                className="hover"
                             >
                                 +
                             </div>
                         </div>
                         <div>
+                            {sections.length === 0 && (
+                                <div
+                                    onClick={(e: any) =>
+                                        addNewSection(
+                                            e,
+                                            props,
+                                            sections,
+                                            chapter,
+                                            0
+                                        )
+                                    }
+                                    className="hover"
+                                >
+                                    section +
+                                </div>
+                            )}
                             {sections.map((c: any, _index: number) => {
                                 return (
                                     <div key={`${_index}`}>
@@ -75,7 +92,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                                 marginLeft: 16,
                                                 ...activeScBg(c, sectionId),
                                             }}
-                                            className="section-nav"
+                                            className="section-nav hover"
                                         >
                                             <div
                                                 onClick={(e) => {
@@ -142,6 +159,7 @@ const addNewChapter = (
             }),
         });
         setParentId(chapter.uniqueId);
+        console.log("chapter");
     } else {
         setCurrentFormType({
             formType: 104,

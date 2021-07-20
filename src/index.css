@@ -47,9 +47,6 @@ a {
 }
 .nav-section a {
 }
-.nav-section:hover {
-    cursor: pointer;
-}
 .button-nav {
     border: none;
     background-color: white;
@@ -115,6 +112,9 @@ h5,
 h6 {
     margin: 8px 0px;
     padding: 0;
+}
+.hover:hover {
+    cursor: pointer;
 }
 .theme {
     --white: #fff;

@@ -11,7 +11,7 @@ const BodyComponent = (props: any) => {
                     <div className="document-categories"></div>
                     <div className="settings">
                         <div
-                            className="document-section"
+                            className="document-section hover"
                             onClick={(e) => {
                                 e.preventDefault();
                                 history.replace({
