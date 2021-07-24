@@ -11,7 +11,20 @@
 .section-nav {
     margin-left: 16px;
 }
-
 .active-nav {
     color: #0054a3;
+}
+.add-section {
+    margin-left: 16px;
+}
+.new-button {
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #0054a3;
+    font-weight: bold;
 }

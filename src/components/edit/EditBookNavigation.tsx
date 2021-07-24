@@ -40,94 +40,102 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                 return (
                     <div key={`${index}`}>
                         <div
-                            className="chapter-nav"
-                            // style={activeChBg(chapter, activeId)}
+                            style={{
+                                borderLeft: "1px solid #ccc",
+                                marginLeft: 4,
+                                paddingLeft: 8,
+                            }}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setActiveId(chapter.uniqueId);
+                                setCurrentFormType({
+                                    formType: 404,
+                                    formData: None,
+                                });
+                                setSectionId(null);
+                            }}
                         >
-                            <div
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setActiveId(chapter.uniqueId);
-                                    setCurrentFormType({
-                                        formType: 404,
-                                        formData: None,
-                                    });
-                                    setSectionId(null);
-                                }}
-                                className="chapter-nav-title hover"
-                            >
-                                {chapter.title}
-                            </div>
-                            <div
-                                onClick={(e) =>
-                                    addNewChapter(e, props, index, chapter)
-                                }
-                                className="hover"
-                            >
-                                +
-                            </div>
+                            {chapter.title}
                         </div>
-                        <div>
-                            {sections.length === 0 && (
-                                <div
-                                    onClick={(e: any) =>
-                                        addNewSection(
-                                            e,
-                                            props,
-                                            sections,
-                                            chapter,
-                                            0
-                                        )
-                                    }
-                                    className="hover"
-                                >
-                                    section +
-                                </div>
-                            )}
+                        {/* section */}
+                        <div
+                            style={{
+                                borderLeft: "1px solid #ccc",
+                                marginLeft: 4,
+                                paddingLeft: 16,
+                            }}
+                            onClick={(e: any) =>
+                                addNewSection(e, props, sections, chapter, 0)
+                            }
+                        >
+                            <span
+                                style={{
+                                    borderLeft: "1px solid #ccc",
+                                    marginRight: 8,
+                                }}
+                            />
+                            +
+                        </div>
+                        <div
+                            style={{
+                                borderLeft: "1px solid #ccc",
+                                marginLeft: 4,
+                                paddingLeft: 16,
+                            }}
+                        >
                             {sections.map((c: any, _index: number) => {
                                 return (
-                                    <div key={`${_index}`}>
+                                    <div>
                                         <div
-                                            key={c.uniqueId}
-                                            style={{
-                                                marginLeft: 16,
-                                                ...activeScBg(c, sectionId),
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setSectionId(c.uniqueId);
+                                                setActiveId(chapter.uniqueId);
+                                                setParentId(c.uniqueId);
+                                                setCurrentFormType({
+                                                    formType: 404,
+                                                    formData: None,
+                                                });
                                             }}
-                                            className="section-nav hover"
                                         >
-                                            <div
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    setSectionId(c.uniqueId);
-                                                    setActiveId(
-                                                        chapter.uniqueId
-                                                    );
-                                                    setParentId(c.uniqueId);
-                                                    setCurrentFormType({
-                                                        formType: 404,
-                                                        formData: None,
-                                                    });
+                                            {c.title}
+                                        </div>
+                                        <div
+                                            onClick={(e: any) =>
+                                                addNewSection(
+                                                    e,
+                                                    props,
+                                                    sections,
+                                                    c,
+                                                    _index
+                                                )
+                                            }
+                                        >
+                                            <span
+                                                style={{
+                                                    borderLeft:
+                                                        "1px solid #ccc",
+                                                    marginRight: 8,
                                                 }}
-                                                className="section-nav-title"
-                                            >
-                                                {c.title}
-                                            </div>
-                                            <div
-                                                onClick={(e: any) =>
-                                                    addNewSection(
-                                                        e,
-                                                        props,
-                                                        sections,
-                                                        c,
-                                                        _index
-                                                    )
-                                                }
-                                            >
-                                                +
-                                            </div>
+                                            />
+                                            +
                                         </div>
                                     </div>
                                 );
                             })}
+                        </div>
+                        {/* chapter */}
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "flex-start",
+                            }}
+                            className="hover"
+                            onClick={(e) =>
+                                addNewChapter(e, props, index, chapter)
+                            }
+                        >
+                            +
                         </div>
                     </div>
                 );
