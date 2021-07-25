@@ -19,8 +19,19 @@ type FormData = {
     identity: number;
 };
 
+enum FormType {
+    FRONT_COVER = "FRONT_COVER",
+    BACK_COVER = "BACK_COVER",
+    PAGE = "PAGE",
+    CHAPTER = "CHAPTER",
+    SECTION = "SECTION",
+    SUB_SECTION = "SUB_SECTION",
+    CREATE_UPDATE = "CREATE_UPDATE",
+    NONE = "NONE",
+}
+
 type Form = {
-    formType: number;
+    formType: FormType;
     formData: Option<FormData>;
 };
 
@@ -107,5 +118,100 @@ const displayNone = (c: any, a: string) => {
     };
 };
 
-export { sortAll, activeChBg, activeScBg, displayNone };
-export type { Book, Form, FormData };
+const doSome = (data: any) => {
+    let child = [];
+    if (data && data.child && Array.isArray(data.child)) {
+        child = data.child;
+    }
+
+    return {
+        chapter: data,
+        sections: child,
+    };
+};
+
+const getChapterData = (
+    value: any,
+    index: number,
+    totalChapters: number,
+    allPages: any,
+    props: any
+) => {
+    const { chapter, sections } = doSome(value);
+    const { setCurrentFormType, setParentId } = props;
+    let formData = {
+        formType: FormType.NONE,
+        chapter,
+        updateIds: {
+            topUniqueId: "",
+            botUniqueId: "",
+        },
+        identity: 104,
+        parentId: chapter.uniqueId,
+        setCurrentFormType,
+        setParentId,
+    };
+    const currentPageNo = index + 1;
+    // let hideForm = false;
+    const formHelp = () => {
+        if (totalChapters === 1) {
+            formData.formType = FormType.CHAPTER;
+            // hideForm = true;
+            return;
+        }
+
+        if (totalChapters > 1 && currentPageNo < totalChapters) {
+            formData.formType = FormType.CREATE_UPDATE;
+            formData.updateIds.topUniqueId = chapter.uniqueId;
+            formData.updateIds.botUniqueId = allPages[index + 1].uniqueId;
+            return;
+        }
+
+        if (currentPageNo === totalChapters) {
+            formData.formType = FormType.CHAPTER;
+        }
+    };
+
+    formHelp();
+
+    console.log("formData", formData);
+
+    return {
+        chapterData: doSome(value),
+        formData,
+        key: index,
+    };
+};
+
+// const getSectionData = (
+//     e: any,
+//     props: any,
+//     sections: any,
+//     data: any,
+//     index: number
+// ) => {
+//     e.preventDefault();
+//     let formData = {
+//         formType: 105,
+//         chapter,
+//         updateIds: {
+//             topUniqueId: "",
+//             botUniqueId: "",
+//         },
+//         identity: 105,
+//         parentId: chapter.uniqueId,
+//         setCurrentFormType,
+//         setParentId,
+//     };
+// };
+
+export {
+    sortAll,
+    activeChBg,
+    activeScBg,
+    displayNone,
+    getChapterData,
+    FormType,
+    // getSectionData,
+};
+export type { Book, Form, FormData, FormType as FormTypes };

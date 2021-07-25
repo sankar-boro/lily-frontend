@@ -1,6 +1,7 @@
-import { activeScBg, Form } from "./util";
+import { activeScBg, getChapterData, Form, FormType } from "./util";
 import { None, Some } from "ts-results";
 import { Dispatch, SetStateAction } from "react";
+import { FormatLineSpacingOutlined } from "@material-ui/icons";
 
 type BookNavigationProps = {
     title: string;
@@ -12,6 +13,19 @@ type BookNavigationProps = {
     activeId: string;
     sectionId: string | null;
 };
+
+type ChapterFormData = {
+    formType: FormType;
+    chapter: any;
+    updateIds: {
+        topUniqueId: string;
+        botUniqueId: string;
+    };
+    identity: number;
+    parentId: string;
+    setCurrentFormType: Dispatch<SetStateAction<Form>>;
+    setParentId: Dispatch<SetStateAction<string | null>>;
+};
 const EditBookNavigation = (props: BookNavigationProps) => {
     const {
         setActiveId,
@@ -22,23 +36,20 @@ const EditBookNavigation = (props: BookNavigationProps) => {
         sectionId,
     } = props;
 
-    const doSome = (data: any) => {
-        let child = [];
-        if (data && data.child && Array.isArray(data.child)) {
-            child = data.child;
-        }
-
-        return {
-            chapter: data,
-            sections: child,
-        };
-    };
+    let totalChapters = allPages.length;
     return (
         <div>
             {allPages.map((value: any, index: number) => {
-                const { chapter, sections } = doSome(value);
+                const { chapterData, formData, key } = getChapterData(
+                    value,
+                    index,
+                    totalChapters,
+                    allPages,
+                    props
+                );
+                const { sections, chapter } = chapterData;
                 return (
-                    <div key={`${index}`}>
+                    <div key={key}>
                         <div
                             style={{
                                 borderLeft: "1px solid #ccc",
@@ -49,7 +60,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                 e.preventDefault();
                                 setActiveId(chapter.uniqueId);
                                 setCurrentFormType({
-                                    formType: 404,
+                                    formType: FormType.NONE,
                                     formData: None,
                                 });
                                 setSectionId(null);
@@ -85,7 +96,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                         >
                             {sections.map((c: any, _index: number) => {
                                 return (
-                                    <div>
+                                    <div key={`${_index}`}>
                                         <div
                                             onClick={(e) => {
                                                 e.preventDefault();
@@ -93,7 +104,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                                 setActiveId(chapter.uniqueId);
                                                 setParentId(c.uniqueId);
                                                 setCurrentFormType({
-                                                    formType: 404,
+                                                    formType: FormType.NONE,
                                                     formData: None,
                                                 });
                                             }}
@@ -131,9 +142,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                 justifyContent: "flex-start",
                             }}
                             className="hover"
-                            onClick={(e) =>
-                                addNewChapter(e, props, index, chapter)
-                            }
+                            onClick={(e) => addNewChapter(e, formData)}
                         >
                             +
                         </div>
@@ -144,33 +153,22 @@ const EditBookNavigation = (props: BookNavigationProps) => {
     );
 };
 
-const addNewChapter = (
-    e: any,
-    props: BookNavigationProps,
-    index: number,
-    chapter: any
-) => {
-    const { setCurrentFormType, setParentId, allPages } = props;
+const addNewChapter = (e: any, formData: ChapterFormData) => {
     e.preventDefault();
-    let lastIndex = allPages.length - 1;
-    if (index < lastIndex) {
-        let nextPageUpdateInfo = allPages[index + 1];
-        let parentPageInfo = allPages[index];
-        let topUniqueId = parentPageInfo.uniqueId;
-        let botUniqueId = nextPageUpdateInfo.uniqueId;
+    const { updateIds, chapter, setCurrentFormType, setParentId } = formData;
+    if (formData.formType === FormType.CREATE_UPDATE) {
         setCurrentFormType({
-            formType: 107,
+            formType: FormType.CREATE_UPDATE,
             formData: Some({
-                topUniqueId: topUniqueId,
-                botUniqueId: botUniqueId,
-                identity: 104,
+                topUniqueId: updateIds.topUniqueId,
+                botUniqueId: updateIds.botUniqueId,
+                identity: formData.identity,
             }),
         });
         setParentId(chapter.uniqueId);
-        console.log("chapter");
     } else {
         setCurrentFormType({
-            formType: 104,
+            formType: FormType.CHAPTER,
             formData: None,
         });
         setParentId(chapter.uniqueId);
@@ -193,7 +191,7 @@ const addNewSection = (
         let topUniqueId = parentPageInfo.uniqueId;
         let botUniqueId = nextPageUpdateInfo.uniqueId;
         setCurrentFormType({
-            formType: 107,
+            formType: FormType.CREATE_UPDATE,
             formData: Some({
                 topUniqueId,
                 botUniqueId,
@@ -203,7 +201,7 @@ const addNewSection = (
     } else {
         setParentId(c.uniqueId);
         setCurrentFormType({
-            formType: 105,
+            formType: FormType.SECTION,
             formData: None,
         });
     }

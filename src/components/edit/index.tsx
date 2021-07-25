@@ -12,7 +12,7 @@ import { Book } from "./util";
 import { EditBookNavigation } from "./EditBookNavigation";
 import "./edit.css";
 import { None } from "ts-results";
-import { Form } from "./util";
+import { Form, FormType } from "./util";
 
 const EditBook = () => {
     const history: {
@@ -31,7 +31,7 @@ const EditBook = () => {
     const [parentId, setParentId] = useState<string | null>(null);
     const [sectionId, setSectionId] = useState<string | null>(null);
     const [currentFormType, setCurrentFormType] = useState<Form>({
-        formType: 404,
+        formType: FormType.NONE,
         formData: None,
     });
 
@@ -101,8 +101,7 @@ const RenderBody = (props: {
             }
         });
     }
-
-    if (currentFormType.formType !== 404) {
+    if (currentFormType.formType !== FormType.NONE) {
         return FormView(props);
     }
     return (
@@ -146,26 +145,26 @@ const FormView = (props: {
     parentId: string | null;
 }) => {
     const { currentFormType } = props;
-    if (currentFormType.formType === 101) {
+    if (currentFormType.formType === FormType.FRONT_COVER) {
         return <Form101 {...props} />;
     }
 
-    if (currentFormType.formType === 102) {
+    if (currentFormType.formType === FormType.BACK_COVER) {
         return <Form102 {...props} />;
     }
-    if (currentFormType.formType === 103) {
+    if (currentFormType.formType === FormType.PAGE) {
         return <Form103 {...props} />;
     }
-    if (currentFormType.formType === 104) {
+    if (currentFormType.formType === FormType.CHAPTER) {
         return <Form104 {...props} />;
     }
-    if (currentFormType.formType === 105) {
+    if (currentFormType.formType === FormType.SECTION) {
         return <Form105 {...props} />;
     }
-    if (currentFormType.formType === 106) {
+    if (currentFormType.formType === FormType.SUB_SECTION) {
         return <Form106 {...props} />;
     }
-    if (currentFormType.formType === 107) {
+    if (currentFormType.formType === FormType.CREATE_UPDATE) {
         return <Form107 {...props} />;
     }
     return null;
