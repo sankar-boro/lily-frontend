@@ -33,7 +33,7 @@ const logout = (e: OnClickEvent, context: AuthService) => {
             }
         })
         .catch((err: AxiosError<any>) => {
-            console.log("Logout Error", err.response);
+            // console.log("Logout Error", err.response);
         });
 };
 
@@ -145,7 +145,7 @@ const AllDocuments = () => {
                 }
             })
             .catch((err: AxiosError<any>) => {
-                console.log("Failed to get document", err.response);
+                // console.log("Failed to get document", err.response);
             });
     }, []);
 

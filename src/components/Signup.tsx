@@ -27,7 +27,7 @@ const Login = () => {
         }
       })
       .catch((err: AxiosError<any>) => {
-        console.log("SignupError", err);
+        // console.log("SignupError", err);
       });
   };
 

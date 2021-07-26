@@ -69,7 +69,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                             {chapter.title}
                         </div>
                         {/* section */}
-                        <div
+                        {/* <div
                             style={{
                                 borderLeft: "1px solid #ccc",
                                 marginLeft: 4,
@@ -86,7 +86,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                 }}
                             />
                             +
-                        </div>
+                        </div> */}
                         <div
                             style={{
                                 borderLeft: "1px solid #ccc",
@@ -100,6 +100,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                         <div
                                             onClick={(e) => {
                                                 e.preventDefault();
+                                                if (_index === 0) return;
                                                 setSectionId(c.uniqueId);
                                                 setActiveId(chapter.uniqueId);
                                                 setParentId(c.uniqueId);
@@ -118,7 +119,8 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                                     props,
                                                     sections,
                                                     c,
-                                                    _index
+                                                    _index,
+                                                    chapter.uniqueId
                                                 )
                                             }
                                         >
@@ -180,30 +182,66 @@ const addNewSection = (
     props: BookNavigationProps,
     sections: any,
     c: any,
-    _index: number
+    _index: number,
+    chapterId: string
 ) => {
     const { setCurrentFormType, setParentId } = props;
     e.preventDefault();
-    let lastIndex = sections.length - 1;
-    if (_index < lastIndex) {
-        let nextPageUpdateInfo = sections[_index + 1];
-        let parentPageInfo = sections[_index];
-        let topUniqueId = parentPageInfo.uniqueId;
-        let botUniqueId = nextPageUpdateInfo.uniqueId;
+
+    if (_index === 0 && sections.length === 1) {
+        setParentId(chapterId);
+        setCurrentFormType({
+            formType: FormType.SECTION,
+            formData: None,
+        });
+        console.log(chapterId);
+        return;
+    }
+
+    if (_index === 0 && sections.length > 1) {
+        const topUniqueId = chapterId;
+        const nextSection = sections[_index + 1];
+        const botUniqueId = nextSection.uniqueId;
+        setParentId(chapterId);
         setCurrentFormType({
             formType: FormType.CREATE_UPDATE,
             formData: Some({
                 topUniqueId,
                 botUniqueId,
-                identity: 106,
+                identity: 105,
             }),
         });
-    } else {
-        setParentId(c.uniqueId);
+        console.log(topUniqueId, botUniqueId);
+        return;
+    }
+
+    const lengthMatchIndex = sections.length - 1;
+
+    if (sections.length > 1 && _index !== 0 && _index < lengthMatchIndex) {
+        const currentSection = sections[_index];
+        const nextSection = sections[_index + 1];
+        const topUniqueId = currentSection.uniqueId;
+        const botUniqueId = nextSection.uniqueId;
+        setParentId(currentSection.uniqueId);
+        setCurrentFormType({
+            formType: FormType.CREATE_UPDATE,
+            formData: Some({
+                topUniqueId,
+                botUniqueId,
+                identity: 105,
+            }),
+        });
+        return;
+    }
+
+    if (sections.length > 1 && _index === lengthMatchIndex) {
+        const currentSection = sections[_index];
+        setParentId(currentSection.uniqueId);
         setCurrentFormType({
             formType: FormType.SECTION,
             formData: None,
         });
+        return;
     }
 };
 export { EditBookNavigation };

@@ -20,10 +20,10 @@ const createNewSubSection = (props: {
         topUniqueId,
         botUniqueId,
     } = props;
-    console.log("props", props);
+    // console.log("props", props);
     axios
         .post(
-            "http://localhost:8000/book/create/update/chapter",
+            "http://localhost:8000/book/create/update/item",
             {
                 title,
                 body,
@@ -43,11 +43,11 @@ const createNewSubSection = (props: {
                 typeof res.status === "number" &&
                 res.status === 200
             ) {
-                console.log(res);
+                // console.log(res);
             }
         })
         .catch((err: AxiosError<any>) => {
-            console.log("SignupError", err.response);
+            // console.log("SignupError", err.response);
         });
 };
 

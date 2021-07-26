@@ -14,7 +14,7 @@ type Book = {
 };
 
 const Form101 = (props: { allPages: Book[] }) => {
-    console.log("form101", props);
+    // console.log("form101", props);
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const { allPages } = props;
@@ -52,7 +52,7 @@ const Form101 = (props: { allPages: Book[] }) => {
                     name="identity"
                     onChange={(e) => {
                         e.preventDefault();
-                        console.log(e.target.value);
+                        // console.log(e.target.value);
                     }}
                 >
                     <option>Select next to</option>

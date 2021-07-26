@@ -32,12 +32,12 @@ const ViewBook = () => {
                     res.status === 200
                 ) {
                     let dataRes: Book[] = res.data;
-                    let x = sortAll(dataRes, bookId);
+                    let x = sortAll(dataRes);
                     setAllPages(x);
                 }
             })
             .catch((err: AxiosError<any>) => {
-                console.log("deleteerror", err.response);
+                // console.log("deleteerror", err.response);
             });
     }, []);
 

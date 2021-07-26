@@ -26,11 +26,11 @@ const submitBook = (props: {
                 typeof res.status === "number" &&
                 res.status === 200
             ) {
-                console.log(res);
+                // console.log(res);
             }
         })
         .catch((err: AxiosError<any>) => {
-            console.log("SignupError", err.response);
+            // console.log("SignupError", err.response);
         });
 };
 

@@ -58,7 +58,7 @@ const AuthServiceProvider = (props: { children: object }) => {
                 }
             })
             .catch((err: AxiosError<any>) => {
-                console.log(err);
+                // console.log(err);
                 setInitializing(false);
             });
     }, []);

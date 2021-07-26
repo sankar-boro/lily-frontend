@@ -91,7 +91,7 @@ const RenderBody = (props: {
     bookId: string;
     parentId: string | null;
 }) => {
-    console.log("RenderBody", props.bookId);
+    // console.log("RenderBody", props);
     const { currentData, sectionId, currentFormType } = props;
     let thisData = currentData;
     if (sectionId && currentData.child && currentData.child.length > 0) {
