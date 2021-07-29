@@ -1,8 +1,10 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import AuthServiceProvider, { useAuthContext } from "./AuthServiceProvider";
+import Home from "../components/home";
+import Login from "../components/auth/Login";
+import Signup from "../components/auth/Signup";
+import AuthServiceProvider, {
+    useAuthContext,
+} from "../service/AuthServiceProvider";
 
 //
 const AuthRoute = () => {

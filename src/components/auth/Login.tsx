@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useAuthContext, UserInfo } from "../AuthServiceProvider";
+import { useAuthContext, UserInfo } from "../../service/AuthServiceProvider";
 import { Link } from "react-router-dom";
 
 const inputs = {

@@ -1,41 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useAuthContext, AuthService } from "../AuthServiceProvider";
+import { useAuthContext, AuthService } from "../../service/AuthServiceProvider";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import "./component.css";
-import { books as booksCache } from "./data";
+import { books as booksCache } from "../data";
 import { useHistory } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
-import ViewBook from "./read";
-import Profile from "../components/profile";
-import NewBook from "./form/book";
-import NewBlog from "./form/blog";
-import EditBook from "../components/edit/index";
-
-type OnClickEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
-
-const logout = (e: OnClickEvent, context: AuthService) => {
-    e.preventDefault();
-    axios
-        .post(
-            "http://localhost:8000/logout",
-            {},
-            {
-                withCredentials: true,
-            }
-        )
-        .then((res: AxiosResponse<{ status: number }>) => {
-            if (
-                res.status &&
-                typeof res.status === "number" &&
-                res.status === 200
-            ) {
-                context.logoutUser();
-            }
-        })
-        .catch((err: AxiosError<any>) => {
-            // console.log("Logout Error", err.response);
-        });
-};
+import ViewBook from "../read";
+import Profile from "../profile";
+import NewBook from "../form/book";
+import NewBlog from "../form/blog";
+import EditBook from "../edit/index";
+import { logout } from "./util";
 
 const Home = () => {
     const context = useAuthContext();
