@@ -33,7 +33,7 @@ function clearAllStorage() {
     localStorage.removeItem("auth");
 }
 const AuthServiceProvider = (props: { children: object }) => {
-    const [initializing, setInitializing] = useState(false);
+    const [initializing, setInitializing] = useState(true);
     const [read, setRead] = useState(false);
     const [authUserData, setAuthUserData] = useState<Option<UserInfo>>(
         Some({
