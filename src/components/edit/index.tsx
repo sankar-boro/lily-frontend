@@ -1,4 +1,4 @@
-import BodyComponent from "../ui/BodyComponent";
+import BodyComponent from "../ui/EditBodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import Form101 from "../forms/Form101";

@@ -6,7 +6,7 @@ type Book = {
     authorName: string;
     title: string;
     body: string;
-    parentId: string;
+    parentId: string | null;
     uniqueId: string;
     createdAt: string;
     updatedAt: string;

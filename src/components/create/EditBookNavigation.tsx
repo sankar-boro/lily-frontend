@@ -5,12 +5,12 @@ import { FormatLineSpacingOutlined } from "@material-ui/icons";
 
 type BookNavigationProps = {
     title: string;
-    setActiveId: Dispatch<SetStateAction<string>>;
+    setActiveId: Dispatch<SetStateAction<string | null>>;
     allPages: any;
     setSectionId: Dispatch<SetStateAction<string | null>>;
     setParentId: Dispatch<SetStateAction<string | null>>;
     setCurrentFormType: Dispatch<SetStateAction<Form>>;
-    activeId: string;
+    activeId: string | null;
     sectionId: string | null;
 };
 

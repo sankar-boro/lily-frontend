@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import BodyComponent from "../ui/BodyComponent";
+import BodyComponent from "../ui/EditBodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";

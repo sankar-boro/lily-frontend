@@ -272,6 +272,12 @@ h6 {
     color: #3c4146;
     font-size: 32px;
 }
+.section {
+    font-weight: bold;
+    padding: 10px 0px;
+    color: #3c4146;
+    font-size: 18px;
+}
 .login-input {
     width: 75%;
 }

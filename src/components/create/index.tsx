@@ -1,4 +1,4 @@
-import BodyComponent from "../ui/BodyComponent";
+import CreateBodyComponent from "./CreateBodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import Form101 from "../forms/Form101";
@@ -10,9 +10,10 @@ import Form106 from "../forms/Form106";
 import Form107 from "../forms/Form107";
 import { Book } from "./util";
 import { EditBookNavigation } from "./EditBookNavigation";
-import "./edit.css";
+// import "./edit.css";
 import { None } from "ts-results";
 import { Form, FormType } from "./util";
+import { useEffect } from "react";
 
 const EditBook = () => {
     const history: {
@@ -24,17 +25,38 @@ const EditBook = () => {
         };
     } = useHistory();
     const { location } = history;
-    const { state } = location;
-    const { title, bookId } = state.main;
-    const [allPages, setAllPages] = useState(state.allPages);
-    const [activeId, setActiveId] = useState<string>(bookId);
+    // const { state } = location;
+    // const { title, bookId } = state.main;
+    const [title, setTitle] = useState("");
+    const [body, setBody] = useState("");
+    const [bookId, setBookId] = useState<string | null>(null);
+    const [allPages, setAllPages] = useState<Book[]>([]);
+    const [activeId, setActiveId] = useState<string | null>(null);
     const [parentId, setParentId] = useState<string | null>(null);
     const [sectionId, setSectionId] = useState<string | null>(null);
     const [currentFormType, setCurrentFormType] = useState<Form>({
-        formType: FormType.NONE,
+        formType: FormType.FRONT_COVER,
         formData: None,
     });
 
+    useEffect(() => {
+        if (allPages.length === 0) {
+            setAllPages([
+                {
+                    title: "Undefined Book title",
+                    body: "Undefined body.",
+                    bookId: "",
+                    uniqueId: "",
+                    authorId: "",
+                    authorName: "",
+                    createdAt: "",
+                    updatedAt: "",
+                    parentId: null,
+                    identity: 100,
+                },
+            ]);
+        }
+    }, []);
     const callMe = (bc: any) => {
         setSectionId(bc);
     };
@@ -50,7 +72,7 @@ const EditBook = () => {
             }
         });
         return (
-            <BodyComponent
+            <CreateBodyComponent
                 leftComponent={
                     <EditBookNavigation
                         title={title}
@@ -75,7 +97,7 @@ const EditBook = () => {
                     bookId={bookId}
                     parentId={parentId}
                 />
-            </BodyComponent>
+            </CreateBodyComponent>
         );
     }
 
@@ -88,7 +110,7 @@ const RenderBody = (props: {
     currentFormType: Form;
     setCurrentFormType: Function;
     allPages: any;
-    bookId: string;
+    bookId: string | null;
     parentId: string | null;
 }) => {
     // console.log("RenderBody", props);
@@ -141,7 +163,7 @@ const RenderBody = (props: {
 const FormView = (props: {
     currentFormType: Form;
     allPages: any;
-    bookId: string;
+    bookId: string | null;
     parentId: string | null;
 }) => {
     const { currentFormType } = props;
@@ -149,24 +171,24 @@ const FormView = (props: {
         return <Form101 {...props} />;
     }
 
-    if (currentFormType.formType === FormType.BACK_COVER) {
-        return <Form102 {...props} />;
-    }
-    if (currentFormType.formType === FormType.PAGE) {
-        return <Form103 {...props} />;
-    }
-    if (currentFormType.formType === FormType.CHAPTER) {
-        return <Form104 {...props} />;
-    }
-    if (currentFormType.formType === FormType.SECTION) {
-        return <Form105 {...props} />;
-    }
-    if (currentFormType.formType === FormType.SUB_SECTION) {
-        return <Form106 {...props} />;
-    }
-    if (currentFormType.formType === FormType.CREATE_UPDATE) {
-        return <Form107 {...props} />;
-    }
+    // if (currentFormType.formType === FormType.BACK_COVER) {
+    //     return <Form102 {...props} />;
+    // }
+    // if (currentFormType.formType === FormType.PAGE) {
+    //     return <Form103 {...props} />;
+    // }
+    // if (currentFormType.formType === FormType.CHAPTER) {
+    //     return <Form104 {...props} />;
+    // }
+    // if (currentFormType.formType === FormType.SECTION) {
+    //     return <Form105 {...props} />;
+    // }
+    // if (currentFormType.formType === FormType.SUB_SECTION) {
+    //     return <Form106 {...props} />;
+    // }
+    // if (currentFormType.formType === FormType.CREATE_UPDATE) {
+    //     return <Form107 {...props} />;
+    // }
     return null;
 };
 

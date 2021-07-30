@@ -1,6 +1,6 @@
 import { useHistory } from "react-router";
 
-const BodyComponent = (props: any) => {
+const CreateBodyComponent = (props: any) => {
     const history = useHistory();
     const { bookId, allPages } = props;
     return (
@@ -14,16 +14,9 @@ const BodyComponent = (props: any) => {
                             className="document-section hover"
                             onClick={(e) => {
                                 e.preventDefault();
-                                history.replace({
-                                    pathname: `/book/edit/${bookId}`,
-                                    state: {
-                                        main: history.location.state,
-                                        allPages,
-                                    },
-                                });
                             }}
                         >
-                            Edit
+                            Create
                         </div>
                     </div>
                 </div>
@@ -33,4 +26,4 @@ const BodyComponent = (props: any) => {
     );
 };
 
-export default BodyComponent;
+export default CreateBodyComponent;

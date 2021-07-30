@@ -6,7 +6,7 @@ import { useHistory } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
 import ViewBook from "../read";
 import Profile from "../profile";
-import NewBook from "../forms/book";
+import NewBook from "../create";
 import NewBlog from "../forms/blog";
 import EditBook from "../edit/index";
 import { logout } from "./util";

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 type Book = {
     bookId: string;
@@ -13,18 +14,50 @@ type Book = {
     updatedAt: string;
 };
 
+const submitBook = (props: {
+    title: string;
+    body: string;
+    identity: number;
+}) => {
+    const { title, body, identity } = props;
+    axios
+        .post(
+            "http://localhost:8000/book/create/new/book",
+            {
+                title,
+                body,
+                identity,
+            },
+            {
+                withCredentials: true,
+            }
+        )
+        .then((res: AxiosResponse<{ status: number }>) => {
+            if (
+                res.status &&
+                typeof res.status === "number" &&
+                res.status === 200
+            ) {
+                // console.log(res);
+            }
+        })
+        .catch((err: AxiosError<any>) => {
+            // console.log("SignupError", err.response);
+        });
+};
+
 const Form101 = (props: { allPages: Book[] }) => {
-    // console.log("form101", props);
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
+
     const { allPages } = props;
     return (
-        <div>
-            <div>Create Front Cover</div>
+        <div className="lg-container">
+            <div className="section">Create Front Cover</div>
             <form action="#" method="post">
                 <input
                     type="text"
-                    placeholder="Title"
+                    placeholder="Enter book title/name"
                     name="title"
                     required
                     onChange={(e) => {
@@ -47,31 +80,17 @@ const Form101 = (props: { allPages: Book[] }) => {
                     value={body}
                 />
                 <br />
-                <label>Next to</label>
-                <select
-                    name="identity"
-                    onChange={(e) => {
-                        e.preventDefault();
-                        // console.log(e.target.value);
-                    }}
-                >
-                    <option>Select next to</option>
-                    {allPages.map((page: Book) => {
-                        return (
-                            <option key={page.uniqueId} value={page.uniqueId}>
-                                {page.title}
-                            </option>
-                        );
-                    })}
-                </select>
-                <br />
                 <input
                     className="new-doc-submit-btn"
                     type="button"
                     value="Submit"
                     onClick={(e) => {
                         e.preventDefault();
-                        // submitDocument();
+                        submitBook({
+                            title,
+                            body,
+                            identity: 101,
+                        });
                     }}
                 />
             </form>
