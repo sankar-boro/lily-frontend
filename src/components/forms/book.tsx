@@ -1,13 +1,48 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import "./index.css";
+import { Some, Option, None } from "ts-results";
+
+type Book = {
+    bookId: string;
+    body: string;
+    identity: number;
+    title: string;
+    parentId: string | null;
+    uniqueId: string;
+    authorId: string;
+    authorName: string;
+    createdAt: string;
+    updatedAt: string;
+};
+type FormData = {
+    topUniqueId: string;
+    botUniqueId: string;
+    identity: number;
+};
+
+enum FormType {
+    FRONT_COVER = "FRONT_COVER",
+    BACK_COVER = "BACK_COVER",
+    PAGE = "PAGE",
+    CHAPTER = "CHAPTER",
+    SECTION = "SECTION",
+    SUB_SECTION = "SUB_SECTION",
+    CREATE_UPDATE = "CREATE_UPDATE",
+    NONE = "NONE",
+}
+type Form = {
+    formType: FormType;
+    formData: Option<FormData>;
+};
 
 const submitBook = (props: {
     title: string;
     body: string;
     identity: number;
+    setBookRows: Function;
+    bookRows: Book[];
 }) => {
-    const { title, body, identity } = props;
+    const { title, body, identity, setBookRows, bookRows } = props;
     axios
         .post(
             "http://localhost:8000/book/create/new/book",
@@ -20,13 +55,13 @@ const submitBook = (props: {
                 withCredentials: true,
             }
         )
-        .then((res: AxiosResponse<{ status: number }>) => {
+        .then((res: AxiosResponse<{ status: number; data: Book }>) => {
             if (
                 res.status &&
                 typeof res.status === "number" &&
                 res.status === 200
             ) {
-                // console.log(res);
+                setBookRows([...bookRows, ...[res.data.data]]);
             }
         })
         .catch((err: AxiosError<any>) => {
@@ -34,61 +69,68 @@ const submitBook = (props: {
         });
 };
 
-const NewBookForm = () => {
+const Form101 = (props: {
+    sectionId: string | null;
+    currentFormType: Form;
+    setCurrentFormType: Function;
+    allPages: any;
+    bookId: string | null;
+    parentId: string | null;
+    activeId: string | null;
+    setBookRows: Function;
+    bookRows: Book[];
+}) => {
     const [title, setTitle] = useState("");
-    const [body, setDescription] = useState("");
+    const [body, setBody] = useState("");
 
+    const { allPages, setBookRows, bookRows } = props;
     return (
-        <div className="form-container">
-            <div>
-                <div className="new-document">
-                    <form action="#" method="post">
-                        <input
-                            type="text"
-                            placeholder="Title or Name of the Book"
-                            name="title"
-                            required
-                            onChange={(e) => {
-                                e.preventDefault();
-                                setTitle(e.target.value);
-                            }}
-                        />
-                        <br />
-                        <textarea
-                            rows={30}
-                            cols={50}
-                            placeholder="About your book"
-                            onChange={(e) => {
-                                e.preventDefault();
-                                setDescription(e.target.value);
-                            }}
-                            required
-                        ></textarea>
-                        <br />
-                        <input
-                            className="new-doc-submit-btn"
-                            type="button"
-                            value="Submit"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (title && body) {
-                                    submitBook({
-                                        title,
-                                        body,
-                                        identity: 101,
-                                    });
-                                }
-                            }}
-                        />
-                    </form>
-                </div>
-            </div>
-            <div>
-                <div>{title}</div>
-                <div>{body}</div>
-            </div>
+        <div className="lg-container">
+            <div className="section">Create Front Cover</div>
+            <form action="#" method="post">
+                <input
+                    type="text"
+                    placeholder="Enter book title/name"
+                    name="title"
+                    required
+                    onChange={(e) => {
+                        e.preventDefault();
+                        setTitle(e.target.value);
+                    }}
+                    value={title}
+                />
+                <br />
+                <textarea
+                    id="body"
+                    name="Body"
+                    rows={12}
+                    cols={50}
+                    onChange={(e) => {
+                        e.preventDefault();
+                        setBody(e.target.value);
+                    }}
+                    placeholder="Body of your document."
+                    value={body}
+                />
+                <br />
+                <input
+                    className="new-doc-submit-btn"
+                    type="button"
+                    value="Submit"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        submitBook({
+                            title,
+                            body,
+                            identity: 101,
+                            setBookRows,
+                            bookRows,
+                        });
+                    }}
+                />
+            </form>
         </div>
     );
 };
 
-export default NewBookForm;
+export default Form101;

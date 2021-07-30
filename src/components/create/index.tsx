@@ -1,7 +1,7 @@
 import CreateBodyComponent from "./CreateBodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
-import Form101 from "../forms/Form101";
+import CreateBook from "../forms/book";
 import Form102 from "../forms/Form102";
 import Form103 from "../forms/Form103";
 import Form104 from "../forms/Form104";
@@ -12,7 +12,7 @@ import { Book } from "./util";
 import { EditBookNavigation } from "./EditBookNavigation";
 // import "./edit.css";
 import { None } from "ts-results";
-import { Form, FormType } from "./util";
+import { Form, FormType, sortAll } from "./util";
 import { useEffect } from "react";
 
 const EditBook = () => {
@@ -30,6 +30,7 @@ const EditBook = () => {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [bookId, setBookId] = useState<string | null>(null);
+    const [bookRows, setBookRows] = useState([]);
     const [allPages, setAllPages] = useState<Book[]>([]);
     const [activeId, setActiveId] = useState<string | null>(null);
     const [parentId, setParentId] = useState<string | null>(null);
@@ -39,82 +40,65 @@ const EditBook = () => {
         formData: None,
     });
 
-    useEffect(() => {
-        if (allPages.length === 0) {
-            setAllPages([
-                {
-                    title: "Undefined Book title",
-                    body: "Undefined body.",
-                    bookId: "",
-                    uniqueId: "",
-                    authorId: "",
-                    authorName: "",
-                    createdAt: "",
-                    updatedAt: "",
-                    parentId: null,
-                    identity: 100,
-                },
-            ]);
-        }
-    }, []);
     const callMe = (bc: any) => {
         setSectionId(bc);
     };
 
-    if (allPages && allPages.length > 0) {
-        let currentData: { title: string; body: string } = {
-            title: "",
-            body: "",
-        };
-        allPages.forEach((a: any) => {
-            if (activeId === a.uniqueId) {
-                currentData = a;
-            }
-        });
-        return (
-            <CreateBodyComponent
-                leftComponent={
-                    <EditBookNavigation
-                        title={title}
-                        allPages={allPages}
-                        setActiveId={setActiveId}
-                        setSectionId={callMe}
-                        setCurrentFormType={setCurrentFormType}
-                        activeId={activeId}
-                        sectionId={sectionId}
-                        setParentId={setParentId}
-                    />
-                }
-                bookId={bookId}
-                allPages={allPages}
-            >
-                <RenderBody
-                    currentData={currentData}
-                    sectionId={sectionId}
-                    currentFormType={currentFormType}
-                    setCurrentFormType={setCurrentFormType}
-                    allPages={allPages}
-                    bookId={bookId}
-                    parentId={parentId}
-                />
-            </CreateBodyComponent>
-        );
-    }
+    useEffect(() => {
+        sortAll(bookRows);
+    }, [bookRows]);
 
-    return null;
+    return (
+        <CreateBodyComponent
+            leftComponent={
+                <EditBookNavigation
+                    title={title}
+                    allPages={allPages}
+                    setActiveId={setActiveId}
+                    setSectionId={callMe}
+                    setCurrentFormType={setCurrentFormType}
+                    activeId={activeId}
+                    sectionId={sectionId}
+                    setParentId={setParentId}
+                />
+            }
+            bookId={bookId}
+            allPages={allPages}
+        >
+            <RenderBody
+                sectionId={sectionId}
+                currentFormType={currentFormType}
+                setCurrentFormType={setCurrentFormType}
+                allPages={allPages}
+                bookId={bookId}
+                parentId={parentId}
+                activeId={activeId}
+                setBookRows={setBookRows}
+                bookRows={bookRows}
+            />
+        </CreateBodyComponent>
+    );
 };
 
 const RenderBody = (props: {
-    currentData: any;
     sectionId: string | null;
     currentFormType: Form;
     setCurrentFormType: Function;
     allPages: any;
     bookId: string | null;
     parentId: string | null;
+    activeId: string | null;
+    setBookRows: Function;
+    bookRows: Book[];
 }) => {
-    // console.log("RenderBody", props);
-    const { currentData, sectionId, currentFormType } = props;
+    console.log("RenderBody", props);
+    const { sectionId, currentFormType, allPages, activeId } = props;
+    let currentData: any = null;
+    allPages.forEach((a: any) => {
+        if (activeId === a.uniqueId) {
+            currentData = a;
+        }
+    });
     let thisData = currentData;
     if (sectionId && currentData.child && currentData.child.length > 0) {
         currentData.child.forEach((a: any) => {
@@ -123,9 +107,13 @@ const RenderBody = (props: {
             }
         });
     }
+
     if (currentFormType.formType !== FormType.NONE) {
         return FormView(props);
     }
+
+    if (currentData === null) return null;
+
     return (
         <div className="lg-container">
             <div className="col-8">
@@ -161,14 +149,19 @@ const RenderBody = (props: {
 };
 
 const FormView = (props: {
+    sectionId: string | null;
     currentFormType: Form;
+    setCurrentFormType: Function;
     allPages: any;
     bookId: string | null;
     parentId: string | null;
+    activeId: string | null;
+    setBookRows: Function;
+    bookRows: Book[];
 }) => {
     const { currentFormType } = props;
     if (currentFormType.formType === FormType.FRONT_COVER) {
-        return <Form101 {...props} />;
+        return <CreateBook {...props} />;
     }
 
     // if (currentFormType.formType === FormType.BACK_COVER) {

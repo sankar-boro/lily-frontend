@@ -37,6 +37,8 @@ const EditBookNavigation = (props: BookNavigationProps) => {
     } = props;
 
     let totalChapters = allPages.length;
+    if (allPages.length === 0) return null;
+
     return (
         <div>
             {allPages.map((value: any, index: number) => {

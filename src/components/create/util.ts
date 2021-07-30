@@ -11,6 +11,7 @@ type Book = {
     createdAt: string;
     updatedAt: string;
     identity: number;
+    child: [];
 };
 
 type FormData = {
@@ -35,61 +36,107 @@ type Form = {
     formData: Option<FormData>;
 };
 
-const sortAll = (data: Book[], parentId: string) => {
-    console.log("data", data);
-    let lastParentId = parentId;
-    let newData: any = [];
-    data.forEach((b) => {
-        if (b.identity === 101) {
-            newData.push({ ...b });
+function groupSections(dd: any, s: any) {
+    let pId = dd.uniqueId;
+    let sections: any[] = [];
+    let c = 0;
+
+    let removeIds: any[] = [];
+    let newIds: any[] = [];
+
+    while (c !== s.length) {
+        // eslint-disable-next-line no-loop-func
+        s.forEach((ss: any) => {
+            if (ss.parentId === pId) {
+                sections.push(ss);
+                pId = ss.uniqueId;
+                removeIds.push(ss.uniqueId);
+            }
+        });
+        c++;
+    }
+
+    s.forEach((ss: any) => {
+        if (!removeIds.includes(ss.uniqueId)) {
+            newIds.push(ss);
         }
     });
-    data.forEach((d) => {
-        if (d.identity === 104) {
-            newData.push({ ...d, child: [] });
+
+    return { data: { ...dd, child: sections }, newSections: newIds };
+}
+
+function buildSectionsReturnSections(
+    chapters: any,
+    sections: any,
+    sub_sections: any
+) {
+    let dynaSections = sections;
+    return chapters.map((chapter: any) => {
+        let buildSections = groupSections(chapter, dynaSections);
+        dynaSections = buildSections.newSections;
+
+        if (
+            buildSections.data.child &&
+            Array.isArray(buildSections.data.child) &&
+            buildSections.data.child.length === 0
+        ) {
+            return buildSections.data;
         }
-    });
-    data.forEach((d) => {
-        if (d.identity === 105) {
-            newData.forEach((n: any) => {
-                if (n.uniqueId === d.parentId) {
-                    n.child.push({ ...d, child: [] });
+
+        if (
+            buildSections.data.child &&
+            Array.isArray(buildSections.data.child) &&
+            buildSections.data.child.length > 0
+        ) {
+            let dynaSubSections = sub_sections;
+            let buildSubSections = buildSections.data.child.map(
+                (sections_: any) => {
+                    let tempBuildSubSections = groupSections(
+                        sections_,
+                        dynaSubSections
+                    );
+                    dynaSubSections = tempBuildSubSections.newSections;
+                    return tempBuildSubSections.data;
                 }
-            });
+            );
+
+            buildSections.data.child = buildSubSections;
+            return buildSections.data;
+        }
+        return buildSections.data;
+    });
+}
+
+function groups(book_data: Book[]) {
+    let gs: any = {
+        101: [],
+        102: [],
+        103: [],
+        104: [],
+        105: [],
+        106: [],
+    };
+
+    book_data.forEach((d: Book) => {
+        if (gs[d.identity]) {
+            gs[d.identity].push(d);
         }
     });
-    newData.forEach((d: any) => {
-        if (d.identity === 104) {
-            const { child } = d;
-            child.forEach((c: any) => {
-                c["child"] = [];
-                data.forEach((dd: any) => {
-                    if (dd.parentId === c.uniqueId) {
-                        c.child.push(dd);
-                    }
-                });
-            });
-        }
+    return gs;
+}
+
+const sortAll = (data: Book[]) => {
+    let gs = groups(data);
+    let ozf = gs[105];
+    let ozs = gs[106];
+
+    let c = { 101: gs[101], 102: gs[102], 103: gs[103], 104: gs[104] };
+    let chapters: Book[] = [];
+    Object.values(c).forEach((v) => {
+        let a = buildSectionsReturnSections(v, ozf, ozs);
+        chapters = [...chapters, ...a];
     });
-    newData.forEach((d: any) => {
-        if (d.identity === 104) {
-            const { child } = d;
-            child.forEach((c: any) => {
-                if (c.child) {
-                    data.forEach((dd: any) => {
-                        if (dd.identity === 106) {
-                            c.child.forEach((a: any) => {
-                                if (dd.parentId === a.uniqueId) {
-                                    c.child.push(dd);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    });
-    return newData;
+    return chapters;
 };
 
 const activeChBg = (c: any, a: string | null) => {
