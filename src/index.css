@@ -117,7 +117,6 @@ h6 {
     cursor: pointer;
 }
 
-
 /* container */
 .container {
     width: 80%;
@@ -172,7 +171,6 @@ h6 {
     width: 22%;
     display: inline-block;
     vertical-align: text-top;
-    border: 1px solid #ccc;
     min-height: 200px;
     padding: 10px;
     margin-right: 18px;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios, { AxiosResponse, AxiosError } from "axios";
-import { Form } from "../util";
+import { Form } from "./util";
 
 const createNewSubSection = (props: {
     title: string;

@@ -6,10 +6,11 @@ import { useHistory } from "react-router";
 import { Switch, Route, Link } from "react-router-dom";
 import ViewBook from "../read";
 import Profile from "../profile";
-import NewBook from "../form/book";
-import NewBlog from "../form/blog";
+import NewBook from "../forms/book";
+import NewBlog from "../forms/blog";
 import EditBook from "../edit/index";
 import { logout } from "./util";
+import Card from "./card";
 
 const Home = () => {
     const context = useAuthContext();
@@ -128,27 +129,7 @@ const AllDocuments = () => {
             {books
                 .filter((a: any) => a.identity === 101)
                 .map((data: any) => {
-                    return (
-                        <div
-                            className="document-card"
-                            key={data.bookId}
-                            onClick={() => {
-                                history.push({
-                                    pathname: `/book/view/${data.bookId}`,
-                                    state: data,
-                                });
-                            }}
-                        >
-                            <div>
-                                <div className="document-title">
-                                    {data.title}
-                                </div>
-                                <div className="document-body">
-                                    {data.body.substr(0, 250)}...
-                                </div>
-                            </div>
-                        </div>
-                    );
+                    return <Card history={history} data={data} />;
                 })}
         </>
     );

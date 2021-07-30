@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
 import { useAuthContext, UserInfo } from "../../service/AuthServiceProvider";
 import { Link } from "react-router-dom";
+import { login } from "./util";
 
 const inputs = {
     email: {
@@ -23,31 +23,6 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const context = useAuthContext();
-    //
-    const login = () => {
-        axios
-            .post(
-                "http://localhost:8000/login",
-                {
-                    email,
-                    password,
-                },
-                {
-                    withCredentials: true,
-                }
-            )
-            .then((res: AxiosResponse<UserInfo>) => {
-                if (res && res.data) {
-                    // console.log(res.data);
-                    context.authenticateUser(res.data);
-                    // const token = res.data.token;
-                    // localStorage.setItem("auth", token);
-                }
-            })
-            .catch((err: AxiosError<any>) => {
-                // console.log(err);
-            });
-    };
 
     //
     return (
@@ -84,7 +59,7 @@ const Login = () => {
                         value="Login"
                         onClick={(e) => {
                             e.preventDefault();
-                            login();
+                            login(email, password, context.authenticateUser);
                         }}
                         className="login-button"
                     />
