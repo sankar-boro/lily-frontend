@@ -1,19 +1,20 @@
-import CreateBodyComponent from "./CreateBodyComponent";
-import { useHistory } from "react-router-dom";
 import { useState } from "react";
-import CreateBook from "../forms/book";
+import { None } from "ts-results";
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+
+import { Book } from "./util";
+import CreateBook from "../forms/CreateNewBook";
+import { Form, FormType, sortAll } from "./util";
+import CreateBodyComponent from "./BodyComponent";
+import { EditBookNavigation } from "./BookNavigation";
+
 import Form102 from "../forms/Form102";
 import Form103 from "../forms/Form103";
 import Form104 from "../forms/Form104";
 import Form105 from "../forms/Form105";
 import Form106 from "../forms/Form106";
 import Form107 from "../forms/Form107";
-import { Book } from "./util";
-import { EditBookNavigation } from "./EditBookNavigation";
-// import "./edit.css";
-import { None } from "ts-results";
-import { Form, FormType, sortAll } from "./util";
-import { useEffect } from "react";
 
 const EditBook = () => {
     const history: {
@@ -45,7 +46,8 @@ const EditBook = () => {
     };
 
     useEffect(() => {
-        sortAll(bookRows);
+        let pages = sortAll(bookRows);
+        setAllPages(pages);
     }, [bookRows]);
 
     return (
@@ -91,7 +93,6 @@ const RenderBody = (props: {
     setBookRows: Function;
     bookRows: Book[];
 }) => {
-    console.log("RenderBody", props);
     const { sectionId, currentFormType, allPages, activeId } = props;
     let currentData: any = null;
     allPages.forEach((a: any) => {

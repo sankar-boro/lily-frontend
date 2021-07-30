@@ -1,8 +1,8 @@
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 
 const CreateBodyComponent = (props: any) => {
-    const history = useHistory();
-    const { bookId, allPages } = props;
+    // const history = useHistory();
+    // const { bookId, allPages } = props;
     return (
         <>
             <div className="navbar-left">{props.leftComponent}</div>

@@ -1,39 +1,7 @@
 import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Some, Option, None } from "ts-results";
-
-type Book = {
-    bookId: string;
-    body: string;
-    identity: number;
-    title: string;
-    parentId: string | null;
-    uniqueId: string;
-    authorId: string;
-    authorName: string;
-    createdAt: string;
-    updatedAt: string;
-};
-type FormData = {
-    topUniqueId: string;
-    botUniqueId: string;
-    identity: number;
-};
-
-enum FormType {
-    FRONT_COVER = "FRONT_COVER",
-    BACK_COVER = "BACK_COVER",
-    PAGE = "PAGE",
-    CHAPTER = "CHAPTER",
-    SECTION = "SECTION",
-    SUB_SECTION = "SUB_SECTION",
-    CREATE_UPDATE = "CREATE_UPDATE",
-    NONE = "NONE",
-}
-type Form = {
-    formType: FormType;
-    formData: Option<FormData>;
-};
+import { Book } from "../../globals/types/book";
+import { Form } from "../../globals/types/form";
 
 const submitBook = (props: {
     title: string;
@@ -61,7 +29,7 @@ const submitBook = (props: {
                 typeof res.status === "number" &&
                 res.status === 200
             ) {
-                setBookRows([...bookRows, ...[res.data.data]]);
+                setBookRows([...bookRows, ...[res.data]]);
             }
         })
         .catch((err: AxiosError<any>) => {
