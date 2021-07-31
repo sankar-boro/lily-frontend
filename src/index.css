@@ -293,6 +293,8 @@ h6 {
 }
 .login-input {
     width: 75%;
+    padding: 10px 8px;
+    border-radius: 3px;
 }
 .email-label,
 .password-label {
@@ -309,6 +311,8 @@ h6 {
     color: white;
     border: 1px solid #0077cc;
     border-radius: 3px;
+    height: 32px;
+    min-width: 100px;
 }
 .login-button:hover {
     cursor: pointer;

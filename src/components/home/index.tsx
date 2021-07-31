@@ -12,9 +12,49 @@ import EditBook from "../edit/index";
 import { logout } from "./util";
 import Card from "./card";
 
+const header = (props: { context: any; userInfo: any }) => {
+    const { context, userInfo } = props;
+    return (
+        <div className="navbar navbar-main">
+            <div className="nav-main-left">
+                <div className="nav-section">
+                    <Link to="/" className="nav-link">
+                        Lily
+                    </Link>
+                </div>
+                <div className="nav-section">Search</div>
+            </div>
+            <div className="nav-main-center"></div>
+            <div className="nav-main-right">
+                <div className="dropdown">
+                    <button className="dropbtn">
+                        Create
+                        <i className="fa fa-caret-down"></i>
+                    </button>
+                    <div className="dropdown-content">
+                        <Link to="/new/blog">Blog</Link>
+                        <Link to="/new/book">Book</Link>
+                    </div>
+                </div>
+                <div className="nav-section">
+                    <Link to="/profile" className="nav-link">
+                        {userInfo?.fname} {userInfo?.lname}
+                    </Link>
+                </div>
+                <button
+                    className="button-nav nav-section"
+                    onClick={(e) => logout(e, context)}
+                >
+                    Logout
+                </button>
+            </div>
+        </div>
+    );
+};
 const Home = () => {
     const context = useAuthContext();
     const read = context.read;
+    const { setRead } = context;
     const userData = context.authUserData;
     let userInfo = null;
     if (context.auth) {
@@ -22,43 +62,7 @@ const Home = () => {
     }
     return (
         <div className="app-container">
-            <div
-                className="navbar navbar-main"
-                style={{ display: read ? "none" : undefined }}
-            >
-                <div className="nav-main-left">
-                    <div className="nav-section">
-                        <Link to="/" className="nav-link">
-                            Lily
-                        </Link>
-                    </div>
-                    <div className="nav-section">Search</div>
-                </div>
-                <div className="nav-main-center"></div>
-                <div className="nav-main-right">
-                    <div className="dropdown">
-                        <button className="dropbtn">
-                            Create
-                            <i className="fa fa-caret-down"></i>
-                        </button>
-                        <div className="dropdown-content">
-                            <Link to="/new/blog">Blog</Link>
-                            <Link to="/new/book">Book</Link>
-                        </div>
-                    </div>
-                    <div className="nav-section">
-                        <Link to="/profile" className="nav-link">
-                            {userInfo?.fname} {userInfo?.lname}
-                        </Link>
-                    </div>
-                    <button
-                        className="button-nav nav-section"
-                        onClick={(e) => logout(e, context)}
-                    >
-                        Logout
-                    </button>
-                </div>
-            </div>
+            {read ? null : header({ context, userInfo })}
             <div className="body-home">
                 <Switch>
                     <Route path="/book/view/:bookId">
@@ -77,7 +81,7 @@ const Home = () => {
                         <EditBook />
                     </Route>
                     <Route path="/">
-                        <HomeDocBody />
+                        <HomeDocBody setRead={setRead} />
                     </Route>
                 </Switch>
             </div>
@@ -85,8 +89,8 @@ const Home = () => {
     );
 };
 
-const HomeDocBody = () => {
-    return <div className="documents-container">{AllDocuments()}</div>;
+const HomeDocBody = (props: { setRead: Function }) => {
+    return <div className="documents-container">{AllDocuments(props)}</div>;
 };
 
 type Book = {
@@ -102,7 +106,8 @@ type Book = {
     updatedAt: string;
 };
 
-const AllDocuments = () => {
+const AllDocuments = (props: { setRead: Function }) => {
+    const { setRead } = props;
     const [books, setBooks] = useState(booksCache);
     const history = useHistory();
     useEffect(() => {
@@ -129,7 +134,9 @@ const AllDocuments = () => {
             {books
                 .filter((a: any) => a.identity === 101)
                 .map((data: any) => {
-                    return <Card history={history} data={data} />;
+                    return (
+                        <Card history={history} data={data} setRead={setRead} />
+                    );
                 })}
         </>
     );
