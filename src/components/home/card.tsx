@@ -1,11 +1,10 @@
-const Card = (props: { history: any; data: any; setRead: Function }) => {
-    const { history, data, setRead } = props;
+const Card = (props: { history: any; data: any }) => {
+    const { history, data } = props;
     return (
         <div
             className="document-card"
             key={data.bookId}
             onClick={() => {
-                setRead(true);
                 history.push({
                     pathname: `/book/view/${data.bookId}`,
                     state: data,

@@ -1,4 +1,4 @@
-import BodyComponent from "../ui/EditBodyComponent";
+import BodyComponent from "../ui/BodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import Form101 from "../forms/Form101";
@@ -13,6 +13,8 @@ import { EditBookNavigation } from "./EditBookNavigation";
 import "./edit.css";
 import { None } from "ts-results";
 import { Form, FormType } from "./util";
+import { useAuthContext } from "../../service/AuthServiceProvider";
+import { useEffect } from "react";
 
 const EditBook = () => {
     const history: {
@@ -23,6 +25,7 @@ const EditBook = () => {
             };
         };
     } = useHistory();
+    const context = useAuthContext();
     const { location } = history;
     const { state } = location;
     const { title, bookId } = state.main;
@@ -38,6 +41,10 @@ const EditBook = () => {
     const callMe = (bc: any) => {
         setSectionId(bc);
     };
+
+    useEffect(() => {
+        context.setRead(true);
+    }, []);
 
     if (allPages && allPages.length > 0) {
         let currentData: { title: string; body: string } = {
@@ -65,6 +72,7 @@ const EditBook = () => {
                 }
                 bookId={bookId}
                 allPages={allPages}
+                header={title}
             >
                 <RenderBody
                     currentData={currentData}
@@ -105,7 +113,7 @@ const RenderBody = (props: {
         return FormView(props);
     }
     return (
-        <div className="lg-container">
+        <div className="sm-container">
             <div className="col-8">
                 <h3>{thisData.title}</h3>
                 <div>{thisData.body}</div>

@@ -1,10 +1,11 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import BodyComponent from "../ui/EditBodyComponent";
+import BodyComponent from "../ui/BodyComponent";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Book, sortAll } from "./util";
 import ReadBookNavigation from "./ReadBookNavigation";
+import { useAuthContext } from "../../service/AuthServiceProvider";
 import "./read.css";
 
 const ViewBook = () => {
@@ -13,6 +14,7 @@ const ViewBook = () => {
             state: Book;
         };
     } = useHistory();
+    const context = useAuthContext();
 
     const { location } = history;
     const { state } = location;
@@ -21,6 +23,7 @@ const ViewBook = () => {
     const [activeId, setActiveId] = useState<string>(bookId);
     const [sectionId, setSectionId] = useState<string | null>(null);
     useEffect(() => {
+        context.setRead(true);
         axios
             .get(`http://localhost:8000/book/getall/${bookId}`, {
                 withCredentials: true,
@@ -89,7 +92,7 @@ const RenderBody = (props: any) => {
         });
     }
     return (
-        <div className="lg-container">
+        <div className="sm-container">
             <div className="col-8">
                 <h3>{thisData.title}</h3>
                 <div>{thisData.body}</div>

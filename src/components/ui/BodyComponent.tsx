@@ -1,17 +1,18 @@
 import { useHistory } from "react-router";
 
-const EditBodyComponent = (props: any) => {
+const BodyComponent = (props: any) => {
     const history = useHistory();
-    const { bookId, allPages } = props;
+    const { bookId, allPages, header } = props;
     return (
         <>
             <div className="navbar-left">{props.leftComponent}</div>
             <div className="body-container">
                 <div className="toolbar">
                     <div className="document-categories"></div>
+                    <div className="read-header">{header}</div>
                     <div className="settings">
                         <div
-                            className="document-section hover"
+                            className="div-inline hover"
                             onClick={(e) => {
                                 e.preventDefault();
                                 history.replace({
@@ -33,4 +34,4 @@ const EditBodyComponent = (props: any) => {
     );
 };
 
-export default EditBodyComponent;
+export default BodyComponent;
