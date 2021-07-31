@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios, { AxiosResponse, AxiosError } from "axios";
-import { Form } from "./util";
+import { textareaRows, textareaCols } from "../../globals/forms";
 
 const createNewSubSection = (props: {
     title: string;
@@ -51,11 +51,7 @@ const createNewSubSection = (props: {
         });
 };
 
-const Form107 = (props: {
-    // sectionProps: any;
-    bookId: string;
-    currentFormType: Form;
-}) => {
+const Form107 = (props: any) => {
     const { bookId, currentFormType } = props;
     // const { sectionId, sectionChildren } = sectionProps;
     const [title, setTitle] = useState("");
@@ -76,8 +72,12 @@ const Form107 = (props: {
     }
     return (
         <div className="lg-container">
-            <div>Create New Chapter - Form107</div>
+            <div className="form-header">Form #107</div>
             <form action="#" method="post">
+                <label className="active-label">
+                    {body ? "Body of your document" : ""}
+                </label>
+                <br />
                 <input
                     type="text"
                     placeholder="Title"
@@ -88,25 +88,31 @@ const Form107 = (props: {
                         setTitle(e.target.value);
                     }}
                     value={title}
+                    className="input no-border"
                 />
+                <br />
+                <label className="active-label">
+                    {body ? "Body of your document" : ""}
+                </label>
                 <br />
                 <textarea
                     id="body"
                     name="Body"
-                    rows={12}
-                    cols={50}
+                    rows={textareaRows}
+                    cols={textareaCols}
                     onChange={(e) => {
                         e.preventDefault();
                         setBody(e.target.value);
                     }}
                     placeholder="Body of your document."
                     value={body}
+                    className="textarea no-border"
                 />
                 <br />
-                <input
-                    className="new-doc-submit-btn"
-                    type="button"
-                    value="Submit"
+                <button
+                    type="submit"
+                    name="Submit"
+                    className="button button-relative button-secondary"
                     onClick={(e) => {
                         e.preventDefault();
                         createNewSubSection({
@@ -119,7 +125,9 @@ const Form107 = (props: {
                             botUniqueId,
                         });
                     }}
-                />
+                >
+                    Submit
+                </button>
             </form>
         </div>
     );

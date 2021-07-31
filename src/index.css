@@ -47,6 +47,9 @@ a {
 }
 .nav-section a {
 }
+.button {
+    height: 32px;
+}
 .button-nav {
     border: none;
     background-color: white;
@@ -57,13 +60,23 @@ select,
 textarea {
     border: 1px solid #ccc;
     margin-bottom: 10px;
-    padding: 8px;
-    /* min-width: 550px;
-    max-width: 550px; */
     background-color: white;
 }
-.new-doc-submit-btn {
+.button-relative {
     min-width: 100px;
+    border: none;
+    border-radius: 3px;
+}
+.button:hover {
+    cursor: pointer;
+}
+.button-primary {
+    background-color: black;
+    color: white;
+}
+.button-secondary {
+    background-color: #0054a3;
+    color: white;
 }
 .flex-container {
     display: flex;
@@ -272,7 +285,7 @@ h6 {
     color: #3c4146;
     font-size: 32px;
 }
-.section {
+.form-header {
     font-weight: bold;
     padding: 10px 0px;
     color: #3c4146;
@@ -299,6 +312,26 @@ h6 {
 }
 .login-button:hover {
     cursor: pointer;
+}
+
+/**
+* Text input
+*/
+.input,
+.textarea {
+    min-width: 50%;
+    border-radius: 3px;
+}
+.no-border {
+    border: none !important;
+}
+.no-border:focus {
+    outline: none;
+}
+.active-label {
+    color: #6a737c;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .theme {

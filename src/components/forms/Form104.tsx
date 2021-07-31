@@ -1,18 +1,6 @@
 import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-
-type Book = {
-    bookId: string;
-    body: string;
-    identity: number;
-    title: string;
-    parentId: string | null;
-    uniqueId: string;
-    authorId: string;
-    authorName: string;
-    createdAt: string;
-    updatedAt: string;
-};
+import { textareaRows, textareaCols } from "../../globals/forms";
 
 const createNewChapter = (props: {
     title: string;
@@ -50,18 +38,16 @@ const createNewChapter = (props: {
         });
 };
 
-const Form104 = (props: {
-    allPages: Book[];
-    bookId: string;
-    parentId: string | null;
-}) => {
+const Form104 = (props: any) => {
     const { allPages, bookId, parentId } = props;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     return (
         <div className="lg-container">
-            <div>Create New Chapter Form104</div>
+            <div className="form-header">Chapter #104</div>
             <form action="#" method="post">
+                <label className="active-label">{title ? "Title" : ""}</label>
+                <br />
                 <input
                     type="text"
                     placeholder="Title"
@@ -72,25 +58,29 @@ const Form104 = (props: {
                         setTitle(e.target.value);
                     }}
                     value={title}
+                    className="input no-border"
                 />
+                <br />
+                <label className="active-label">{body ? "Body" : ""}</label>
                 <br />
                 <textarea
                     id="body"
                     name="Body"
-                    rows={12}
-                    cols={50}
+                    rows={textareaRows}
+                    cols={textareaCols}
                     onChange={(e) => {
                         e.preventDefault();
                         setBody(e.target.value);
                     }}
                     placeholder="Body of your document."
                     value={body}
+                    className="textarea no-border"
                 />
                 <br />
-                <input
-                    className="new-doc-submit-btn"
-                    type="button"
-                    value="Submit"
+                <button
+                    type="submit"
+                    name="Submit"
+                    className="button button-relative button-secondary"
                     onClick={(e) => {
                         e.preventDefault();
                         createNewChapter({
@@ -101,7 +91,9 @@ const Form104 = (props: {
                             bookId,
                         });
                     }}
-                />
+                >
+                    Submit
+                </button>
             </form>
         </div>
     );

@@ -164,25 +164,24 @@ const FormView = (props: {
     if (currentFormType.formType === FormType.FRONT_COVER) {
         return <CreateBook {...props} />;
     }
-
-    // if (currentFormType.formType === FormType.BACK_COVER) {
-    //     return <Form102 {...props} />;
-    // }
-    // if (currentFormType.formType === FormType.PAGE) {
-    //     return <Form103 {...props} />;
-    // }
-    // if (currentFormType.formType === FormType.CHAPTER) {
-    //     return <Form104 {...props} />;
-    // }
-    // if (currentFormType.formType === FormType.SECTION) {
-    //     return <Form105 {...props} />;
-    // }
-    // if (currentFormType.formType === FormType.SUB_SECTION) {
-    //     return <Form106 {...props} />;
-    // }
-    // if (currentFormType.formType === FormType.CREATE_UPDATE) {
-    //     return <Form107 {...props} />;
-    // }
+    if (currentFormType.formType === FormType.BACK_COVER) {
+        return <Form102 {...props} />;
+    }
+    if (currentFormType.formType === FormType.PAGE) {
+        return <Form103 {...props} />;
+    }
+    if (currentFormType.formType === FormType.CHAPTER) {
+        return <Form104 {...props} />;
+    }
+    if (currentFormType.formType === FormType.SECTION) {
+        return <Form105 {...props} />;
+    }
+    if (currentFormType.formType === FormType.SUB_SECTION) {
+        return <Form106 {...props} />;
+    }
+    if (currentFormType.formType === FormType.CREATE_UPDATE) {
+        return <Form107 {...props} />;
+    }
     return null;
 };
 
