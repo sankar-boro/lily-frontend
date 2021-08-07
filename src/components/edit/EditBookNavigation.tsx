@@ -113,7 +113,9 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                             {c.title}
                                         </div>
                                         <div
-                                            onClick={(e: any) =>
+                                            onClick={(e: any) => {
+                                                e.preventDefault();
+                                                if (index === 0) return;
                                                 addNewSection(
                                                     e,
                                                     props,
@@ -122,7 +124,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                                     _index,
                                                     chapter.uniqueId
                                                 )
-                                            }
+                                            }}
                                         >
                                             <span
                                                 style={{
@@ -131,7 +133,7 @@ const EditBookNavigation = (props: BookNavigationProps) => {
                                                     marginRight: 8,
                                                 }}
                                             />
-                                            +
+                                            {index === 0 ? "" : "+" }
                                         </div>
                                     </div>
                                 );

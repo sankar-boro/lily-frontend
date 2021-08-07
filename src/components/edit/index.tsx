@@ -116,7 +116,7 @@ const RenderBody = (props: {
         <div className="sm-container">
             <div className="col-8">
                 <h3>{thisData.title}</h3>
-                <div>{thisData.body}</div>
+                <div className="description">{thisData.body}</div>
                 {sectionId &&
                     thisData &&
                     thisData.child &&
@@ -125,7 +125,7 @@ const RenderBody = (props: {
                         return (
                             <div key={x.uniqueId}>
                                 <h4>{x.title}</h4>
-                                <div>{x.body}</div>
+                                <div className="description">{x.body}</div>
                             </div>
                         );
                     })}
