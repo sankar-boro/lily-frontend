@@ -72,6 +72,7 @@ const ViewBook = () => {
                 }
                 bookId={bookId}
                 allPages={allPages}
+                header={title}
             >
                 <RenderBody currentData={currentData} sectionId={sectionId} />
             </BodyComponent>
@@ -93,9 +94,9 @@ const RenderBody = (props: any) => {
     }
     return (
         <div className="sm-container">
-            <div className="col-8">
+            <div className="col-8" style={{backgroundColor:"red"}}>
                 <h3>{thisData.title}</h3>
-                <div>{thisData.body}</div>
+                <div className="description">{thisData.body}</div>
                 {sectionId &&
                     thisData.child &&
                     thisData.child.length > 0 &&
@@ -103,12 +104,12 @@ const RenderBody = (props: any) => {
                         return (
                             <div key={x.uniqueId}>
                                 <h4>{x.title}</h4>
-                                <div>{x.body}</div>
+                                <div className="description">{x.body}</div>
                             </div>
                         );
                     })}
             </div>
-            <div className="col-4">Divider</div>
+            <div className="col-4" style={{backgroundColor:"blue"}}>Divider</div>
         </div>
     );
 };

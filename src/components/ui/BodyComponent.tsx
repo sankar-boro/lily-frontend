@@ -1,4 +1,5 @@
 import { useHistory } from "react-router";
+import { MdHome, MdModeEdit } from 'react-icons/md';
 
 const BodyComponent = (props: any) => {
     const history = useHistory();
@@ -10,9 +11,17 @@ const BodyComponent = (props: any) => {
                 <div className="toolbar">
                     <div className="document-categories"></div>
                     <div className="read-header">{header}</div>
-                    <div className="settings">
+                    <div className="settings div-inline">
+                        <div className="inline-item hover" onClick={(e) => {
+                                e.preventDefault();
+                                history.replace({
+                                    pathname: `/`,
+                                });
+                            }}>
+                            <MdHome />
+                        </div>
                         <div
-                            className="div-inline hover"
+                            className="inline-item hover"
                             onClick={(e) => {
                                 e.preventDefault();
                                 history.replace({
@@ -24,7 +33,7 @@ const BodyComponent = (props: any) => {
                                 });
                             }}
                         >
-                            Edit
+                            <MdModeEdit />
                         </div>
                     </div>
                 </div>

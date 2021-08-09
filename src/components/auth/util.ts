@@ -1,7 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { UserInfo } from "../../service/AuthServiceProvider";
 
-const login = (email: string, password: string, authenticateUser: any) => {
+function login(this: any, email: string, password: string) {
+    console.log(this);
     axios
         .post(
             "http://localhost:8000/login",
@@ -15,11 +16,15 @@ const login = (email: string, password: string, authenticateUser: any) => {
         )
         .then((res: AxiosResponse<UserInfo>) => {
             if (res && res.data) {
-                authenticateUser(res.data);
+                this.authenticateUser(res.data);
             }
         })
         .catch((err: AxiosError<any>) => {
-            // console.log(err);
+            console.log(this);
+            console.log(err.response);
+            if (err.response && err.response.data && err.response.data.message) {
+                console.log(this.setError({credentials: err.response.data.message}));
+            }
         });
 };
 

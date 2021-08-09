@@ -17,6 +17,8 @@ export type AuthService = {
     logoutUser: () => void;
     read: boolean;
     setRead: (value: boolean) => void;
+    error: any;
+    setError: (e: any) => void;
 };
 export const AuthContext = React.createContext<AuthService>({
     initializing: true,
@@ -27,6 +29,8 @@ export const AuthContext = React.createContext<AuthService>({
     logoutUser: () => {},
     read: false,
     setRead: (value: boolean) => {},
+    error: {},
+    setError: (e: any) => {},
 });
 export const useAuthContext = () => useContext(AuthContext);
 function clearAllStorage() {
@@ -45,6 +49,8 @@ const AuthServiceProvider = (props: { children: object }) => {
     );
     const [auth, setAuth] = useState<boolean>(false);
     const [authToken, setAuthToken] = useState<Option<string>>(None);
+    const [error, setError] = useState<any>({});
+
     useEffect(() => {
         axios
             .get("http://localhost:8000/user/session", {
@@ -86,6 +92,8 @@ const AuthServiceProvider = (props: { children: object }) => {
                 logoutUser,
                 read,
                 setRead: toggleRead,
+                error,
+                setError: setError,
             }}
         >
             {props.children}
