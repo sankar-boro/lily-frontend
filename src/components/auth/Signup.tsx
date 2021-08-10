@@ -11,74 +11,88 @@ const Login = () => {
 
     //
     return (
-        <>
+        <div className="login-container">
+            <div className="header">Sign up</div>
             <form action="#" method="post">
-                <input
-                    type="text"
-                    placeholder="Email*"
-                    name="email"
-                    required
-                    defaultValue="sankar.boro@yahoo.com"
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setEmail(e.target.value);
-                    }}
-                />
-                <br />
-                <input
-                    type="text"
-                    placeholder="First Name"
-                    name="firstname"
-                    required
-                    defaultValue="Sankar"
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setFname(e.target.value);
-                    }}
-                />
-                <br />
-                <input
-                    type="text"
-                    placeholder="Last Name"
-                    name="lastname"
-                    required
-                    defaultValue="boro"
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setLname(e.target.value);
-                    }}
-                />
-                <br />
-                <input
-                    type="password"
-                    placeholder="Password*"
-                    name="password"
-                    required
-                    defaultValue="sankar"
-                    onChange={(e) => {
-                        e.preventDefault();
-                        setPassword(e.target.value);
-                    }}
-                />
-                <br />
-                <input
-                    type="button"
-                    value="Submit"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        signup({
-                            email,
-                            password,
-                            fname,
-                            lname,
-                            history,
-                        });
-                    }}
-                />
+                <div>
+                    <div className="email-label">Email*</div>    
+                    <input
+                        type="text"
+                        placeholder="Email*"
+                        name="email"
+                        required
+                        className="auth-input"
+                        onChange={(e) => {
+                            e.preventDefault();
+                            setEmail(e.target.value);
+                        }}
+                    />
+                </div>
+                <div>
+                    <div className="input-label">First name*</div>
+                    <input
+                        type="text"
+                        placeholder="First Name"
+                        name="firstname"
+                        required
+                        className="auth-input"
+                        onChange={(e) => {
+                            e.preventDefault();
+                            setFname(e.target.value);
+                        }}
+                    />
+                </div>
+                <div>
+                    <div className="input-label">Last name*</div>
+                    <input
+                        type="text"
+                        placeholder="Last Name"
+                        name="lastname"
+                        required
+                        className="auth-input"
+                        onChange={(e) => {
+                            e.preventDefault();
+                            setLname(e.target.value);
+                        }}
+                    />
+                </div>
+                <div>
+                    <div className="input-label">Password*</div>
+                    <input
+                        type="password"
+                        placeholder="Password*"
+                        name="password"
+                        required
+                        className="auth-input"
+                        onChange={(e) => {
+                            e.preventDefault();
+                            setPassword(e.target.value);
+                        }}
+                    />
+                </div>
+                <div>
+                    <button
+                        type="button"
+                        value="Submit"
+                        className="button button-relative button-secondary"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            signup({
+                                email,
+                                password,
+                                fname,
+                                lname,
+                                history,
+                            });
+                        }}
+                    >
+                        Submit
+                    </button>
+                </div>
             </form>
 
-            <Link to="/">Login</Link>
-        </>
+            <Link to="/" className="link">Login</Link>
+        </ div>
     );
 };
 
