@@ -14,7 +14,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video, #root {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -47,14 +47,77 @@ table {
 }
 /* Reset css */
 
+/* Import fonts */
 @font-face {
-    font-family: "Source Sans Pro";
-    src: local("Source Sans Pro"),
+    font-family: "SSP-R";
+    src: local("SSP-R"),
     url("./fonts/SourceSansPro-Regular.ttf") format("truetype");
     font-weight: bold;
 }
 
-/*  */
-body {
-    font-family: 'Source Sans Pro', sans-serif;
+@font-face {
+    font-family: "SSP-SB";
+    src: local("SSP-SB"),
+    url("./fonts/SourceSansPro-SemiBold.ttf") format("truetype");
+    font-weight: bold;
+}
+
+html, body {
+    font-family: 'SSP-R', sans-serif;
+    height: 100%;
+}
+#root {
+    height: 100%;
+}
+
+/* Container styles */
+.container {
+    height: 100%;
+}
+.container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Custom page containers */
+.container-login {
+    width: 345px;
+    padding: 20px;
+}
+
+/* Headers */
+.h1 {
+    font-family: 'SSP-SB', sans-serif;
+    font-size: 28px;
+    padding: 8px 0px;
+    color: #4a4a4a;
+}
+
+/* Form */
+.form-section {
+    margin: 10px 0px;
+}
+.form-input {
+    padding: 5px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
+.form-label {
+    font-size: 14px;
+}
+.link {
+    color: #404040;
+}
+/* Login */
+
+/* Button */
+.button {
+    padding: 5px 10px;
+}
+
+/* Suffix styles */
+.button:hover {
+    cursor: pointer;
 }

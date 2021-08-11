@@ -33,65 +33,70 @@ const Login = () => {
     }
     //
     return (
-        <div className="login-container">
-            <div className="header">Login</div>
-            <div className="form-res-error">{error && error.credentials}</div>
-            <form action="#" method="post">
-                <div style={{ marginBottom: 10}}>
-                    <div>
-                        <div className="email-label">Email*</div>
-                        <input
-                            {...inputs.email}
-                            onChange={(e) => {
-                                e.preventDefault();
-                                setEmail(e.target.value);
-                            }}
-                            className="login-input"
-                            value={email}
-                            required
-                            />
-                    </div>
-                    <div>
-                        <div className="password-label">Password*</div>
-                        <input
-                            {...inputs.password}
-                            onChange={(e) => {
-                                e.preventDefault();
-                                setPassword(e.target.value);
-                            }}
-                            className="login-input"
-                            value={password}
-                            required
-                            />
-                    </div>
-                </div>
-                <div style={{display: "flex",justifyContent:"space-between"}}>
-                    <div>
-                        <button
-                            type="submit"
-                            name="Submit"
-                            className="button button-relative button-secondary"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                
-                                if (state === constants.IDLE) {
-                                    setState(constants.WAITING);
-                                    login(handles);
-                                }
-                            }}
-                            >
-                            Submit
-                        </button>
-                    </div>
-                    <div>
-                        <div className="button button-relative button-tertiary" style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
-                            <Link to="/signup" style={{color: "#5d5d5d"}}>
-                                Sign up
-                            </Link>
+        <div className="container container-center">
+            <div className="container-login">
+                <div className="h1">Login</div>
+                <div className="form-res-error">{error && error.credentials}</div>
+                <div className="container-form">    
+                    <form action="#" method="post">
+                        <div style={{ marginBottom: 10}}>
+                            <div className="form-section">
+                                <div className="form-label">Email*</div>
+                                <input
+                                    {...inputs.email}
+                                    onChange={(e) => {
+                                        e.preventDefault();
+                                        setEmail(e.target.value);
+                                    }}
+                                    className="form-input"
+                                    value={email}
+                                    required
+                                    />
+                            </div>
+                            <div className="form-section">
+                                <div className="form-label">Password*</div>
+                                <input
+                                    {...inputs.password}
+                                    onChange={(e) => {
+                                        e.preventDefault();
+                                        setPassword(e.target.value);
+                                    }}
+                                    className="form-input"
+                                    value={password}
+                                    required
+                                    />
+                            </div>
                         </div>
-                    </div>
+                        <div style={{display: "flex",justifyContent:"space-between"}}>
+                            <div>
+                                <button
+                                    type="submit"
+                                    name="Submit"
+                                    className="button"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        
+                                        if (state === constants.IDLE) {
+                                            setState(constants.WAITING);
+                                            login(handles);
+                                        }
+                                    }}
+                                    >
+                                    Submit
+                                </button>
+                            </div>
+                            <div>
+                                <div className="button">
+                                    <Link to="/signup" className="link">
+                                        Sign up
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                                    
                 </div>
-            </form>
+            </div>
         </div>
     );
 };
