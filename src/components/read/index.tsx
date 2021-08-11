@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { Book, sortAll } from "./util";
 import ReadBookNavigation from "./ReadBookNavigation";
 import { useAuthContext } from "../../service/AuthServiceProvider";
-import "./read.css";
 
 const ViewBook = () => {
     const history: {

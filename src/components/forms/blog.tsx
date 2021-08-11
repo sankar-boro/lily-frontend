@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import "./index.css";
 
 const submitBlog = (props: { title: string; description: string }) => {
     const { title, description } = props;

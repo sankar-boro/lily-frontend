@@ -10,7 +10,6 @@ import Form106 from "../forms/Form106";
 import Form107 from "../forms/Form107";
 import { Book } from "./util";
 import { EditBookNavigation } from "./EditBookNavigation";
-import "./edit.css";
 import { None } from "ts-results";
 import { Form, FormType } from "./util";
 import { useAuthContext } from "../../service/AuthServiceProvider";

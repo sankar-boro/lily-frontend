@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import "./fonts/SourceSansPro-Black.ttf";
 import "./index.css";
 import { ReportHandler } from "web-vitals";
 
