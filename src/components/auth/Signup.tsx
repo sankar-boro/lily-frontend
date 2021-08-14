@@ -16,7 +16,7 @@ const Login = () => {
                 <div className="h1">Sign up</div>
                 <div className="container-form">
                     <form action="#" method="post">
-                        <div style={{ marginBottom: 10}}>
+                        <div className="group-form-input">
                             <div className="form-section">
                                 <div className="form-label">Email*</div>    
                                 <input
@@ -70,7 +70,7 @@ const Login = () => {
                                     />
                             </div>
                         </div>
-                        <div style={{display: "flex",justifyContent:"space-between"}}>
+                        <div style={styles.footer}>
                             <div>
                                 <button
                                     type="button"
@@ -91,7 +91,7 @@ const Login = () => {
                                 </button>
                             </div>
                             <div>
-                                <div className="button">
+                                <div>
                                     <Link to="/" className="link">Login</Link>
                                 </div>
                             </div>
@@ -102,5 +102,9 @@ const Login = () => {
         </ div>
     );
 };
+
+const styles = {
+    footer: {display: "flex",justifyContent:"space-between", alignItems: "center"}
+}
 
 export default Login;

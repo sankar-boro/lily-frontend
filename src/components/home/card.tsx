@@ -2,7 +2,7 @@ const Card = (props: { history: any; data: any }) => {
     const { history, data } = props;
     return (
         <div
-            className="document-card"
+            className="card"
             key={data.bookId}
             onClick={() => {
                 history.push({
@@ -12,8 +12,8 @@ const Card = (props: { history: any; data: any }) => {
             }}
         >
             <div>
-                <div className="document-title hover">{data.title}</div>
-                <div className="document-body hover">
+                <div className="card-title hover"><span>{data.title}</span></div>
+                <div className="card-body hover">
                     {data.body.substr(0, 250)}...
                 </div>
             </div>

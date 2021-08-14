@@ -21,6 +21,7 @@ time, mark, audio, video, #root {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+    text-decoration: none;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -69,10 +70,19 @@ html, body {
 #root {
     height: 100%;
 }
+.hover:hover {
+    cursor: pointer;
+}
 
 /* Container styles */
 .container {
     height: 100%;
+}
+.container-sm {
+    width: 75%;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 .container-center {
     display: flex;
@@ -101,11 +111,14 @@ html, body {
 .form-input {
     padding: 5px;
     width: 100%;
-    border: 1px solid #ccc;
+    border: 1px solid #cccccc;
     border-radius: 2px;
 }
 .form-label {
     font-size: 14px;
+}
+.group-form-input {
+    margin-bottom: 10px;
 }
 .link {
     color: #404040;
@@ -115,9 +128,83 @@ html, body {
 /* Button */
 .button {
     padding: 5px 10px;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
 }
 
 /* Suffix styles */
 .button:hover {
     cursor: pointer;
+}
+
+/* Navigation */
+.navbar-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.navbar-top-right, .navbar-top-left {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.nav-section {
+    padding: 5px 10px;
+}
+
+/* Body */
+.card {
+    width: 23%;
+}
+.card-title {
+    padding: 5px 0px;
+    margin-bottom: 10px;
+}
+.card-title span {
+    font-family: "SSP-SB";
+}
+
+/* Menu dropdown */
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+.dropdown .dropbtn {
+    border: none;
+    outline: none;
+    padding: 8px 20px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+    border-left: 1px solid #ccc;
+}
+
+/* .navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: red;
+} */
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    float: none;
+    color: black;
+    padding: 8px 20px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
 }

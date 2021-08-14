@@ -39,7 +39,7 @@ const Login = () => {
                 <div className="form-res-error">{error && error.credentials}</div>
                 <div className="container-form">    
                     <form action="#" method="post">
-                        <div style={{ marginBottom: 10}}>
+                        <div className="group-form-input">
                             <div className="form-section">
                                 <div className="form-label">Email*</div>
                                 <input
@@ -67,7 +67,7 @@ const Login = () => {
                                     />
                             </div>
                         </div>
-                        <div style={{display: "flex",justifyContent:"space-between"}}>
+                        <div style={{display: "flex",justifyContent:"space-between", alignItems: "center"}}>
                             <div>
                                 <button
                                     type="submit"
@@ -86,7 +86,7 @@ const Login = () => {
                                 </button>
                             </div>
                             <div>
-                                <div className="button">
+                                <div>
                                     <Link to="/signup" className="link">
                                         Sign up
                                     </Link>
