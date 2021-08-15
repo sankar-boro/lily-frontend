@@ -20,7 +20,6 @@ const createNewSubSection = (props: {
         topUniqueId,
         botUniqueId,
     } = props;
-    // console.log("props", props);
     axios
         .post(
             "http://localhost:8000/book/create/update/item",

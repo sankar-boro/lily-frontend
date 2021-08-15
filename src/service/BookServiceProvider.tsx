@@ -90,7 +90,6 @@ const fetchData = (state: BookState, dispatch: Function) => {
 }
 
 const idSetter = (state: any, action: any) => {
-    console.log(state, action);
 
     switch (action.idType) {
         case 'BOOK_ID':
@@ -137,7 +136,6 @@ const reducer = (state: any, action: any) => {
 }
 
 const setActiveId = (data: any, activeId: string, dispatch: Function) => {
-    console.log('setactiveId', data);
     data.forEach((a: any) => {
         if (activeId === a.uniqueId) {
             dispatch({

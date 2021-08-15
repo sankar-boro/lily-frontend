@@ -5,7 +5,6 @@ function login(props: any) {
     const {email, password, context} = props;
     const { authenticateUser, setError } = context;
 
-    console.log(props);
     axios
         .post(
             "http://localhost:8000/login",
@@ -23,7 +22,6 @@ function login(props: any) {
             }
         })
         .catch((err: AxiosError<any>) => {
-            console.log(err.response);
             if (err.response && err.response.data && err.response.data.message) {
                 console.log(setError({credentials: err.response.data.message}));
             }

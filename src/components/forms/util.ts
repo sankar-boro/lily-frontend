@@ -36,7 +36,6 @@ type Form = {
 };
 
 const sortAll = (data: Book[], parentId: string) => {
-    console.log("data", data);
     let lastParentId = parentId;
     let newData: any = [];
     data.forEach((b) => {
@@ -125,7 +124,6 @@ const doSome = (data: any) => {
         child = [...child, ...data.child];
     }
 
-    // console.log("child", child);
     return {
         chapter: data,
         sections: child,
@@ -175,8 +173,6 @@ const getChapterData = (
     };
 
     formHelp();
-
-    // console.log("formData", formData);
 
     return {
         chapterData: doSome(value),

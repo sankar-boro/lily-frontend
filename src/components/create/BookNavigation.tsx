@@ -196,7 +196,6 @@ const addNewSection = (
             formType: FormType.SECTION,
             formData: None,
         });
-        console.log(chapterId);
         return;
     }
 
@@ -213,7 +212,6 @@ const addNewSection = (
                 identity: 105,
             }),
         });
-        console.log(topUniqueId, botUniqueId);
         return;
     }
 

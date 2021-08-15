@@ -172,7 +172,6 @@ const doSome = (data: any) => {
         child = [...child, ...data.child];
     }
 
-    // console.log("child", child);
     return {
         chapter: data,
         sections: child,
@@ -222,8 +221,6 @@ const getChapterData = (
     };
 
     formHelp();
-
-    // console.log("formData", formData);
 
     return {
         chapterData: doSome(value),

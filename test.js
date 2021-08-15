@@ -172,7 +172,6 @@ function run() {
         let a = buildSectionsReturnSections(v, ozf, ozs);
         chapters = [...chapters, ...a];
     });
-    console.log(chapters, "\n\n");
 }
 
 run();
