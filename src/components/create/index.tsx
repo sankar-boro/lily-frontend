@@ -7,7 +7,7 @@ import { Book } from "./util";
 import CreateBook from "../forms/CreateNewBook";
 import { Form, FormType, sortAll } from "./util";
 import CreateBodyComponent from "./BodyComponent";
-import { EditBookNavigation } from "./BookNavigation";
+import { BookNavigation } from "./BookNavigation";
 
 import Form102 from "../forms/Form102";
 import Form103 from "../forms/Form103";
@@ -53,7 +53,7 @@ const EditBook = () => {
     return (
         <CreateBodyComponent
             leftComponent={
-                <EditBookNavigation
+                <BookNavigation
                     title={title}
                     allPages={allPages}
                     setActiveId={setActiveId}

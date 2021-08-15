@@ -1,7 +1,10 @@
 import { activeChBg, activeScBg } from "./util";
+import BookServiceProvider, { useBookContext} from "../../service/BookServiceProvider";
+
 
 const ReadBookNavigation = (props: any) => {
-    const { setActiveId, allPages, setSectionId, activeId, sectionId } = props;
+    const context = useBookContext();
+    const { data, activeId, sectionId } = context;
     const doSome = (data: any) => {
         let child = [];
         if (data && data.child && Array.isArray(data.child)) {
@@ -15,15 +18,23 @@ const ReadBookNavigation = (props: any) => {
     };
     return (
         <div style={{ marginTop: 16 }}>
-            {allPages.map((value: any, index: number) => {
+            {data.map((value: any, index: number) => {
                 const { chapter, sections } = doSome(value);
                 return (
                     <div key={chapter.title}>
                         <div
                             onClick={(e) => {
                                 e.preventDefault();
-                                setActiveId(chapter.uniqueId);
-                                setSectionId(null);
+                                context.dispatch({
+                                    type: 'ID_SETTER',
+                                    payload: chapter.uniqueId,
+                                    idType: 'ACTIVE_ID',
+                                });
+                                context.dispatch({
+                                    type: 'ID_SETTER',
+                                    payload: null,
+                                    idType: 'SECTION_ID',
+                                });
                             }}
                             className={`chapter-nav hover ${activeChBg(
                                 chapter,
@@ -38,8 +49,16 @@ const ReadBookNavigation = (props: any) => {
                                     <div
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            setActiveId(chapter.uniqueId);
-                                            setSectionId(c.uniqueId);
+                                            context.dispatch({
+                                                type: 'ID_SETTER',
+                                                payload: chapter.uniqueId,
+                                                idType: 'ACTIVE_ID',
+                                            });
+                                            context.dispatch({
+                                                type: 'ID_SETTER',
+                                                payload: c.uniqueId,
+                                                idType: 'SECTION_ID',
+                                            });
                                         }}
                                         key={c.uniqueId}
                                         className={`section-nav hover ${activeScBg(

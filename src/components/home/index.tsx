@@ -83,7 +83,7 @@ const AllDocuments = () => {
             {books
                 .filter((a: any) => a.identity === 101)
                 .map((data: any) => {
-                    return <Card history={history} data={data} />;
+                    return <Card history={history} data={data} key={data.uniqueId} />;
                 })}
         </div>
     );

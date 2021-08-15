@@ -26,7 +26,7 @@ type ChapterFormData = {
     setCurrentFormType: Dispatch<SetStateAction<Form>>;
     setParentId: Dispatch<SetStateAction<string | null>>;
 };
-const EditBookNavigation = (props: BookNavigationProps) => {
+const BookNavigation = (props: BookNavigationProps) => {
     const {
         setActiveId,
         allPages,
@@ -246,4 +246,4 @@ const addNewSection = (
         return;
     }
 };
-export { EditBookNavigation };
+export { BookNavigation };

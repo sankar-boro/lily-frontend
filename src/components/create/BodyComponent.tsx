@@ -1,28 +1,11 @@
-// import { useHistory } from "react-router";
-
 const CreateBodyComponent = (props: any) => {
-    // const history = useHistory();
-    // const { bookId, allPages } = props;
     return (
-        <>
+        <div style={{display: "flex", flexDirection: "row"}}>
             <div className="navbar-left">{props.leftComponent}</div>
-            <div className="body-container">
-                <div className="toolbar">
-                    <div className="document-categories"></div>
-                    <div className="settings">
-                        <div
-                            className="document-section hover"
-                            onClick={(e) => {
-                                e.preventDefault();
-                            }}
-                        >
-                            Create
-                        </div>
-                    </div>
-                </div>
+            <div className="home-page-container">
                 <div>{props.children}</div>
             </div>
-        </>
+        </div>
     );
 };
 

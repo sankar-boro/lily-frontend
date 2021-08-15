@@ -51,7 +51,7 @@ const Login = () => {
                                     className="form-input"
                                     value={email}
                                     required
-                                    />
+                                />
                             </div>
                             <div className="form-section">
                                 <div className="form-label">Password*</div>
