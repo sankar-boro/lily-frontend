@@ -10,6 +10,7 @@ import BookServiceProvider, { useBookContext} from "../../service/BookServicePro
 
 const Main = () => {
     const context = useBookContext();
+    const authContext = useAuthContext();
     const history: {
         location: {
             state: Book;
@@ -22,6 +23,7 @@ const Main = () => {
             idType: 'BOOK_ID',
             payload: history.location.state.bookId,
         });
+        authContext.setRead(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

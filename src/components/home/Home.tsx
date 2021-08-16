@@ -1,8 +1,16 @@
+import { useEffect } from "react";
 import Card from "./Card";
 import HomeServiceProvider, { useHomeContext } from "../../service/HomeServiceProvider";
+import { useAuthContext } from "../../service/AuthServiceProvider";
 
 const Main = () => {
+    const authContext = useAuthContext();
     const { books } = useHomeContext();
+
+    useEffect(() => {
+        authContext.setRead(false);
+    }, []);
+
     return (
         <div className="container-sm">
             {books
