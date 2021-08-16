@@ -27,14 +27,22 @@ const Main = () => {
 
     if(!context.data) return <div>Fetching...</div>;
 
-    return <Renderer data={context.data} />
+    return <Renderer title={history.location.state.title} />
 }
 
 const Renderer = (props: any) => {
     return <div>
-        <NavigationRenderer />
-        <BodyRenderer />
+        <div style={{display: "flex", justifyContent: "space-between"}}>
+            <div></div>
+            <div><h2 className="h2">{props.title}</h2></div>
+            <div></div>
+        </div>
+        <div className="container-flex">
+            <NavigationRenderer />
+            <BodyRenderer />
+        </div>
     </div>
+    
 }
 
 export default function MainContext(props: any){

@@ -81,6 +81,10 @@ html, body {
 .container {
     height: 100%;
 }
+.container-flex {
+    display: flex;
+    flex-direction: row;
+}
 .con-1 {
     width: 95%;
 }
@@ -136,6 +140,18 @@ html, body {
 .h1 {
     font-family: 'SSP-SB', sans-serif;
     font-size: 28px;
+    padding: 8px 0px;
+    color: #4a4a4a;
+}
+.h2 {
+    font-family: 'SSP-SB', sans-serif;
+    font-size: 24px;
+    padding: 8px 0px;
+    color: #4a4a4a;
+}
+.h3 {
+    font-family: 'SSP-SB', sans-serif;
+    font-size: 20px;
     padding: 8px 0px;
     color: #4a4a4a;
 }
@@ -246,4 +262,9 @@ html, body {
 
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+/* Read book */
+.description {
+    white-space: pre-wrap;
 }

@@ -1,5 +1,8 @@
-const Card = (props: { history: any; data: any }) => {
-    const { history, data } = props;
+import { useHistory } from "react-router";
+
+const Card = (props: { data: any }) => {
+    const history = useHistory();
+    const { data } = props;
     return (
         <div
             className="card"

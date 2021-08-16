@@ -1,5 +1,5 @@
 import { activeChBg, activeScBg } from "./util";
-import BookServiceProvider, { useBookContext} from "../../service/BookServiceProvider";
+import { useBookContext} from "../../service/BookServiceProvider";
 
 
 const ReadBookNavigation = (props: any) => {
@@ -17,11 +17,11 @@ const ReadBookNavigation = (props: any) => {
         };
     };
     return (
-        <div style={{ marginTop: 16 }}>
+        <div style={{ width: "18%" }}>
             {data.map((value: any, index: number) => {
                 const { chapter, sections } = doSome(value);
                 return (
-                    <div key={chapter.title}>
+                    <div style={{ padding: "5px 0px 5px 10px" }} key={chapter.title}>
                         <div
                             onClick={(e) => {
                                 e.preventDefault();

@@ -1,8 +1,18 @@
 import { Link } from "react-router-dom";
 import { logout } from "./util";
+import { useAuthContext } from "../../service/AuthServiceProvider";
 
-const Header = (props: { context: any; userInfo: any }) => {
-    const { context, userInfo } = props;
+const Header = () => {
+    const context = useAuthContext();
+    const read = context.read;
+    const userData = context.authUserData;
+    let userInfo = null;
+    if (context.auth) {
+        userInfo = userData.unwrap();
+    }
+
+    if (read) return null;
+    
     return (
         <div>
             <div className="navbar navbar-top">

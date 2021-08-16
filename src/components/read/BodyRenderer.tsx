@@ -1,5 +1,5 @@
 import { Book } from "../../globals/types/book";
-import BookServiceProvider, { useBookContext} from "../../service/BookServiceProvider";
+import { useBookContext} from "../../service/BookServiceProvider";
 
 
 const BodyRenderer = (props: any) => {
@@ -14,9 +14,9 @@ const BodyRenderer = (props: any) => {
         });
     }
     return (
-        <div className="sm-container">
+        <div style={{width:"82%"}}>
             <div className="col-8">
-                <h3>{thisData.title}</h3>
+                <h3 className="h3" style={{marginBottom: 15 }}>{thisData.title}</h3>
                 <div className="description">{thisData.body}</div>
                 {sectionId &&
                     thisData.child &&
