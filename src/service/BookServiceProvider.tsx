@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useReducer } from "react";
 import { Option, None, Some } from "ts-results";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { sortAll } from "../globals/forms/index";
+import { VIEW_TYPE } from "../globals/types/index";
 
 type Book = {
     bookId: string;
@@ -15,6 +16,7 @@ type Book = {
     updatedAt: string;
     identity: number;
 };
+
 export type BookState = {
     data: Book[];
     bookId: string;
@@ -25,6 +27,7 @@ export type BookState = {
     apiState: string | null;
     error: string;
     dispatch: Function,
+    viewState: string,
 };
 
 const bookState = {
@@ -37,7 +40,9 @@ const bookState = {
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
+    viewState: VIEW_TYPE.NONE,
 }
+
 export const BookContext = React.createContext<BookState>({
     data: [],
     bookId: '',
@@ -48,7 +53,9 @@ export const BookContext = React.createContext<BookState>({
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
+    viewState: VIEW_TYPE.NONE,
 });
+
 export const useBookContext = () => useContext(BookContext);
 
 const fetchData = (state: BookState, dispatch: Function) => {

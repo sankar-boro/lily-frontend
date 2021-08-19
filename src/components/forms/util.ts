@@ -1,39 +1,5 @@
 import { Some, Option, None } from "ts-results";
-
-type Book = {
-    bookId: string;
-    authorId: string;
-    authorName: string;
-    title: string;
-    body: string;
-    parentId: string;
-    uniqueId: string;
-    createdAt: string;
-    updatedAt: string;
-    identity: number;
-};
-
-type FormData = {
-    topUniqueId: string;
-    botUniqueId: string;
-    identity: number;
-};
-
-enum FormType {
-    FRONT_COVER = "FRONT_COVER",
-    BACK_COVER = "BACK_COVER",
-    PAGE = "PAGE",
-    CHAPTER = "CHAPTER",
-    SECTION = "SECTION",
-    SUB_SECTION = "SUB_SECTION",
-    CREATE_UPDATE = "CREATE_UPDATE",
-    NONE = "NONE",
-}
-
-type Form = {
-    formType: FormType;
-    formData: Option<FormData>;
-};
+import { Book, VIEW_TYPE } from "../../globals/types/index";
 
 const sortAll = (data: Book[], parentId: string) => {
     let lastParentId = parentId;
@@ -140,7 +106,7 @@ const getChapterData = (
     const { chapter, sections } = doSome(value);
     const { setCurrentFormType, setParentId } = props;
     let formData = {
-        formType: FormType.NONE,
+        formType: VIEW_TYPE.NONE,
         chapter,
         updateIds: {
             topUniqueId: "",
@@ -155,20 +121,20 @@ const getChapterData = (
     // let hideForm = false;
     const formHelp = () => {
         if (totalChapters === 1) {
-            formData.formType = FormType.CHAPTER;
+            formData.formType = VIEW_TYPE.CHAPTER;
             // hideForm = true;
             return;
         }
 
         if (totalChapters > 1 && currentPageNo < totalChapters) {
-            formData.formType = FormType.CREATE_UPDATE;
+            formData.formType = VIEW_TYPE.CREATE_UPDATE;
             formData.updateIds.topUniqueId = chapter.uniqueId;
             formData.updateIds.botUniqueId = allPages[index + 1].uniqueId;
             return;
         }
 
         if (currentPageNo === totalChapters) {
-            formData.formType = FormType.CHAPTER;
+            formData.formType = VIEW_TYPE.CHAPTER;
         }
     };
 
@@ -209,7 +175,4 @@ export {
     activeScBg,
     displayNone,
     getChapterData,
-    FormType,
-    // getSectionData,
 };
-export type { Book, Form, FormData, FormType as FormTypes };

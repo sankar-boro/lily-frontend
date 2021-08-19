@@ -1,8 +1,5 @@
-import BodyComponent from "../ui/BodyComponent";
 import { useHistory } from "react-router-dom";
-import { useState } from "react";
 import { useEffect } from "react";
-import { Book, sortAll, getPages } from "./util";
 import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
 import { useAuthContext } from "../../service/AuthServiceProvider";
@@ -11,11 +8,7 @@ import BookServiceProvider, { useBookContext} from "../../service/BookServicePro
 const Main = () => {
     const context = useBookContext();
     const authContext = useAuthContext();
-    const history: {
-        location: {
-            state: Book;
-        };
-    } = useHistory();
+    const history: any = useHistory();
 
     useEffect(() => {
         context.dispatch({
@@ -29,22 +22,14 @@ const Main = () => {
 
     if(!context.data) return <div>Fetching...</div>;
 
-    return <Renderer title={history.location.state.title} />
+    return <Renderer />
 }
 
-const Renderer = (props: any) => {
-    return <div>
-        <div style={{display: "flex", justifyContent: "space-between"}}>
-            <div></div>
-            <div><h2 className="h2">{props.title}</h2></div>
-            <div></div>
-        </div>
-        <div className="container-flex">
-            <NavigationRenderer />
-            <BodyRenderer />
-        </div>
-    </div>
-    
+const Renderer = () => {
+    return <div className="container-flex">
+        <NavigationRenderer />
+        <BodyRenderer />
+    </div>  
 }
 
 export default function MainContext(props: any){

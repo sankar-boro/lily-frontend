@@ -1,4 +1,4 @@
-import { Some, Option, None } from "ts-results";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 type Book = {
     bookId: string;
@@ -13,100 +13,141 @@ type Book = {
     identity: number;
 };
 
-type FormData = {
-    topUniqueId: string;
-    botUniqueId: string;
-    identity: number;
-};
-
-enum FormType {
-    FRONT_COVER = "FRONT_COVER",
-    BACK_COVER = "BACK_COVER",
-    PAGE = "PAGE",
-    CHAPTER = "CHAPTER",
-    SECTION = "SECTION",
-    SUB_SECTION = "SUB_SECTION",
-    CREATE_UPDATE = "CREATE_UPDATE",
-    NONE = "NONE",
+const getPages = (setAllPages: Function, bookId: string) => {
+    axios
+    .get(`http://localhost:8000/book/getall/${bookId}`, {
+        withCredentials: true,
+    })
+    .then((res: AxiosResponse<any>) => {
+        if (
+            res.status &&
+            typeof res.status === "number" &&
+            res.status === 200
+        ) {
+            let dataRes: Book[] = res.data;
+            let x = sortAll(dataRes);
+            setAllPages(x);
+        }
+    })
+    .catch((err: AxiosError<any>) => {
+        // console.log("deleteerror", err.response);
+    });
 }
 
-type Form = {
-    formType: FormType;
-    formData: Option<FormData>;
-};
+function groupSections(dd: any, s: any) {
+    let pId = dd.uniqueId;
+    let sections: any[] = [];
+    let c = 0;
 
-const sortAll = (data: Book[], parentId: string) => {
-    let lastParentId = parentId;
-    let newData: any = [];
-    data.forEach((b) => {
-        if (b.identity === 101) {
-            newData.push({ ...b });
-        }
-    });
-    data.forEach((d) => {
-        if (d.identity === 104) {
-            newData.push({ ...d, child: [] });
-        }
-    });
-    data.forEach((d) => {
-        if (d.identity === 105) {
-            newData.forEach((n: any) => {
-                if (n.uniqueId === d.parentId) {
-                    n.child.push({ ...d, child: [] });
-                }
-            });
-        }
-    });
-    newData.forEach((d: any) => {
-        if (d.identity === 104) {
-            const { child } = d;
-            child.forEach((c: any) => {
-                c["child"] = [];
-                data.forEach((dd: any) => {
-                    if (dd.parentId === c.uniqueId) {
-                        c.child.push(dd);
-                    }
-                });
-            });
-        }
-    });
-    newData.forEach((d: any) => {
-        if (d.identity === 104) {
-            const { child } = d;
-            child.forEach((c: any) => {
-                if (c.child) {
-                    data.forEach((dd: any) => {
-                        if (dd.identity === 106) {
-                            c.child.forEach((a: any) => {
-                                if (dd.parentId === a.uniqueId) {
-                                    c.child.push(dd);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    });
-    return newData;
-};
+    let removeIds: any[] = [];
+    let newIds: any[] = [];
 
-const activeChBg = (c: any, a: string | null) => {
-    let color = "white";
-    if (a && c.uniqueId === a) {
-        color = "#eff0f1";
+    while (c !== s.length) {
+        // eslint-disable-next-line no-loop-func
+        s.forEach((ss: any) => {
+            if (ss.parentId === pId) {
+                sections.push(ss);
+                pId = ss.uniqueId;
+                removeIds.push(ss.uniqueId);
+            }
+        });
+        c++;
     }
-    return {
-        backgroundColor: color,
+
+    s.forEach((ss: any) => {
+        if (!removeIds.includes(ss.uniqueId)) {
+            newIds.push(ss);
+        }
+    });
+
+    return { data: { ...dd, child: sections }, newSections: newIds };
+}
+
+function buildSectionsReturnSections(
+    chapters: any,
+    sections: any,
+    sub_sections: any
+) {
+    let dynaSections = sections;
+    return chapters.map((chapter: any) => {
+        let buildSections = groupSections(chapter, dynaSections);
+        dynaSections = buildSections.newSections;
+
+        if (
+            buildSections.data.child &&
+            Array.isArray(buildSections.data.child) &&
+            buildSections.data.child.length === 0
+        ) {
+            return buildSections.data;
+        }
+
+        if (
+            buildSections.data.child &&
+            Array.isArray(buildSections.data.child) &&
+            buildSections.data.child.length > 0
+        ) {
+            let dynaSubSections = sub_sections;
+            let buildSubSections = buildSections.data.child.map(
+                (sections_: any) => {
+                    let tempBuildSubSections = groupSections(
+                        sections_,
+                        dynaSubSections
+                    );
+                    dynaSubSections = tempBuildSubSections.newSections;
+                    return tempBuildSubSections.data;
+                }
+            );
+
+            buildSections.data.child = buildSubSections;
+            return buildSections.data;
+        }
+        return buildSections.data;
+    });
+}
+
+function groups(book_data: Book[]) {
+    let gs: any = {
+        101: [],
+        102: [],
+        103: [],
+        104: [],
+        105: [],
+        106: [],
     };
+
+    book_data.forEach((d: Book) => {
+        if (gs[d.identity]) {
+            gs[d.identity].push(d);
+        }
+    });
+    return gs;
+}
+
+const sortAll = (data: Book[]) => {
+    let gs = groups(data);
+    let ozf = gs[105];
+    let ozs = gs[106];
+
+    let c = { 101: gs[101], 102: gs[102], 103: gs[103], 104: gs[104] };
+    let chapters: Book[] = [];
+    Object.values(c).forEach((v) => {
+        let a = buildSectionsReturnSections(v, ozf, ozs);
+        chapters = [...chapters, ...a];
+    });
+    return chapters;
 };
-const activeScBg = (c: any, a: string | null) => {
-    if (a && c.uniqueId === a) {
-        return {
-            backgroundColor: "#f1f1f1",
-        };
+
+const activeChBg = (c: any, a: string) => {
+    if (c.uniqueId === a) {
+        return "active-nav";
     }
-    return {};
+    return "no-active-nav";
+};
+const activeScBg = (c: any, a: string) => {
+    if (c.uniqueId === a) {
+        return "active-nav";
+    }
+    return "no-active-nav";
 };
 const displayNone = (c: any, a: string) => {
     let display = "none";
@@ -118,98 +159,5 @@ const displayNone = (c: any, a: string) => {
     };
 };
 
-const doSome = (data: any) => {
-    let child = [{ title: "" }];
-    if (data && data.child && Array.isArray(data.child)) {
-        child = [...child, ...data.child];
-    }
-
-    return {
-        chapter: data,
-        sections: child,
-    };
-};
-
-const getChapterData = (
-    value: any,
-    index: number,
-    totalChapters: number,
-    allPages: any,
-    props: any
-) => {
-    const { chapter, sections } = doSome(value);
-    const { setCurrentFormType, setParentId } = props;
-    let formData = {
-        formType: FormType.NONE,
-        chapter,
-        updateIds: {
-            topUniqueId: "",
-            botUniqueId: "",
-        },
-        identity: 104,
-        parentId: chapter.uniqueId,
-        setCurrentFormType,
-        setParentId,
-    };
-    const currentPageNo = index + 1;
-    // let hideForm = false;
-    const formHelp = () => {
-        if (totalChapters === 1) {
-            formData.formType = FormType.CHAPTER;
-            // hideForm = true;
-            return;
-        }
-
-        if (totalChapters > 1 && currentPageNo < totalChapters) {
-            formData.formType = FormType.CREATE_UPDATE;
-            formData.updateIds.topUniqueId = chapter.uniqueId;
-            formData.updateIds.botUniqueId = allPages[index + 1].uniqueId;
-            return;
-        }
-
-        if (currentPageNo === totalChapters) {
-            formData.formType = FormType.CHAPTER;
-        }
-    };
-
-    formHelp();
-
-    return {
-        chapterData: doSome(value),
-        formData,
-        key: index,
-    };
-};
-
-// const getSectionData = (
-//     e: any,
-//     props: any,
-//     sections: any,
-//     data: any,
-//     index: number
-// ) => {
-//     e.preventDefault();
-//     let formData = {
-//         formType: 105,
-//         chapter,
-//         updateIds: {
-//             topUniqueId: "",
-//             botUniqueId: "",
-//         },
-//         identity: 105,
-//         parentId: chapter.uniqueId,
-//         setCurrentFormType,
-//         setParentId,
-//     };
-// };
-
-export {
-    sortAll,
-    activeChBg,
-    activeScBg,
-    displayNone,
-    getChapterData,
-    FormType,
-    // getSectionData,
-};
-export type { Book, Form, FormData, FormType as FormTypes };
+export { sortAll, activeChBg, activeScBg, displayNone, getPages };
+export type { Book };

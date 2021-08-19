@@ -267,4 +267,13 @@ html, body {
 /* Read book */
 .description {
     white-space: pre-wrap;
+    font-size: 18px;
+}
+.li-item {
+    font-family: "SSP-SB";
+    color: #4d4d4d;
+    padding: 5px 0px;
+}
+.li-item:hover, .section-nav:hover, .chapter-nav:hover {
+    color:#0080f0;
 }

@@ -1,6 +1,13 @@
 import { useHistory } from "react-router-dom";
 import Divider from "./Divider";
-import { Book } from "../../globals/types/book";
+import Form101 from "../edit";
+import Form102 from "../edit";
+import Form103 from "../edit";
+import Form104 from "../edit";
+import Form105 from "../edit";
+import Form106 from "../edit";
+import Form107 from "../edit";
+import { Book, VIEW_TYPE } from "../../globals/types/index";
 import { useBookContext } from "../../service/BookServiceProvider";
 
 const Main = (props: any) => {
@@ -34,6 +41,34 @@ const Main = (props: any) => {
     );
 }
 
+const FormView = () => {
+    const context: any = useBookContext();
+
+    if (context.viewState === VIEW_TYPE.FRONT_COVER) {
+        return <Form101 />;
+    }
+
+    if (context.viewState === VIEW_TYPE.BACK_COVER) {
+        return <Form102 />;
+    }
+    if (context.viewState === VIEW_TYPE.PAGE) {
+        return <Form103 />;
+    }
+    if (context.viewState === VIEW_TYPE.CHAPTER) {
+        return <Form104 />;
+    }
+    if (context.viewState === VIEW_TYPE.SECTION) {
+        return <Form105 />;
+    }
+    if (context.viewState === VIEW_TYPE.SUB_SECTION) {
+        return <Form106 />;
+    }
+    if (context.viewState === VIEW_TYPE.CREATE_UPDATE) {
+        return <Form107 />;
+    }
+    return null;
+};
+
 const BodyRenderer = (props: any) => {
     const history: any = useHistory();
     const { title } = history.location.state;
@@ -48,7 +83,11 @@ const BodyRenderer = (props: any) => {
         });
     }
 
-    const temp = {title, thisData, sectionId};
+    const temp = { title, thisData, sectionId };
+    if (context.viewState !== VIEW_TYPE.NONE) {
+        return <FormView />;
+    }
+
     return <Main {...temp} />
 };
 

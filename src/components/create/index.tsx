@@ -3,9 +3,9 @@ import { None } from "ts-results";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
-import { Book } from "./util";
+import { sortAll } from "./util";
 import CreateBook from "../forms/CreateNewBook";
-import { Form, FormType, sortAll } from "./util";
+import { Book, Form, VIEW_TYPE } from "../../globals/types";
 import CreateBodyComponent from "./BodyComponent";
 import { BookNavigation } from "./BookNavigation";
 
@@ -37,7 +37,7 @@ const EditBook = () => {
     const [parentId, setParentId] = useState<string | null>(null);
     const [sectionId, setSectionId] = useState<string | null>(null);
     const [currentFormType, setCurrentFormType] = useState<Form>({
-        formType: FormType.FRONT_COVER,
+        formType: VIEW_TYPE.FRONT_COVER,
         formData: None,
     });
 
@@ -109,7 +109,7 @@ const RenderBody = (props: {
         });
     }
 
-    if (currentFormType.formType !== FormType.NONE) {
+    if (currentFormType.formType !== VIEW_TYPE.NONE) {
         return FormView(props);
     }
 
@@ -161,25 +161,25 @@ const FormView = (props: {
     bookRows: Book[];
 }) => {
     const { currentFormType } = props;
-    if (currentFormType.formType === FormType.FRONT_COVER) {
+    if (currentFormType.formType === VIEW_TYPE.FRONT_COVER) {
         return <CreateBook {...props} />;
     }
-    if (currentFormType.formType === FormType.BACK_COVER) {
+    if (currentFormType.formType === VIEW_TYPE.BACK_COVER) {
         return <Form102 {...props} />;
     }
-    if (currentFormType.formType === FormType.PAGE) {
+    if (currentFormType.formType === VIEW_TYPE.PAGE) {
         return <Form103 {...props} />;
     }
-    if (currentFormType.formType === FormType.CHAPTER) {
+    if (currentFormType.formType === VIEW_TYPE.CHAPTER) {
         return <Form104 {...props} />;
     }
-    if (currentFormType.formType === FormType.SECTION) {
+    if (currentFormType.formType === VIEW_TYPE.SECTION) {
         return <Form105 {...props} />;
     }
-    if (currentFormType.formType === FormType.SUB_SECTION) {
+    if (currentFormType.formType === VIEW_TYPE.SUB_SECTION) {
         return <Form106 {...props} />;
     }
-    if (currentFormType.formType === FormType.CREATE_UPDATE) {
+    if (currentFormType.formType === VIEW_TYPE.CREATE_UPDATE) {
         return <Form107 {...props} />;
     }
     return null;

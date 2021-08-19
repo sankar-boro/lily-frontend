@@ -1,4 +1,5 @@
-import { activeScBg, getChapterData, Form, FormType } from "./util";
+import { activeScBg, getChapterData } from "./util";
+import { Form, VIEW_TYPE } from "../../globals/types";
 import { None, Some } from "ts-results";
 import { Dispatch, SetStateAction } from "react";
 import { FormatLineSpacingOutlined } from "@material-ui/icons";
@@ -15,7 +16,7 @@ type BookNavigationProps = {
 };
 
 type ChapterFormData = {
-    formType: FormType;
+    formType: VIEW_TYPE;
     chapter: any;
     updateIds: {
         topUniqueId: string;
@@ -62,7 +63,7 @@ const BookNavigation = (props: BookNavigationProps) => {
                                 e.preventDefault();
                                 setActiveId(chapter.uniqueId);
                                 setCurrentFormType({
-                                    formType: FormType.NONE,
+                                    formType: VIEW_TYPE.NONE,
                                     formData: None,
                                 });
                                 setSectionId(null);
@@ -107,7 +108,7 @@ const BookNavigation = (props: BookNavigationProps) => {
                                                 setActiveId(chapter.uniqueId);
                                                 setParentId(c.uniqueId);
                                                 setCurrentFormType({
-                                                    formType: FormType.NONE,
+                                                    formType: VIEW_TYPE.NONE,
                                                     formData: None,
                                                 });
                                             }}
@@ -146,7 +147,7 @@ const BookNavigation = (props: BookNavigationProps) => {
                                 justifyContent: "flex-start",
                             }}
                             className="hover"
-                            onClick={(e) => addNewChapter(e, formData)}
+                            // onClick={(e) => addNewChapter(e, formData)}
                         >
                             +
                         </div>
@@ -160,9 +161,9 @@ const BookNavigation = (props: BookNavigationProps) => {
 const addNewChapter = (e: any, formData: ChapterFormData) => {
     e.preventDefault();
     const { updateIds, chapter, setCurrentFormType, setParentId } = formData;
-    if (formData.formType === FormType.CREATE_UPDATE) {
+    if (formData.formType === VIEW_TYPE.CREATE_UPDATE) {
         setCurrentFormType({
-            formType: FormType.CREATE_UPDATE,
+            formType: VIEW_TYPE.CREATE_UPDATE,
             formData: Some({
                 topUniqueId: updateIds.topUniqueId,
                 botUniqueId: updateIds.botUniqueId,
@@ -172,7 +173,7 @@ const addNewChapter = (e: any, formData: ChapterFormData) => {
         setParentId(chapter.uniqueId);
     } else {
         setCurrentFormType({
-            formType: FormType.CHAPTER,
+            formType: VIEW_TYPE.CHAPTER,
             formData: None,
         });
         setParentId(chapter.uniqueId);
@@ -193,7 +194,7 @@ const addNewSection = (
     if (_index === 0 && sections.length === 1) {
         setParentId(chapterId);
         setCurrentFormType({
-            formType: FormType.SECTION,
+            formType: VIEW_TYPE.SECTION,
             formData: None,
         });
         return;
@@ -205,7 +206,7 @@ const addNewSection = (
         const botUniqueId = nextSection.uniqueId;
         setParentId(chapterId);
         setCurrentFormType({
-            formType: FormType.CREATE_UPDATE,
+            formType: VIEW_TYPE.CREATE_UPDATE,
             formData: Some({
                 topUniqueId,
                 botUniqueId,
@@ -224,7 +225,7 @@ const addNewSection = (
         const botUniqueId = nextSection.uniqueId;
         setParentId(currentSection.uniqueId);
         setCurrentFormType({
-            formType: FormType.CREATE_UPDATE,
+            formType: VIEW_TYPE.CREATE_UPDATE,
             formData: Some({
                 topUniqueId,
                 botUniqueId,
@@ -238,7 +239,7 @@ const addNewSection = (
         const currentSection = sections[_index];
         setParentId(currentSection.uniqueId);
         setCurrentFormType({
-            formType: FormType.SECTION,
+            formType: VIEW_TYPE.SECTION,
             formData: None,
         });
         return;

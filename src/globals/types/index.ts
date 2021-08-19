@@ -6,7 +6,20 @@ type FormData = {
     identity: number;
 };
 
-enum FormType {
+type Book = {
+    bookId: string;
+    body: string;
+    identity: number;
+    title: string;
+    parentId: string | null;
+    uniqueId: string;
+    authorId: string;
+    authorName: string;
+    createdAt: string;
+    updatedAt: string;
+};
+
+enum VIEW_TYPE {
     FRONT_COVER = "FRONT_COVER",
     BACK_COVER = "BACK_COVER",
     PAGE = "PAGE",
@@ -16,9 +29,11 @@ enum FormType {
     CREATE_UPDATE = "CREATE_UPDATE",
     NONE = "NONE",
 }
+
 type Form = {
-    formType: FormType;
+    formType: VIEW_TYPE;
     formData: Option<FormData>;
 };
 
-export type { Form, FormData };
+export type { Form, FormData, Book };
+export { VIEW_TYPE };

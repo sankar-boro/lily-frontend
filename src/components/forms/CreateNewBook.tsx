@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Book } from "../../globals/types/book";
-import { Form } from "../../globals/types/form";
+import { Form } from "../../globals/types";
 import { textareaRows, textareaCols } from "../../globals/forms";
 
 const submitBook = (props: {

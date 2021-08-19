@@ -17,11 +17,11 @@ const ReadBookNavigation = (props: any) => {
         };
     };
     return (
-        <div style={{ width: "18%", marginTop: 24 }}>
+        <div style={styles.container}>
             {data.map((value: any, index: number) => {
                 const { chapter, sections } = doSome(value);
                 return (
-                    <div style={{ padding: "5px 0px 5px 10px" }} key={chapter.title}>
+                    <div style={styles.chapter} key={chapter.title}>
                         <div
                             onClick={(e) => {
                                 e.preventDefault();
@@ -71,6 +71,12 @@ const ReadBookNavigation = (props: any) => {
                                 );
                             })}
                         </div>
+                        <div
+                            style={{marginTop:5}}
+                            className="hover"
+                        >
+                            +
+                        </div>
                     </div>
                 );
             })}
@@ -78,4 +84,11 @@ const ReadBookNavigation = (props: any) => {
     );
 };
 
+const styles = {
+    container: { width: "18%", marginTop: 24, paddingLeft: 8 },
+    chapter: {
+        paddingTop: 5,
+        paddingBottom: 5,
+    }
+}
 export default ReadBookNavigation;
