@@ -13,8 +13,8 @@ import Form102 from "../forms/Form102";
 import Form103 from "../forms/Form103";
 import Form104 from "../forms/Chapter";
 import Form105 from "../forms/Section";
-import Form106 from "../forms/Form106";
-import Form107 from "../forms/Form107";
+import Form106 from "../forms/SubSection";
+import Form107 from "../forms/CreateUpdate";
 
 const EditBook = () => {
     const history: {

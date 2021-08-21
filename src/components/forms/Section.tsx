@@ -44,61 +44,68 @@ const Section = (props: any) => {
     const [body, setBody] = useState("");
     const { bookId, parentId } = props;
     return (
-        <div className="con-60">
-            <div className="h3">Add Section</div>
-            <div className="container-form">
-                <form action="#" method="post">
-                    <div className="group-form-input">
-                        <div className="form-section">
-                            <div className="form-label">Title*</div>
-                            <input
-                                type="text"
-                                name="title"
-                                required
-                                onChange={(e) => {
-                                    e.preventDefault();
-                                    setTitle(e.target.value);
-                                }}
-                                value={title}
-                                className="form-input"
-                            />
-                        </div>
-                        <div className="form-section">
-                            <div className="form-label">Body*</div>
-                            <textarea
-                                id="body"
-                                name="Body"
-                                rows={textareaRows}
-                                cols={textareaCols}
-                                onChange={(e) => {
-                                    e.preventDefault();
-                                    setBody(e.target.value);
-                                }}
-                                placeholder="Body of your document."
-                                value={body}
-                                className="form-input"
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            name="Submit"
-                            className="button"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                createNewSection({
-                                    title,
-                                    body,
-                                    identity: 105,
-                                    parentId,
-                                    bookId,
-                                });
-                            }}
-                        >
-                            Submit
-                        </button>
+        <div className="flex">
+            <div className="con-80 flex">
+                <div className="con-10" />
+                <div className="con-80" >
+                    <div className="h3">Add Section</div>
+                    <div className="container-form">
+                        <form action="#" method="post">
+                            <div className="group-form-input">
+                                <div className="form-section">
+                                    <div className="form-label">Title*</div>
+                                    <input
+                                        type="text"
+                                        name="title"
+                                        required
+                                        onChange={(e) => {
+                                            e.preventDefault();
+                                            setTitle(e.target.value);
+                                        }}
+                                        value={title}
+                                        className="form-input"
+                                    />
+                                </div>
+                                <div className="form-section">
+                                    <div className="form-label">Body*</div>
+                                    <textarea
+                                        id="body"
+                                        name="Body"
+                                        rows={textareaRows}
+                                        cols={textareaCols}
+                                        onChange={(e) => {
+                                            e.preventDefault();
+                                            setBody(e.target.value);
+                                        }}
+                                        placeholder="Body of your document."
+                                        value={body}
+                                        className="form-input"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    name="Submit"
+                                    className="button"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        createNewSection({
+                                            title,
+                                            body,
+                                            identity: 105,
+                                            parentId,
+                                            bookId,
+                                        });
+                                    }}
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
+                <div className="con-10" />
             </div>
+            <div className="con-20" style={{ backgroundColor: "#fffee0" }} />    
         </div>
     );
 };

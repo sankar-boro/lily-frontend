@@ -1,3 +1,4 @@
+import { VIEW_TYPE } from "../../globals/types";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 type Book = {
@@ -159,5 +160,127 @@ const displayNone = (c: any, a: string) => {
     };
 };
 
-export { sortAll, activeChBg, activeScBg, displayNone, getPages };
+const addNewSection = (
+    // e: any,
+    // props: BookNavigationProps,
+    // sections: any,
+    // c: any,
+    // _index: number,
+    // chapterId: string
+    props: any
+) => {
+    const { sectionIndex, sections, context, chapter } = props;
+    const { dispatch } = context;
+    if (sectionIndex === null) {
+        dispatch({
+            type: 'ID_SETTER',
+            payload: chapter.uniqueId,
+            idType: 'PARENT_ID',
+        });
+        dispatch({
+            type: 'VIEW_SETTER',
+            viewType: VIEW_TYPE.SECTION,
+        });
+        return;
+    }
+
+    // if (_index === 0 && sections.length > 1) {
+    //     const topUniqueId = chapterId;
+    //     const nextSection = sections[_index + 1];
+    //     const botUniqueId = nextSection.uniqueId;
+    //     setParentId(chapterId);
+    //     setCurrentFormType({
+    //         formType: FormType.CREATE_UPDATE,
+    //         formData: Some({
+    //             topUniqueId,
+    //             botUniqueId,
+    //             identity: 105,
+    //         }),
+    //     });
+    //     console.log(topUniqueId, botUniqueId);
+    //     return;
+    // }
+
+    // const lengthMatchIndex = sections.length - 1;
+
+    // if (sections.length > 1 && _index !== 0 && _index < lengthMatchIndex) {
+    //     const currentSection = sections[_index];
+    //     const nextSection = sections[_index + 1];
+    //     const topUniqueId = currentSection.uniqueId;
+    //     const botUniqueId = nextSection.uniqueId;
+    //     setParentId(currentSection.uniqueId);
+    //     setCurrentFormType({
+    //         formType: FormType.CREATE_UPDATE,
+    //         formData: Some({
+    //             topUniqueId,
+    //             botUniqueId,
+    //             identity: 105,
+    //         }),
+    //     });
+    //     return;
+    // }
+
+    // if (sections.length > 1 && _index === lengthMatchIndex) {
+    //     const currentSection = sections[_index];
+    //     setParentId(currentSection.uniqueId);
+    //     setCurrentFormType({
+    //         formType: FormType.SECTION,
+    //         formData: None,
+    //     });
+    //     return;
+    // }
+};
+
+const addNewChapter = (props: any) => {
+    const { chapter, context, data, chapterIndex } = props;
+    console.log('data', data);
+    const { dispatch } = context;
+    const lastPageIndex = data.length - 1;
+    
+
+    if (chapterIndex === lastPageIndex) {
+        dispatch({
+            type: 'VIEW_SETTER',
+            viewType: VIEW_TYPE.CHAPTER,
+        });
+        dispatch({
+            type: 'ID_SETTER',
+            payload: chapter.uniqueId,
+            idType: 'PARENT_ID',
+        });
+    } else {
+        const topUniqueId = data[chapterIndex].uniqueId;
+        const botUniqueId = data[chapterIndex + 1].uniqueId;
+        dispatch({
+            type: 'VIEW_SETTER',
+            viewType: VIEW_TYPE.CREATE_UPDATE,
+        });
+        dispatch({
+            type: 'ID_SETTER',
+            payload: {
+                topUniqueId,
+                botUniqueId,
+                identity: 107,
+            },
+            idType: 'MULTI_ID',
+        });
+        console.log('last page');
+    }
+};
+const sectionOnClick = (e: any, props: any) => {
+    e.preventDefault();
+    const { context, chapter, section } = props;
+    context.dispatch({
+        type: 'ID_SETTER',
+        payload: chapter.uniqueId,
+        idType: 'ACTIVE_ID',
+    });
+    context.dispatch({
+        type: 'ID_SETTER',
+        payload: section.uniqueId,
+        idType: 'SECTION_ID',
+    });
+}
+
+export { sortAll, activeChBg, activeScBg, displayNone, getPages, addNewChapter, addNewSection, sectionOnClick };
 export type { Book };

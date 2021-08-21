@@ -5,32 +5,20 @@ import { textareaRows, textareaCols } from "../../globals/forms";
 const createNewSubSection = (props: {
     title: string;
     body: string;
-    identity: number;
-    parentId: string;
+    identity: number | null;
+    parentId: string | null;
     bookId: string;
-    topUniqueId: string;
-    botUniqueId: string;
 }) => {
-    const {
-        title,
-        body,
-        identity,
-        parentId,
-        bookId,
-        topUniqueId,
-        botUniqueId,
-    } = props;
+    const { title, body, identity, parentId, bookId } = props;
     axios
         .post(
-            "http://localhost:8000/book/create/update/item",
+            "http://localhost:8000/book/create/new/section",
             {
                 title,
                 body,
                 identity,
                 parentId,
                 bookId,
-                topUniqueId,
-                botUniqueId,
             },
             {
                 withCredentials: true,
@@ -50,31 +38,21 @@ const createNewSubSection = (props: {
         });
 };
 
-const Form107 = (props: any) => {
-    const { bookId, currentFormType } = props;
-    // const { sectionId, sectionChildren } = sectionProps;
+const SubSection = (props: any) => {
+    const { sectionProps, bookId } = props;
+    const { sectionId, sectionChildren } = sectionProps;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
-    // let parentId = sectionId;
-    // if (sectionChildren.length > 0) {
-    //     parentId = sectionChildren[sectionChildren.length - 1].uniqueId;
-    // }
-
-    let topUniqueId: string = "";
-    let botUniqueId: string = "";
-    let identity = 0;
-
-    if (currentFormType.formData && currentFormType.formData.some) {
-        topUniqueId = currentFormType.formData.val.topUniqueId;
-        botUniqueId = currentFormType.formData.val.botUniqueId;
-        identity = currentFormType.formData.val.identity;
+    let parentId = sectionId;
+    if (sectionChildren.length > 0) {
+        parentId = sectionChildren[sectionChildren.length - 1].uniqueId;
     }
     return (
-        <div className="lg-container">
-            <div className="form-header">Form #107</div>
+        <div style={{ marginTop: 50, borderTop: "1px solid #ccc" }}>
+            <div className="form-header">Create New Sub-Section</div>
             <form action="#" method="post">
                 <label className="active-label">
-                    {body ? "Body of your document" : ""}
+                    {title ? "Enter book title/name" : ""}
                 </label>
                 <br />
                 <input
@@ -118,10 +96,8 @@ const Form107 = (props: any) => {
                             bookId,
                             title,
                             body,
-                            parentId: topUniqueId,
-                            identity,
-                            topUniqueId,
-                            botUniqueId,
+                            parentId,
+                            identity: 106,
                         });
                     }}
                 >
@@ -132,4 +108,4 @@ const Form107 = (props: any) => {
     );
 };
 
-export default Form107;
+export default SubSection;

@@ -109,6 +109,8 @@ const idSetter = (state: any, action: any) => {
             return { ...state, sectionId: action.payload };
         case 'PARENT_ID':
             return { ...state, parentId: action.payload };
+        case 'MULTI_ID': 
+            return { ...state, multiId: action.payload };
         default:
             throw new Error(`Unknown type: ${action.idType}`);
     }
@@ -130,6 +132,8 @@ const viewSetter = (state: any, action: any) => {
             return { ...state, viewState: VIEW_TYPE.SUB_SECTION };
         case VIEW_TYPE.NONE:
             return { ...state, viewState: VIEW_TYPE.NONE };
+        case VIEW_TYPE.CREATE_UPDATE:
+            return { ...state, viewState: VIEW_TYPE.CREATE_UPDATE };
         default:
             throw new Error(`Unknown type: ${action.idType}`);
     }

@@ -1,25 +1,37 @@
 import { useState } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { textareaRows, textareaCols } from "../../globals/forms";
 import { useBookContext} from "../../service/BookServiceProvider";
 
-const createNewChapter = (props: {
+const createNewSubSection = (props: {
     title: string;
     body: string;
-    identity: number | null;
-    parentId: string | null;
+    identity: number;
+    parentId: string;
     bookId: string;
+    topUniqueId: string;
+    botUniqueId: string;
 }) => {
-    const { title, body, identity, parentId, bookId } = props;
+    const {
+        title,
+        body,
+        identity,
+        parentId,
+        bookId,
+        topUniqueId,
+        botUniqueId,
+    } = props;
     axios
         .post(
-            "http://localhost:8000/book/create/new/chapter",
+            "http://localhost:8000/book/create/update/item",
             {
                 title,
                 body,
                 identity,
                 parentId,
                 bookId,
+                topUniqueId,
+                botUniqueId,
             },
             {
                 withCredentials: true,
@@ -39,12 +51,9 @@ const createNewChapter = (props: {
         });
 };
 
-const Chapter = (props: any) => {
+const Form107 = (props: any) => {
     const context = useBookContext();
-    console.log(context);
-    const { allPages, bookId, parentId } = props;
-    const [title, setTitle] = useState("");
-    const [body, setBody] = useState("");
+    console.log('context', context);
     return (
         <div className="flex">
             <div className="con-80 flex">
@@ -63,9 +72,7 @@ const Chapter = (props: any) => {
                                         required
                                         onChange={(e) => {
                                             e.preventDefault();
-                                            setTitle(e.target.value);
                                         }}
-                                        value={title}
                                         className="form-input"
                                     />
                                 </div>
@@ -78,10 +85,8 @@ const Chapter = (props: any) => {
                                         cols={textareaCols}
                                         onChange={(e) => {
                                             e.preventDefault();
-                                            setBody(e.target.value);
                                         }}
                                         placeholder="Body of your document."
-                                        value={body}
                                         className="form-input"
                                     />
                                 </div>
@@ -91,26 +96,17 @@ const Chapter = (props: any) => {
                                     className="button"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        createNewChapter({
-                                            title,
-                                            body,
-                                            parentId,
-                                            identity: 104,
-                                            bookId,
-                                        });
                                     }}
                                 >
                                     Submit
                                 </button>
                             </div>
                         </form>
-                    </div>    
+                    </div>
                 </div>
-                <div className="con-10" />
             </div>
-            <div className="con-20" style={{ backgroundColor: "#fffee0" }} />
         </div>
     );
 };
 
-export default Chapter;
+export default Form107;

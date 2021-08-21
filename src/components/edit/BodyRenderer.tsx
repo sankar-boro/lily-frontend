@@ -1,12 +1,9 @@
 import { useHistory } from "react-router-dom";
 import Divider from "./Divider";
 import AddSection from "../forms/Section";
-import Form102 from "../forms/Form102";
-import Form103 from "../forms/Form103";
 import AddChapter from "../forms/Chapter";
-import Form105 from "../forms/Section";
-import Form106 from "../forms/Form106";
-import Form107 from "../forms/Form107";
+import SubSection from "../forms/SubSection";
+import CreateUpdate from "../forms/CreateUpdate";
 import { Book, VIEW_TYPE } from "../../globals/types/index";
 import { useBookContext } from "../../service/BookServiceProvider";
 
@@ -59,27 +56,17 @@ const Main = (props: any) => {
 const FormView = () => {
     const context: any = useBookContext();
 
-    if (context.viewState === VIEW_TYPE.FRONT_COVER) {
-        return <AddSection />;
-    }
-
-    if (context.viewState === VIEW_TYPE.BACK_COVER) {
-        return <Form102 />;
-    }
-    if (context.viewState === VIEW_TYPE.PAGE) {
-        return <Form103 />;
-    }
     if (context.viewState === VIEW_TYPE.CHAPTER) {
         return <AddChapter />;
     }
     if (context.viewState === VIEW_TYPE.SECTION) {
-        return <Form105 />;
+        return <AddSection />;
     }
     if (context.viewState === VIEW_TYPE.SUB_SECTION) {
-        return <Form106 />;
+        return <SubSection />;
     }
     if (context.viewState === VIEW_TYPE.CREATE_UPDATE) {
-        return <Form107 />;
+        return <CreateUpdate />;
     }
     return null;
 };
