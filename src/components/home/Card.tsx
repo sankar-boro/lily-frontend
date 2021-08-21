@@ -13,6 +13,7 @@ const Card = (props: { data: any }) => {
                     state: data,
                 });
             }}
+            style={{marginRight: 25}}
         >
             <div>
                 <div className="card-title hover"><span>{data.title}</span></div>

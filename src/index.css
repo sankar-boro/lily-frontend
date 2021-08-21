@@ -85,6 +85,9 @@ html, body {
     display: flex;
     flex-direction: row;
 }
+.con-100 {
+    width: 100%;
+}
 .con-95 {
     width: 95%;
 }
@@ -140,7 +143,7 @@ html, body {
     width: 10%;
 }
 .con-5 {
-    width: 10%;
+    width: 5%;
 }
 .container-sm {
     width: 75%;
@@ -317,4 +320,15 @@ input:focus, textarea:focus, select:focus {
 }
 .li-item:hover, .section-nav:hover, .chapter-nav:hover {
     color:#0080f0;
+}
+
+.pad-hor-5 {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.scroll-view {
+    overflow: auto;
+}
+.flex {
+    display: flex;
 }

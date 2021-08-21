@@ -26,7 +26,7 @@ const Main = () => {
 }
 
 const Renderer = () => {
-    return <div className="container-flex">
+    return <div className="flex">
         <NavigationRenderer />
         <BodyRenderer />
     </div>  

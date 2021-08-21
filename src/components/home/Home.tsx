@@ -12,7 +12,7 @@ const Main = () => {
     }, []);
 
     return (
-        <div className="container-sm">
+        <div className="container-sm flex">
             {books
                 .filter((a: any) => a.identity === 101)
                 .map((data: any) => {

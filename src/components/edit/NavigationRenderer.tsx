@@ -6,27 +6,30 @@ const Sections = (props: any) => {
     const { sections, context, chapter, sectionId } = props;
     return <div> {sections.map((c: any) => {
         return (
-            <div
-                onClick={(e) => {
-                    e.preventDefault();
-                    context.dispatch({
-                        type: 'ID_SETTER',
-                        payload: chapter.uniqueId,
-                        idType: 'ACTIVE_ID',
-                    });
-                    context.dispatch({
-                        type: 'ID_SETTER',
-                        payload: c.uniqueId,
-                        idType: 'SECTION_ID',
-                    });
-                }}
-                key={c.uniqueId}
-                className={`section-nav hover ${activeScBg(
-                    c,
-                    sectionId
-                )}`}
-            >
-                {c.title}
+            <div>
+                <div
+                    onClick={(e) => {
+                        e.preventDefault();
+                        context.dispatch({
+                            type: 'ID_SETTER',
+                            payload: chapter.uniqueId,
+                            idType: 'ACTIVE_ID',
+                        });
+                        context.dispatch({
+                            type: 'ID_SETTER',
+                            payload: c.uniqueId,
+                            idType: 'SECTION_ID',
+                        });
+                    }}
+                    key={c.uniqueId}
+                    className={`section-nav hover ${activeScBg(
+                        c,
+                        sectionId
+                    )}`}
+                >
+                    {c.title}
+                </div>
+                <AddSection {...props} />
             </div>
         );
     })} 
@@ -35,18 +38,23 @@ const Sections = (props: any) => {
 
 const PageTitle = (props: any) => {
     const { context, chapter, activeId } = props;
+    const { dispatch } = context;
     return <div
         onClick={(e) => {
             e.preventDefault();
-            context.dispatch({
+            dispatch({
                 type: 'ID_SETTER',
                 payload: chapter.uniqueId,
                 idType: 'ACTIVE_ID',
             });
-            context.dispatch({
+            dispatch({
                 type: 'ID_SETTER',
                 payload: null,
                 idType: 'SECTION_ID',
+            });
+            dispatch({
+                type: 'VIEW_SETTER',
+                viewType: 'NONE'
             });
         }}
         className={`chapter-nav hover ${activeChBg(
@@ -77,6 +85,10 @@ const AddChapter = (props: any) => {
     return <div
             style={{marginTop:5}}
             className="hover"
+            onClick={(e: any) => {
+                e.preventDefault();
+                addNewChapter(props);
+            }}
         >
             <span style={{ fontSize: 12 }}>+ Add chapter</span>
         </div>
@@ -97,7 +109,8 @@ const ReadBookNavigation = () => {
         };
     };
     return (
-        <div style={styles.container}>
+        <div className="con-20" style={{ backgroundColor: "#c0d6fa", padding: "0px 10px" }}>
+            <div style={{ height: 35 }}/>
             {data.map((value: any, chapterIndex: number) => {
                 const { chapter, sections } = doSome(value);
                 let props = {
@@ -195,6 +208,20 @@ const addNewSection = (
     // }
 };
 
+const addNewChapter = (props: any) => {
+    const { chapter, context } = props;
+    const { dispatch } = context;
+    // dispatch({
+    //     type: 'ID_SETTER',
+    //     payload: chapter.uniqueId,
+    //     idType: 'PARENT_ID',
+    // });
+    dispatch({
+        type: 'VIEW_SETTER',
+        viewType: VIEW_TYPE.CHAPTER,
+    });
+};
+
 const styles = {
     container: { width: "18%", marginTop: 24, paddingLeft: 8 },
     chapter: {
@@ -202,4 +229,5 @@ const styles = {
         paddingBottom: 5,
     }
 }
+
 export default ReadBookNavigation;

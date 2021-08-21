@@ -12,7 +12,7 @@ const Divider = () => {
             state: history.location.state,
         });
     }
-    return <div>
+    return <div className="con-20" style={{backgroundColor: "#ffebf2"}}>
         <div className="li-item hover" onClick={editNavigate}>Edit</div>
         <div className="li-item hover">Delete</div>
     </div>

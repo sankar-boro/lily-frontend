@@ -17,11 +17,12 @@ const ReadBookNavigation = (props: any) => {
         };
     };
     return (
-        <div style={{ width: "18%", marginTop: 24 }}>
+        <div className="con-20 scroll-view" style={{ backgroundColor: "#ceffc9", padding: "0px 10px" }}>
+            <div style={{height: 35}}/>
             {data.map((value: any, index: number) => {
                 const { chapter, sections } = doSome(value);
                 return (
-                    <div style={{ padding: "5px 0px 5px 10px" }} key={chapter.title}>
+                    <div key={chapter.title}>
                         <div
                             onClick={(e) => {
                                 e.preventDefault();
