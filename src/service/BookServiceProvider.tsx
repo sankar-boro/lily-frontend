@@ -22,6 +22,7 @@ export type BookState = {
     bookId: string;
     activeId: string;
     sectionId: string;
+    parentId: string;
     activePage: Book[];
     activeSection: null;
     apiState: string | null;
@@ -35,6 +36,7 @@ const bookState = {
     bookId: '',
     activeId: '',
     sectionId: '',
+    parentId: '',
     activePage: [],
     activeSection: null,
     apiState: null,
@@ -48,6 +50,7 @@ export const BookContext = React.createContext<BookState>({
     bookId: '',
     activeId: '',
     sectionId: '',
+    parentId: '',
     activePage: [],
     activeSection: null,
     apiState: null,
@@ -97,22 +100,40 @@ const fetchData = (state: BookState, dispatch: Function) => {
 }
 
 const idSetter = (state: any, action: any) => {
-
     switch (action.idType) {
         case 'BOOK_ID':
             return { ...state, bookId: action.payload };
-
         case 'ACTIVE_ID':
             return { ...state, activeId: action.payload };
-                
         case 'SECTION_ID':
             return { ...state, sectionId: action.payload };
-    
+        case 'PARENT_ID':
+            return { ...state, parentId: action.payload };
         default:
             throw new Error(`Unknown type: ${action.idType}`);
     }
 }
 
+const viewSetter = (state: any, action: any) => {
+    switch (action.viewType) {
+        case VIEW_TYPE.FRONT_COVER:
+            return { ...state, viewState: VIEW_TYPE.FRONT_COVER };
+        case VIEW_TYPE.BACK_COVER:
+            return { ...state, viewState: VIEW_TYPE.BACK_COVER };
+        case VIEW_TYPE.CHAPTER:
+            return { ...state, viewState: VIEW_TYPE.CHAPTER };
+        case VIEW_TYPE.PAGE:
+            return { ...state, viewState: VIEW_TYPE.PAGE };
+        case VIEW_TYPE.SECTION: 
+            return { ...state, viewState: VIEW_TYPE.SECTION};
+        case VIEW_TYPE.SUB_SECTION:
+            return { ...state, viewState: VIEW_TYPE.SUB_SECTION };
+        case VIEW_TYPE.NONE:
+            return { ...state, viewState: VIEW_TYPE.NONE };
+        default:
+            throw new Error(`Unknown type: ${action.idType}`);
+    }
+}
 
 const reducer = (state: any, action: any) => {
     switch (action.type) {
@@ -130,6 +151,9 @@ const reducer = (state: any, action: any) => {
 
         case 'ID_SETTER':
             return idSetter(state, action);
+
+        case 'VIEW_SETTER': 
+            return viewSetter(state, action);
         
         case 'ACTIVE_PAGE':
             return { ...state, activePage: action.payload };

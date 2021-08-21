@@ -46,11 +46,10 @@ const submitBook = (props: {
         });
 };
 
-const Form101 = (props: { allPages: Book[] }) => {
+const Form101 = () => {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
 
-    const { allPages } = props;
     return (
         <div className="lg-container">
             <div className="section">Create Front Cover</div>
