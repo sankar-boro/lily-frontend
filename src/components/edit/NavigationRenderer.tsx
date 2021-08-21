@@ -1,4 +1,4 @@
-import { activeChBg, addNewChapter, addNewSection, sectionOnClick } from "./util";
+import { addNewChapter, addNewSection, sectionOnClick } from "./util";
 import { useBookContext} from "../../service/BookServiceProvider";
 
 const Sections = (props: any) => {
@@ -21,7 +21,8 @@ const Sections = (props: any) => {
 }
 
 const PageTitle = (props: any) => {
-    const { context, chapter, activeId } = props;
+    const { chapter } = props;
+    const context = useBookContext();
     const { dispatch } = context;
     return <div
         onClick={(e) => {
@@ -41,22 +42,20 @@ const PageTitle = (props: any) => {
                 viewType: 'NONE'
             });
         }}
-        className={`chapter-nav hover ${activeChBg(
-            chapter,
-            activeId
-        )}`}
+        className="chapter-nav hover"
     >
         {chapter.title}
     </div>
 }
 
 const AddSection = (props: any) => {
+    const context = useBookContext();
     return <div 
         className="hover" 
         style={{marginTop:5}}
         onClick={(e: any) => {
             e.preventDefault();
-            addNewSection(props);
+            addNewSection(props, context);
         }}
     >
         <span style={{ marginLeft: 20, fontSize: 12 }}>+ Add section</span>
@@ -64,12 +63,13 @@ const AddSection = (props: any) => {
 }
 
 const AddChapter = (props: any) => {
+    const context = useBookContext();
     return <div
             style={{marginTop:5}}
             className="hover"
             onClick={(e: any) => {
                 e.preventDefault();
-                addNewChapter(props);
+                addNewChapter(props, context);
             }}
         >
             <span style={{ fontSize: 12 }}>+ Add chapter</span>
@@ -96,12 +96,9 @@ const ReadBookNavigation = () => {
             {data.map((value: any, chapterIndex: number) => {
                 const { chapter, sections } = doSome(value);
                 let props = {
-                    context: context,
                     chapter: chapter, 
                     chapterIndex,
                     sectionIndex: null,
-                    activeId: activeId,
-                    sectionId: sectionId,
                     sections: sections,
                     data: data,
                 }

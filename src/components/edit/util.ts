@@ -167,11 +167,12 @@ const addNewSection = (
     // c: any,
     // _index: number,
     // chapterId: string
-    props: any
+    props: any,
+    context: any
 ) => {
-    const { sectionIndex, sections, context, chapter } = props;
+    const { sectionIndex, sections, chapter } = props;
     const { dispatch } = context;
-    if (sectionIndex === null) {
+    if (sectionIndex === null && sections.length === 0) {
         dispatch({
             type: 'ID_SETTER',
             payload: chapter.uniqueId,
@@ -184,55 +185,62 @@ const addNewSection = (
         return;
     }
 
-    // if (_index === 0 && sections.length > 1) {
-    //     const topUniqueId = chapterId;
-    //     const nextSection = sections[_index + 1];
-    //     const botUniqueId = nextSection.uniqueId;
-    //     setParentId(chapterId);
-    //     setCurrentFormType({
-    //         formType: FormType.CREATE_UPDATE,
-    //         formData: Some({
-    //             topUniqueId,
-    //             botUniqueId,
-    //             identity: 105,
-    //         }),
-    //     });
-    //     console.log(topUniqueId, botUniqueId);
-    //     return;
-    // }
+    if (sectionIndex === null && sections.length > 0) {
+        const topUniqueId = chapter.uniqueId;
+        const botUniqueId = sections[0].uniqueId;
+        dispatch({
+            type: 'VIEW_SETTER',
+            viewType: VIEW_TYPE.SECTION,
+        });
+        dispatch({
+            type: 'ID_SETTER',
+            payload: {
+                topUniqueId,
+                botUniqueId,
+                identity: 107,
+            },
+            idType: 'MULTI_ID',
+        });
+        return;
+    }
 
-    // const lengthMatchIndex = sections.length - 1;
+    const lastSectionIndex = sections.length - 1;
 
-    // if (sections.length > 1 && _index !== 0 && _index < lengthMatchIndex) {
-    //     const currentSection = sections[_index];
-    //     const nextSection = sections[_index + 1];
-    //     const topUniqueId = currentSection.uniqueId;
-    //     const botUniqueId = nextSection.uniqueId;
-    //     setParentId(currentSection.uniqueId);
-    //     setCurrentFormType({
-    //         formType: FormType.CREATE_UPDATE,
-    //         formData: Some({
-    //             topUniqueId,
-    //             botUniqueId,
-    //             identity: 105,
-    //         }),
-    //     });
-    //     return;
-    // }
+    if (sectionIndex === lastSectionIndex) {
+        const uniqueId = sections[sectionIndex].uniqueId;
+        dispatch({
+            type: 'ID_SETTER',
+            payload: uniqueId,
+            idType: 'PARENT_ID',
+        });
+        dispatch({
+            type: 'VIEW_SETTER',
+            viewType: VIEW_TYPE.SECTION,
+        });
+        return;
+    }
 
-    // if (sections.length > 1 && _index === lengthMatchIndex) {
-    //     const currentSection = sections[_index];
-    //     setParentId(currentSection.uniqueId);
-    //     setCurrentFormType({
-    //         formType: FormType.SECTION,
-    //         formData: None,
-    //     });
-    //     return;
-    // }
+    if (sectionIndex !== lastSectionIndex) {
+        const topUniqueId = sections[sectionIndex].uniqueId;
+        const botUniqueId = sections[sectionIndex + 1].uniqueId;
+        dispatch({
+            type: 'VIEW_SETTER',
+            viewType: VIEW_TYPE.SECTION,
+        });
+        dispatch({
+            type: 'ID_SETTER',
+            payload: {
+                topUniqueId,
+                botUniqueId,
+                identity: 107,
+            },
+            idType: 'MULTI_ID',
+        });
+    }
 };
 
-const addNewChapter = (props: any) => {
-    const { chapter, context, data, chapterIndex } = props;
+const addNewChapter = (props: any, context: any) => {
+    const { chapter, data, chapterIndex } = props;
     console.log('data', data);
     const { dispatch } = context;
     const lastPageIndex = data.length - 1;
