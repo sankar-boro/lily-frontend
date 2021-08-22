@@ -1,16 +1,15 @@
 import { useState } from "react";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { textareaRows, textareaCols } from "../../globals/forms";
+import { useBookContext } from "../../service/BookServiceProvider";
 
 const createNewSection = (props: {
     title: string;
     body: string;
-    identity: number | null;
-    parentId: string | null;
-    bookId: string;
-}) => {
-    // console.log("props", props);
-    const { title, body, identity, parentId, bookId } = props;
+}, context: any) => {
+    const { title, body } = props;
+    const { bookId, formId } = context;
+    const { identity, parentId } = formId;
     axios
         .post(
             "http://localhost:8000/book/create/new/section",
@@ -40,6 +39,7 @@ const createNewSection = (props: {
 };
 
 const Section = (props: any) => {
+    const context = useBookContext();
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const { bookId, parentId } = props;
@@ -90,11 +90,8 @@ const Section = (props: any) => {
                                         e.preventDefault();
                                         createNewSection({
                                             title,
-                                            body,
-                                            identity: 105,
-                                            parentId,
-                                            bookId,
-                                        });
+                                            body
+                                        }, context);
                                     }}
                                 >
                                     Submit

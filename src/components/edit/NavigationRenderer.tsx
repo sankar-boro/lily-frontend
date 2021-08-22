@@ -3,7 +3,9 @@ import { useBookContext} from "../../service/BookServiceProvider";
 
 const Sections = (props: any) => {
     const { sections } = props;
-    return <div> {sections.map((c: any) => {
+    let newProps = {...props};
+    return <div> {sections.map((c: any, sectionIndex: number) => {
+        newProps.sectionIndex = sectionIndex;
         return (
             <div>
                 <div

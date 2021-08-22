@@ -51,7 +51,7 @@ const CreateUpdate = (props: any) => {
             <div className="con-80 flex">
                 <div className="con-10" />
                 <div className="con-80">
-                    <div className="h3">Create Chapter</div>
+                    <div className="h3">Create Update</div>
                     <div className="container-form">
                         <form action="#" method="post">
                             <div className="group-form-input">

@@ -62,10 +62,7 @@ const ReadBookNavigation = (props: any) => {
                                             });
                                         }}
                                         key={c.uniqueId}
-                                        className={`section-nav hover ${activeScBg(
-                                            c,
-                                            sectionId
-                                        )}`}
+                                        className="section-nav hover"
                                     >
                                         {c.title}
                                     </div>

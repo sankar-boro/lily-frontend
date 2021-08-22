@@ -168,13 +168,16 @@ const addNewSection = (
     const { dispatch } = context;
     if (sectionIndex === null && sections.length === 0) {
         dispatch({
-            type: 'ID_SETTER',
-            payload: chapter.uniqueId,
-            idType: 'FORM_ID',
-        });
-        dispatch({
             type: 'VIEW_SETTER',
             viewType: VIEW_TYPE.SECTION,
+        });
+        dispatch({
+            type: 'ID_SETTER',
+            payload: {
+                parentId: chapter.uniqueId,
+                identity: 105
+            },
+            idType: 'FORM_ID',
         });
         return;
     }
@@ -184,14 +187,14 @@ const addNewSection = (
         const botUniqueId = sections[0].uniqueId;
         dispatch({
             type: 'VIEW_SETTER',
-            viewType: VIEW_TYPE.SECTION,
+            viewType: VIEW_TYPE.CREATE_UPDATE,
         });
         dispatch({
             type: 'ID_SETTER',
             payload: {
                 topUniqueId,
                 botUniqueId,
-                identity: 107,
+                identity: 105,
             },
             idType: 'FORM_ID',
         });
@@ -203,13 +206,16 @@ const addNewSection = (
     if (sectionIndex === lastSectionIndex) {
         const uniqueId = sections[sectionIndex].uniqueId;
         dispatch({
-            type: 'ID_SETTER',
-            payload: uniqueId,
-            idType: 'FORM_ID',
-        });
-        dispatch({
             type: 'VIEW_SETTER',
             viewType: VIEW_TYPE.SECTION,
+        });
+        dispatch({
+            type: 'ID_SETTER',
+            payload: {
+                parentId: uniqueId,
+                identity: 105,
+            },
+            idType: 'FORM_ID',
         });
         return;
     }
@@ -226,7 +232,7 @@ const addNewSection = (
             payload: {
                 topUniqueId,
                 botUniqueId,
-                identity: 107,
+                identity: 105,
             },
             idType: 'FORM_ID',
         });

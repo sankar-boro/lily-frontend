@@ -321,7 +321,13 @@ input:focus, textarea:focus, select:focus {
 .li-item:hover, .section-nav:hover, .chapter-nav:hover {
     color:#0080f0;
 }
-
+.chapter-nav {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.section-nav {
+    margin-left: 20px;   
+}
 .pad-hor-5 {
     padding-left: 5%;
     padding-right: 5%;
