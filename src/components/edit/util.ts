@@ -161,12 +161,6 @@ const displayNone = (c: any, a: string) => {
 };
 
 const addNewSection = (
-    // e: any,
-    // props: BookNavigationProps,
-    // sections: any,
-    // c: any,
-    // _index: number,
-    // chapterId: string
     props: any,
     context: any
 ) => {
@@ -176,7 +170,7 @@ const addNewSection = (
         dispatch({
             type: 'ID_SETTER',
             payload: chapter.uniqueId,
-            idType: 'PARENT_ID',
+            idType: 'FORM_ID',
         });
         dispatch({
             type: 'VIEW_SETTER',
@@ -199,7 +193,7 @@ const addNewSection = (
                 botUniqueId,
                 identity: 107,
             },
-            idType: 'MULTI_ID',
+            idType: 'FORM_ID',
         });
         return;
     }
@@ -211,7 +205,7 @@ const addNewSection = (
         dispatch({
             type: 'ID_SETTER',
             payload: uniqueId,
-            idType: 'PARENT_ID',
+            idType: 'FORM_ID',
         });
         dispatch({
             type: 'VIEW_SETTER',
@@ -234,7 +228,7 @@ const addNewSection = (
                 botUniqueId,
                 identity: 107,
             },
-            idType: 'MULTI_ID',
+            idType: 'FORM_ID',
         });
     }
 };
@@ -245,7 +239,6 @@ const addNewChapter = (props: any, context: any) => {
     const { dispatch } = context;
     const lastPageIndex = data.length - 1;
     
-
     if (chapterIndex === lastPageIndex) {
         dispatch({
             type: 'VIEW_SETTER',
@@ -253,8 +246,11 @@ const addNewChapter = (props: any, context: any) => {
         });
         dispatch({
             type: 'ID_SETTER',
-            payload: chapter.uniqueId,
-            idType: 'PARENT_ID',
+            payload: {
+                parentId: chapter.uniqueId,
+                identity: 104,
+            },
+            idType: 'FORM_ID',
         });
     } else {
         const topUniqueId = data[chapterIndex].uniqueId;
@@ -268,13 +264,13 @@ const addNewChapter = (props: any, context: any) => {
             payload: {
                 topUniqueId,
                 botUniqueId,
-                identity: 107,
+                identity: 104,
             },
-            idType: 'MULTI_ID',
+            idType: 'FORM_ID',
         });
-        console.log('last page');
     }
 };
+
 const sectionOnClick = (e: any, props: any) => {
     e.preventDefault();
     const { context, chapter, section } = props;

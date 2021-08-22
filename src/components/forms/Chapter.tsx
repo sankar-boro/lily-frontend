@@ -6,11 +6,11 @@ import { useBookContext} from "../../service/BookServiceProvider";
 const createNewChapter = (props: {
     title: string;
     body: string;
-    identity: number | null;
-    parentId: string | null;
-    bookId: string;
-}) => {
-    const { title, body, identity, parentId, bookId } = props;
+}, context: any) => {
+    console.log('context', context);
+    const { title, body } = props;
+    const { formId, bookId } = context;
+    const { parentId, identity } = formId;
     axios
         .post(
             "http://localhost:8000/book/create/new/chapter",
@@ -39,10 +39,8 @@ const createNewChapter = (props: {
         });
 };
 
-const Chapter = (props: any) => {
+const Chapter = () => {
     const context = useBookContext();
-    console.log(context);
-    const { allPages, bookId, parentId } = props;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     return (
@@ -94,10 +92,7 @@ const Chapter = (props: any) => {
                                         createNewChapter({
                                             title,
                                             body,
-                                            parentId,
-                                            identity: 104,
-                                            bookId,
-                                        });
+                                        }, context);
                                     }}
                                 >
                                     Submit

@@ -3,32 +3,23 @@ import axios, { AxiosResponse, AxiosError } from "axios";
 import { textareaRows, textareaCols } from "../../globals/forms";
 import { useBookContext} from "../../service/BookServiceProvider";
 
-const createNewSubSection = (props: {
+const createAndUpdate = (props: {
     title: string;
     body: string;
-    identity: number;
-    parentId: string;
-    bookId: string;
-    topUniqueId: string;
-    botUniqueId: string;
-}) => {
+}, context: any) => {
     const {
         title,
         body,
-        identity,
-        parentId,
-        bookId,
-        topUniqueId,
-        botUniqueId,
     } = props;
+    const { formId, bookId, } = context;
+    const { identity, topUniqueId, botUniqueId } = formId;
     axios
         .post(
-            "http://localhost:8000/book/create/update/item",
+            "http://localhost:8000/book/create/update/chapter",
             {
                 title,
                 body,
                 identity,
-                parentId,
                 bookId,
                 topUniqueId,
                 botUniqueId,
@@ -51,9 +42,10 @@ const createNewSubSection = (props: {
         });
 };
 
-const Form107 = (props: any) => {
+const CreateUpdate = (props: any) => {
     const context = useBookContext();
-    console.log('context', context);
+    const [title, setTitle] = useState("");
+    const [body, setBody] = useState("");
     return (
         <div className="flex">
             <div className="con-80 flex">
@@ -72,6 +64,7 @@ const Form107 = (props: any) => {
                                         required
                                         onChange={(e) => {
                                             e.preventDefault();
+                                            setTitle(e.target.value);
                                         }}
                                         className="form-input"
                                     />
@@ -85,6 +78,7 @@ const Form107 = (props: any) => {
                                         cols={textareaCols}
                                         onChange={(e) => {
                                             e.preventDefault();
+                                            setBody(e.target.value);
                                         }}
                                         placeholder="Body of your document."
                                         className="form-input"
@@ -96,6 +90,7 @@ const Form107 = (props: any) => {
                                     className="button"
                                     onClick={(e) => {
                                         e.preventDefault();
+                                        createAndUpdate({ title, body}, context);
                                     }}
                                 >
                                     Submit
@@ -109,4 +104,4 @@ const Form107 = (props: any) => {
     );
 };
 
-export default Form107;
+export default CreateUpdate;

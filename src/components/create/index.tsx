@@ -11,7 +11,7 @@ import { BookNavigation } from "./BookNavigation";
 
 import Form102 from "../forms/Form102";
 import Form103 from "../forms/Form103";
-import Form104 from "../forms/Chapter";
+import Chapter from "../forms/Chapter";
 import Form105 from "../forms/Section";
 import Form106 from "../forms/SubSection";
 import Form107 from "../forms/CreateUpdate";
@@ -171,7 +171,7 @@ const FormView = (props: {
         return <Form103 {...props} />;
     }
     if (currentFormType.formType === VIEW_TYPE.CHAPTER) {
-        return <Form104 {...props} />;
+        return <Chapter />;
     }
     if (currentFormType.formType === VIEW_TYPE.SECTION) {
         return <Form105 {...props} />;

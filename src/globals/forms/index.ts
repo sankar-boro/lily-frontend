@@ -92,12 +92,31 @@ function groups(book_data: Book[]) {
     return gs;
 }
 
+const groupChapters = (parentId: string, chapters: any) => {
+    let currentParentId = parentId;
+    let orders: any = [];
+    let times = 0;
+    console.log('chaptesr', chapters);
+    while (times !== 3) {
+        // eslint-disable-next-line no-loop-func
+        chapters.forEach((chapter: any) => {
+            if (chapter.parentId === currentParentId) {
+                orders.push(chapter);
+                currentParentId = chapter.uniqueId;
+            }
+        });
+        times++;
+    }
+    return orders;
+};
+
 const sortAll = (data: Book[]) => {
     let gs = groups(data);
     let ozf = gs[105];
     let ozs = gs[106];
 
     let c = { 101: gs[101], 102: gs[102], 103: gs[103], 104: gs[104] };
+    c[104] = groupChapters(c[101][0].uniqueId, c[104]);
     let chapters: Book[] = [];
     Object.values(c).forEach((v) => {
         let a = buildSectionsReturnSections(v, ozf, ozs);

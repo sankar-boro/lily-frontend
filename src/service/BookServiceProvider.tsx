@@ -23,6 +23,7 @@ export type BookState = {
     activeId: string;
     sectionId: string;
     parentId: string;
+    formId: object;
     activePage: Book[];
     activeSection: null;
     apiState: string | null;
@@ -37,6 +38,7 @@ const bookState = {
     activeId: '',
     sectionId: '',
     parentId: '',
+    formId: {},
     activePage: [],
     activeSection: null,
     apiState: null,
@@ -51,6 +53,7 @@ export const BookContext = React.createContext<BookState>({
     activeId: '',
     sectionId: '',
     parentId: '',
+    formId: {},
     activePage: [],
     activeSection: null,
     apiState: null,
@@ -82,6 +85,7 @@ const fetchData = (state: BookState, dispatch: Function) => {
         ) {
             let dataRes: Book[] = res.data;
             let a = sortAll(dataRes);
+            console.log(a);
             dispatch({
                 ...state,
                 type: 'SUCCESS',
@@ -109,8 +113,8 @@ const idSetter = (state: any, action: any) => {
             return { ...state, sectionId: action.payload };
         case 'PARENT_ID':
             return { ...state, parentId: action.payload };
-        case 'MULTI_ID': 
-            return { ...state, multiId: action.payload };
+        case 'FORM_ID': 
+            return { ...state, formId: action.payload };
         default:
             throw new Error(`Unknown type: ${action.idType}`);
     }
