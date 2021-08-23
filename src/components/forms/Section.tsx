@@ -8,8 +8,8 @@ const createNewSection = (props: {
     body: string;
 }, context: any) => {
     const { title, body } = props;
-    const { bookId, formId } = context;
-    const { identity, parentId } = formId;
+    const { bookId, formData } = context;
+    const { identity, parentId } = formData;
     axios
         .post(
             "http://localhost:8000/book/create/new/section",

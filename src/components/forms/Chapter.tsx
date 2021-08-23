@@ -9,8 +9,8 @@ const createNewChapter = (props: {
 }, context: any) => {
     console.log('context', context);
     const { title, body } = props;
-    const { formId, bookId } = context;
-    const { parentId, identity } = formId;
+    const { formData, bookId } = context;
+    const { parentId, identity } = formData;
     axios
         .post(
             "http://localhost:8000/book/create/new/chapter",

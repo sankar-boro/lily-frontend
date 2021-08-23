@@ -29,12 +29,12 @@ const ReadBookNavigation = (props: any) => {
                                 context.dispatch({
                                     type: 'ID_SETTER',
                                     payload: chapter.uniqueId,
-                                    idType: 'ACTIVE_ID',
+                                    idType: 'ACTIVE',
                                 });
                                 context.dispatch({
                                     type: 'ID_SETTER',
                                     payload: null,
-                                    idType: 'SECTION_ID',
+                                    idType: 'SECTION',
                                 });
                             }}
                             className={`chapter-nav hover ${activeChBg(
@@ -53,12 +53,12 @@ const ReadBookNavigation = (props: any) => {
                                             context.dispatch({
                                                 type: 'ID_SETTER',
                                                 payload: chapter.uniqueId,
-                                                idType: 'ACTIVE_ID',
+                                                idType: 'ACTIVE',
                                             });
                                             context.dispatch({
                                                 type: 'ID_SETTER',
                                                 payload: c.uniqueId,
-                                                idType: 'SECTION_ID',
+                                                idType: 'SECTION',
                                             });
                                         }}
                                         key={c.uniqueId}

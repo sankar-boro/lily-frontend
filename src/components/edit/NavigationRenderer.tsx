@@ -3,9 +3,7 @@ import { useBookContext} from "../../service/BookServiceProvider";
 
 const Sections = (props: any) => {
     const { sections } = props;
-    let newProps = {...props};
     return <div> {sections.map((c: any, sectionIndex: number) => {
-        newProps.sectionIndex = sectionIndex;
         return (
             <div>
                 <div
@@ -15,7 +13,7 @@ const Sections = (props: any) => {
                 >
                     {c.title}
                 </div>
-                <AddSection {...props} />
+                <AddSection {...props} sectionIndex={sectionIndex} />
             </div>
         );
     })} 
@@ -32,12 +30,12 @@ const PageTitle = (props: any) => {
             dispatch({
                 type: 'ID_SETTER',
                 payload: chapter.uniqueId,
-                idType: 'ACTIVE_ID',
+                idType: 'ACTIVE',
             });
             dispatch({
                 type: 'ID_SETTER',
                 payload: null,
-                idType: 'SECTION_ID',
+                idType: 'SECTION',
             });
             dispatch({
                 type: 'VIEW_SETTER',

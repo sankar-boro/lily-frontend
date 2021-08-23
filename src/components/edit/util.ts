@@ -164,6 +164,7 @@ const addNewSection = (
     props: any,
     context: any
 ) => {
+    console.log('props', props);
     const { sectionIndex, sections, chapter } = props;
     const { dispatch } = context;
     if (sectionIndex === null && sections.length === 0) {
@@ -177,7 +178,7 @@ const addNewSection = (
                 parentId: chapter.uniqueId,
                 identity: 105
             },
-            idType: 'FORM_ID',
+            idType: 'FORM',
         });
         return;
     }
@@ -196,7 +197,7 @@ const addNewSection = (
                 botUniqueId,
                 identity: 105,
             },
-            idType: 'FORM_ID',
+            idType: 'FORM',
         });
         return;
     }
@@ -215,7 +216,7 @@ const addNewSection = (
                 parentId: uniqueId,
                 identity: 105,
             },
-            idType: 'FORM_ID',
+            idType: 'FORM',
         });
         return;
     }
@@ -234,7 +235,7 @@ const addNewSection = (
                 botUniqueId,
                 identity: 105,
             },
-            idType: 'FORM_ID',
+            idType: 'FORM',
         });
     }
 };
@@ -256,7 +257,7 @@ const addNewChapter = (props: any, context: any) => {
                 parentId: chapter.uniqueId,
                 identity: 104,
             },
-            idType: 'FORM_ID',
+            idType: 'FORM',
         });
     } else {
         const topUniqueId = data[chapterIndex].uniqueId;
@@ -272,7 +273,7 @@ const addNewChapter = (props: any, context: any) => {
                 botUniqueId,
                 identity: 104,
             },
-            idType: 'FORM_ID',
+            idType: 'FORM',
         });
     }
 };
@@ -283,12 +284,12 @@ const sectionOnClick = (e: any, props: any) => {
     context.dispatch({
         type: 'ID_SETTER',
         payload: chapter.uniqueId,
-        idType: 'ACTIVE_ID',
+        idType: 'ACTIVE',
     });
     context.dispatch({
         type: 'ID_SETTER',
         payload: section.uniqueId,
-        idType: 'SECTION_ID',
+        idType: 'SECTION',
     });
 }
 

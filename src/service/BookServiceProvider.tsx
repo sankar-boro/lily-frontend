@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useReducer } from "react";
 import { Option, None, Some } from "ts-results";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { sortAll } from "../globals/forms/index";
-import { VIEW_TYPE } from "../globals/types/index";
+import { VIEW_TYPE, ID_TYPES } from "../globals/types";
 
 type Book = {
     bookId: string;
@@ -18,12 +18,12 @@ type Book = {
 };
 
 export type BookState = {
-    data: Book[];
+    data: any;
     bookId: string;
     activeId: string;
     sectionId: string;
     parentId: string;
-    formId: object;
+    formData: object;
     activePage: Book[];
     activeSection: null;
     apiState: string | null;
@@ -38,7 +38,7 @@ const bookState = {
     activeId: '',
     sectionId: '',
     parentId: '',
-    formId: {},
+    formData: {},
     activePage: [],
     activeSection: null,
     apiState: null,
@@ -53,7 +53,7 @@ export const BookContext = React.createContext<BookState>({
     activeId: '',
     sectionId: '',
     parentId: '',
-    formId: {},
+    formData: {},
     activePage: [],
     activeSection: null,
     apiState: null,
@@ -104,17 +104,18 @@ const fetchData = (state: BookState, dispatch: Function) => {
 }
 
 const idSetter = (state: any, action: any) => {
+    const { payload } = action;
     switch (action.idType) {
-        case 'BOOK_ID':
-            return { ...state, bookId: action.payload };
-        case 'ACTIVE_ID':
-            return { ...state, activeId: action.payload };
-        case 'SECTION_ID':
-            return { ...state, sectionId: action.payload };
-        case 'PARENT_ID':
-            return { ...state, parentId: action.payload };
-        case 'FORM_ID': 
-            return { ...state, formId: action.payload };
+        case ID_TYPES.BOOK:
+            return { ...state, bookId: payload };
+        case ID_TYPES.ACTIVE:
+            return { ...state, activeId: payload };
+        case ID_TYPES.SECTION:
+            return { ...state, sectionId: payload };
+        case ID_TYPES.PARENT:
+            return { ...state, parentId: payload };
+        case ID_TYPES.FORM: 
+            return { ...state, formData: payload };
         default:
             throw new Error(`Unknown type: ${action.idType}`);
     }
@@ -134,12 +135,12 @@ const viewSetter = (state: any, action: any) => {
             return { ...state, viewState: VIEW_TYPE.SECTION};
         case VIEW_TYPE.SUB_SECTION:
             return { ...state, viewState: VIEW_TYPE.SUB_SECTION };
-        case VIEW_TYPE.NONE:
-            return { ...state, viewState: VIEW_TYPE.NONE };
         case VIEW_TYPE.CREATE_UPDATE:
             return { ...state, viewState: VIEW_TYPE.CREATE_UPDATE };
+        case VIEW_TYPE.NONE:
+            return { ...state, viewState: VIEW_TYPE.NONE };
         default:
-            throw new Error(`Unknown type: ${action.idType}`);
+            throw new Error(`Unknown type: ${action.viewType}`);
     }
 }
 

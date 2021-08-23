@@ -30,10 +30,18 @@ enum VIEW_TYPE {
     NONE = "NONE",
 }
 
+enum ID_TYPES {
+    BOOK = "BOOK",
+    ACTIVE = "ACTIVE",
+    SECTION = "SECTION",
+    PARENT = "PARENT",
+    FORM = "FORM"
+}
+
 type Form = {
     formType: VIEW_TYPE;
     formData: Option<FormData>;
 };
 
 export type { Form, FormData, Book };
-export { VIEW_TYPE };
+export { VIEW_TYPE, ID_TYPES };
