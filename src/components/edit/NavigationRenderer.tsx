@@ -3,15 +3,16 @@ import { useBookContext} from "../../service/BookServiceProvider";
 
 const Sections = (props: any) => {
     const { sections } = props;
-    return <div> {sections.map((c: any, sectionIndex: number) => {
+    if (sections.length === 0) return null;
+    return <div> {sections.map((section: any, sectionIndex: number) => {
         return (
             <div>
                 <div
-                    onClick={(e) => sectionOnClick(e, props)}
-                    key={c.uniqueId}
+                    onClick={(e) => sectionOnClick(e, props, section)}
+                    key={section.uniqueId}
                     className="section-nav"
                 >
-                    {c.title}
+                    {section.title}
                 </div>
                 <AddSection {...props} sectionIndex={sectionIndex} />
             </div>
@@ -38,7 +39,7 @@ const PageTitle = (props: any) => {
                 idType: 'SECTION',
             });
             dispatch({
-                type: 'VIEW_SETTER',
+                type: 'FORM_VIEW_SETTER',
                 viewType: 'NONE'
             });
         }}
@@ -96,6 +97,7 @@ const ReadBookNavigation = () => {
             {data.map((value: any, chapterIndex: number) => {
                 const { chapter, sections } = doSome(value);
                 let props = {
+                    context,
                     chapter: chapter, 
                     chapterIndex,
                     sectionIndex: null,

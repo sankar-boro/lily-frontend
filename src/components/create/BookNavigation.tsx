@@ -1,5 +1,5 @@
 import { activeScBg, getChapterData } from "./util";
-import { Form, VIEW_TYPE } from "../../globals/types";
+import { Form, FORM_TYPE } from "../../globals/types";
 import { None, Some } from "ts-results";
 import { Dispatch, SetStateAction } from "react";
 import { FormatLineSpacingOutlined } from "@material-ui/icons";
@@ -16,7 +16,7 @@ type BookNavigationProps = {
 };
 
 type ChapterFormData = {
-    formType: VIEW_TYPE;
+    formType: FORM_TYPE;
     chapter: any;
     updateIds: {
         topUniqueId: string;
@@ -63,7 +63,7 @@ const BookNavigation = (props: BookNavigationProps) => {
                                 e.preventDefault();
                                 setActiveId(chapter.uniqueId);
                                 setCurrentFormType({
-                                    formType: VIEW_TYPE.NONE,
+                                    formType: FORM_TYPE.NONE,
                                     formData: None,
                                 });
                                 setSectionId(null);
@@ -108,7 +108,7 @@ const BookNavigation = (props: BookNavigationProps) => {
                                                 setActiveId(chapter.uniqueId);
                                                 setParentId(c.uniqueId);
                                                 setCurrentFormType({
-                                                    formType: VIEW_TYPE.NONE,
+                                                    formType: FORM_TYPE.NONE,
                                                     formData: None,
                                                 });
                                             }}
@@ -161,9 +161,9 @@ const BookNavigation = (props: BookNavigationProps) => {
 const addNewChapter = (e: any, formData: ChapterFormData) => {
     e.preventDefault();
     const { updateIds, chapter, setCurrentFormType, setParentId } = formData;
-    if (formData.formType === VIEW_TYPE.CREATE_UPDATE) {
+    if (formData.formType === FORM_TYPE.CREATE_UPDATE) {
         setCurrentFormType({
-            formType: VIEW_TYPE.CREATE_UPDATE,
+            formType: FORM_TYPE.CREATE_UPDATE,
             formData: Some({
                 topUniqueId: updateIds.topUniqueId,
                 botUniqueId: updateIds.botUniqueId,
@@ -173,7 +173,7 @@ const addNewChapter = (e: any, formData: ChapterFormData) => {
         setParentId(chapter.uniqueId);
     } else {
         setCurrentFormType({
-            formType: VIEW_TYPE.CHAPTER,
+            formType: FORM_TYPE.CHAPTER,
             formData: None,
         });
         setParentId(chapter.uniqueId);
@@ -194,7 +194,7 @@ const addNewSection = (
     if (_index === 0 && sections.length === 1) {
         setParentId(chapterId);
         setCurrentFormType({
-            formType: VIEW_TYPE.SECTION,
+            formType: FORM_TYPE.SECTION,
             formData: None,
         });
         return;
@@ -206,7 +206,7 @@ const addNewSection = (
         const botUniqueId = nextSection.uniqueId;
         setParentId(chapterId);
         setCurrentFormType({
-            formType: VIEW_TYPE.CREATE_UPDATE,
+            formType: FORM_TYPE.CREATE_UPDATE,
             formData: Some({
                 topUniqueId,
                 botUniqueId,
@@ -225,7 +225,7 @@ const addNewSection = (
         const botUniqueId = nextSection.uniqueId;
         setParentId(currentSection.uniqueId);
         setCurrentFormType({
-            formType: VIEW_TYPE.CREATE_UPDATE,
+            formType: FORM_TYPE.CREATE_UPDATE,
             formData: Some({
                 topUniqueId,
                 botUniqueId,
@@ -239,7 +239,7 @@ const addNewSection = (
         const currentSection = sections[_index];
         setParentId(currentSection.uniqueId);
         setCurrentFormType({
-            formType: VIEW_TYPE.SECTION,
+            formType: FORM_TYPE.SECTION,
             formData: None,
         });
         return;

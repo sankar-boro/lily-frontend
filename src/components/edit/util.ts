@@ -1,4 +1,4 @@
-import { VIEW_TYPE } from "../../globals/types";
+import { FORM_TYPE } from "../../globals/types";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
 type Book = {
@@ -169,8 +169,8 @@ const addNewSection = (
     const { dispatch } = context;
     if (sectionIndex === null && sections.length === 0) {
         dispatch({
-            type: 'VIEW_SETTER',
-            viewType: VIEW_TYPE.SECTION,
+            type: 'FORM_VIEW_SETTER',
+            viewType: FORM_TYPE.SECTION,
         });
         dispatch({
             type: 'ID_SETTER',
@@ -187,8 +187,8 @@ const addNewSection = (
         const topUniqueId = chapter.uniqueId;
         const botUniqueId = sections[0].uniqueId;
         dispatch({
-            type: 'VIEW_SETTER',
-            viewType: VIEW_TYPE.CREATE_UPDATE,
+            type: 'FORM_VIEW_SETTER',
+            viewType: FORM_TYPE.CREATE_UPDATE,
         });
         dispatch({
             type: 'ID_SETTER',
@@ -207,8 +207,8 @@ const addNewSection = (
     if (sectionIndex === lastSectionIndex) {
         const uniqueId = sections[sectionIndex].uniqueId;
         dispatch({
-            type: 'VIEW_SETTER',
-            viewType: VIEW_TYPE.SECTION,
+            type: 'FORM_VIEW_SETTER',
+            viewType: FORM_TYPE.SECTION,
         });
         dispatch({
             type: 'ID_SETTER',
@@ -225,8 +225,8 @@ const addNewSection = (
         const topUniqueId = sections[sectionIndex].uniqueId;
         const botUniqueId = sections[sectionIndex + 1].uniqueId;
         dispatch({
-            type: 'VIEW_SETTER',
-            viewType: VIEW_TYPE.SECTION,
+            type: 'FORM_VIEW_SETTER',
+            viewType: FORM_TYPE.SECTION,
         });
         dispatch({
             type: 'ID_SETTER',
@@ -248,8 +248,8 @@ const addNewChapter = (props: any, context: any) => {
     
     if (chapterIndex === lastPageIndex) {
         dispatch({
-            type: 'VIEW_SETTER',
-            viewType: VIEW_TYPE.CHAPTER,
+            type: 'FORM_VIEW_SETTER',
+            viewType: FORM_TYPE.CHAPTER,
         });
         dispatch({
             type: 'ID_SETTER',
@@ -263,8 +263,8 @@ const addNewChapter = (props: any, context: any) => {
         const topUniqueId = data[chapterIndex].uniqueId;
         const botUniqueId = data[chapterIndex + 1].uniqueId;
         dispatch({
-            type: 'VIEW_SETTER',
-            viewType: VIEW_TYPE.CREATE_UPDATE,
+            type: 'FORM_VIEW_SETTER',
+            viewType: FORM_TYPE.CREATE_UPDATE,
         });
         dispatch({
             type: 'ID_SETTER',
@@ -278,9 +278,10 @@ const addNewChapter = (props: any, context: any) => {
     }
 };
 
-const sectionOnClick = (e: any, props: any) => {
+const sectionOnClick = (e: any, props: any, section: any) => {
     e.preventDefault();
-    const { context, chapter, section } = props;
+    const { context, chapter } = props;
+    console.log(props);
     context.dispatch({
         type: 'ID_SETTER',
         payload: chapter.uniqueId,
@@ -293,5 +294,54 @@ const sectionOnClick = (e: any, props: any) => {
     });
 }
 
-export { sortAll, activeChBg, activeScBg, displayNone, getPages, addNewChapter, addNewSection, sectionOnClick };
+const editSubSection = (subSectionIndex: number | null, props: any, chapterId: undefined | string) => {
+    console.log('props', props);
+    const { context, sections } = props;
+    
+    if (chapterId) {
+        context.dispatch({
+            type: 'ID_SETTER',
+            payload: chapterId,
+            idType: 'EDIT_SUB_SECTION',
+        });
+    }
+
+    if (subSectionIndex) {
+        const section = sections[subSectionIndex];
+        context.dispatch({
+            type: 'ID_SETTER',
+            payload: section.uniqueId,
+            idType: 'EDIT_SUB_SECTION',
+        });
+    }
+}
+
+const createSubSection = (context: any, id: string) => {
+    const { dispatch } = context;
+    dispatch({
+        type: 'FORM_VIEW_SETTER',
+        viewType: FORM_TYPE.SUB_SECTION,
+    });
+    dispatch({
+        type: 'ID_SETTER',
+        payload: {
+            parentId: id
+        },
+        idType: 'EDIT_SUB_SECTION',
+    });
+}
+
+export { 
+    sortAll, 
+    activeChBg, 
+    activeScBg, 
+    displayNone, 
+    getPages, 
+    addNewChapter, 
+    addNewSection, 
+    sectionOnClick,
+    editSubSection,
+    createSubSection
+};
+
 export type { Book };

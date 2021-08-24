@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useReducer } from "react";
 import { Option, None, Some } from "ts-results";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { sortAll } from "../globals/forms/index";
-import { VIEW_TYPE, ID_TYPES } from "../globals/types";
+import { FORM_TYPE, ID_TYPES } from "../globals/types";
 
 type Book = {
     bookId: string;
@@ -22,6 +22,7 @@ export type BookState = {
     bookId: string;
     activeId: string;
     sectionId: string;
+    editSubSectionId: string;
     parentId: string;
     formData: object;
     activePage: Book[];
@@ -37,6 +38,7 @@ const bookState = {
     bookId: '',
     activeId: '',
     sectionId: '',
+    editSubSectionId: '',
     parentId: '',
     formData: {},
     activePage: [],
@@ -44,7 +46,7 @@ const bookState = {
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
-    viewState: VIEW_TYPE.NONE,
+    viewState: FORM_TYPE.NONE,
 }
 
 export const BookContext = React.createContext<BookState>({
@@ -52,6 +54,7 @@ export const BookContext = React.createContext<BookState>({
     bookId: '',
     activeId: '',
     sectionId: '',
+    editSubSectionId: '',
     parentId: '',
     formData: {},
     activePage: [],
@@ -59,7 +62,7 @@ export const BookContext = React.createContext<BookState>({
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
-    viewState: VIEW_TYPE.NONE,
+    viewState: FORM_TYPE.NONE,
 });
 
 export const useBookContext = () => useContext(BookContext);
@@ -121,27 +124,31 @@ const idSetter = (state: any, action: any) => {
     }
 }
 
-const viewSetter = (state: any, action: any) => {
+const formPageViewSetter = (state: any, action: any) => {
     switch (action.viewType) {
-        case VIEW_TYPE.FRONT_COVER:
-            return { ...state, viewState: VIEW_TYPE.FRONT_COVER };
-        case VIEW_TYPE.BACK_COVER:
-            return { ...state, viewState: VIEW_TYPE.BACK_COVER };
-        case VIEW_TYPE.CHAPTER:
-            return { ...state, viewState: VIEW_TYPE.CHAPTER };
-        case VIEW_TYPE.PAGE:
-            return { ...state, viewState: VIEW_TYPE.PAGE };
-        case VIEW_TYPE.SECTION: 
-            return { ...state, viewState: VIEW_TYPE.SECTION};
-        case VIEW_TYPE.SUB_SECTION:
-            return { ...state, viewState: VIEW_TYPE.SUB_SECTION };
-        case VIEW_TYPE.CREATE_UPDATE:
-            return { ...state, viewState: VIEW_TYPE.CREATE_UPDATE };
-        case VIEW_TYPE.NONE:
-            return { ...state, viewState: VIEW_TYPE.NONE };
+        case FORM_TYPE.FRONT_COVER:
+            return { ...state, viewState: FORM_TYPE.FRONT_COVER };
+        case FORM_TYPE.BACK_COVER:
+            return { ...state, viewState: FORM_TYPE.BACK_COVER };
+        case FORM_TYPE.CHAPTER:
+            return { ...state, viewState: FORM_TYPE.CHAPTER };
+        case FORM_TYPE.PAGE:
+            return { ...state, viewState: FORM_TYPE.PAGE };
+        case FORM_TYPE.SECTION: 
+            return { ...state, viewState: FORM_TYPE.SECTION};
+        case FORM_TYPE.SUB_SECTION:
+            return { ...state, viewState: FORM_TYPE.SUB_SECTION };
+        case FORM_TYPE.CREATE_UPDATE:
+            return { ...state, viewState: FORM_TYPE.CREATE_UPDATE };
+        case FORM_TYPE.NONE:
+            return { ...state, viewState: FORM_TYPE.NONE };
         default:
             throw new Error(`Unknown type: ${action.viewType}`);
     }
+}
+
+const formPageUpdateSetter = (state: any, action: any) => {
+
 }
 
 const reducer = (state: any, action: any) => {
@@ -161,8 +168,11 @@ const reducer = (state: any, action: any) => {
         case 'ID_SETTER':
             return idSetter(state, action);
 
-        case 'VIEW_SETTER': 
-            return viewSetter(state, action);
+        case 'FORM_VIEW_SETTER': 
+            return formPageViewSetter(state, action);
+        
+        case 'FORM_UPDATE_SETTER': 
+            return formPageUpdateSetter(state, action);
         
         case 'ACTIVE_PAGE':
             return { ...state, activePage: action.payload };

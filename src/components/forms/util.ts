@@ -1,5 +1,5 @@
 import { Some, Option, None } from "ts-results";
-import { Book, VIEW_TYPE } from "../../globals/types/index";
+import { Book, FORM_TYPE } from "../../globals/types/index";
 
 const sortAll = (data: Book[], parentId: string) => {
     let lastParentId = parentId;
@@ -106,7 +106,7 @@ const getChapterData = (
     const { chapter, sections } = doSome(value);
     const { setCurrentFormType, setParentId } = props;
     let formData = {
-        formType: VIEW_TYPE.NONE,
+        formType: FORM_TYPE.NONE,
         chapter,
         updateIds: {
             topUniqueId: "",
@@ -121,20 +121,20 @@ const getChapterData = (
     // let hideForm = false;
     const formHelp = () => {
         if (totalChapters === 1) {
-            formData.formType = VIEW_TYPE.CHAPTER;
+            formData.formType = FORM_TYPE.CHAPTER;
             // hideForm = true;
             return;
         }
 
         if (totalChapters > 1 && currentPageNo < totalChapters) {
-            formData.formType = VIEW_TYPE.CREATE_UPDATE;
+            formData.formType = FORM_TYPE.CREATE_UPDATE;
             formData.updateIds.topUniqueId = chapter.uniqueId;
             formData.updateIds.botUniqueId = allPages[index + 1].uniqueId;
             return;
         }
 
         if (currentPageNo === totalChapters) {
-            formData.formType = VIEW_TYPE.CHAPTER;
+            formData.formType = FORM_TYPE.CHAPTER;
         }
     };
 

@@ -19,7 +19,7 @@ type Book = {
     updatedAt: string;
 };
 
-enum VIEW_TYPE {
+enum FORM_TYPE {
     FRONT_COVER = "FRONT_COVER",
     BACK_COVER = "BACK_COVER",
     PAGE = "PAGE",
@@ -34,14 +34,15 @@ enum ID_TYPES {
     BOOK = "BOOK",
     ACTIVE = "ACTIVE",
     SECTION = "SECTION",
+    EDIT_SUB_SECTION = "EDIT_SUB_SECTION",
     PARENT = "PARENT",
     FORM = "FORM"
 }
 
 type Form = {
-    formType: VIEW_TYPE;
+    formType: FORM_TYPE;
     formData: Option<FormData>;
 };
 
 export type { Form, FormData, Book };
-export { VIEW_TYPE, ID_TYPES };
+export { FORM_TYPE, ID_TYPES };

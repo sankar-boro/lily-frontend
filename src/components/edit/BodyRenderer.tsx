@@ -1,41 +1,49 @@
 import { useHistory } from "react-router-dom";
 import Divider from "./Divider";
+import { editSubSection, createSubSection } from "./util";
+import AddSubSection from "./AddSubSection";
 import AddSection from "../forms/Section";
 import AddChapter from "../forms/Chapter";
 import SubSection from "../forms/SubSection";
 import CreateUpdate from "../forms/CreateUpdate";
-import { Book, VIEW_TYPE } from "../../globals/types/index";
+import { Book, FORM_TYPE } from "../../globals/types/index";
 import { useBookContext } from "../../service/BookServiceProvider";
+
+const SectionBody = (section: any, subSectionIndex: number, props: any) => {
+    const { uniqueId, title, body } = section;
+    return <div key={uniqueId}>
+        <div>
+            <h4>{title}</h4>
+            <div className="description">{body}</div>
+        </div>
+    </div>
+}
 
 const MainBody = (props: any) => {
     const context: any = useBookContext();
     const { thisData, sectionId } = props;
+    const { editSubSectionId } = context;
 
-    if (context.viewState !== VIEW_TYPE.NONE) {
+    if (context.viewState !== FORM_TYPE.NONE) {
         return <FormView />;
     }
 
     return <div className="flex" style={{ backgroundColor: "#feffc4" }}>
         <div className="con-80 flex">
             <div className="con-10" style={{ backgroundColor: "#f5fff0"}} />
-            <div className="con-80" >
+            <div className="con-80">
                 <h3 className="h3" style={{marginBottom: 15 }}>{thisData.title}</h3>
                 <div className="description">{thisData.body}</div>
                 {sectionId &&
                     thisData.child &&
                     thisData.child.length > 0 &&
-                    thisData.child.map((x: Book) => {
-                        return (
-                            <div key={x.uniqueId}>
-                                <h4>{x.title}</h4>
-                                <div className="description">{x.body}</div>
-                            </div>
-                        );
+                    thisData.child.map((x: Book, subSectionIndex: number) => {
+                        return SectionBody(x, subSectionIndex, props);
                     })}
             </div>
             <div className="con-10" style={{ backgroundColor: "#e8feff" }} />
         </div>
-        <Divider />
+        <Divider payload={thisData} sectionId={sectionId} />
     </div>
 }
 
@@ -56,16 +64,16 @@ const Main = (props: any) => {
 const FormView = () => {
     const context: any = useBookContext();
 
-    if (context.viewState === VIEW_TYPE.CHAPTER) {
+    if (context.viewState === FORM_TYPE.CHAPTER) {
         return <AddChapter />;
     }
-    if (context.viewState === VIEW_TYPE.SECTION) {
+    if (context.viewState === FORM_TYPE.SECTION) {
         return <AddSection />;
     }
-    if (context.viewState === VIEW_TYPE.SUB_SECTION) {
+    if (context.viewState === FORM_TYPE.SUB_SECTION) {
         return <SubSection />;
     }
-    if (context.viewState === VIEW_TYPE.CREATE_UPDATE) {
+    if (context.viewState === FORM_TYPE.CREATE_UPDATE) {
         return <CreateUpdate />;
     }
     return null;
@@ -85,7 +93,7 @@ const BodyRenderer = (props: any) => {
         });
     }
 
-    const temp = { title, thisData, sectionId };
+    const temp = { title, thisData, sectionId, context };
 
     return <Main {...temp} />
 };
