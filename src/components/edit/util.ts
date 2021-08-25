@@ -302,7 +302,7 @@ const editSubSection = (subSectionIndex: number | null, props: any, chapterId: u
         context.dispatch({
             type: 'ID_SETTER',
             payload: chapterId,
-            idType: 'EDIT_SUB_SECTION',
+            idType: 'SECTION',
         });
     }
 
@@ -311,24 +311,71 @@ const editSubSection = (subSectionIndex: number | null, props: any, chapterId: u
         context.dispatch({
             type: 'ID_SETTER',
             payload: section.uniqueId,
-            idType: 'EDIT_SUB_SECTION',
+            idType: 'SECTION',
         });
     }
 }
 
-const createSubSection = (context: any, id: string) => {
+const createSubSection = (context: any, sectionId: string, subSectionIndex: number | null, subSections: Book[]) => {
+    
+    if (!sectionId) return;
     const { dispatch } = context;
-    dispatch({
-        type: 'FORM_VIEW_SETTER',
-        viewType: FORM_TYPE.SUB_SECTION,
-    });
-    dispatch({
-        type: 'ID_SETTER',
-        payload: {
-            parentId: id
-        },
-        idType: 'EDIT_SUB_SECTION',
-    });
+
+    if (!subSectionIndex && subSections.length === 0) {
+        dispatch({
+            type: 'FORM_VIEW_SETTER',
+            viewType: FORM_TYPE.SUB_SECTION,
+        });
+        dispatch({
+            type: 'ID_SETTER',
+            payload: {
+                parentId: sectionId,
+                identity: 106,
+            },
+            idType: 'FORM',
+        });
+        return;
+    }
+
+
+    if (!subSectionIndex && subSections.length > 0) {
+        dispatch({
+            type: 'FORM_VIEW_SETTER',
+            viewType: FORM_TYPE.CREATE_UPDATE,
+        });
+        let topUniqueId = sectionId;
+        let botUniqueId = subSections[0].uniqueId;
+        dispatch({
+            type: 'ID_SETTER',
+            payload: {
+                topUniqueId,
+                botUniqueId,
+                identity: 106,
+            },
+            idType: 'FORM',
+        });
+        return;
+    }
+
+    if (subSectionIndex) {
+
+        dispatch({
+            type: 'FORM_VIEW_SETTER',
+            viewType: FORM_TYPE.CREATE_UPDATE,
+        });
+        let topUniqueId = subSections[subSectionIndex].uniqueId;
+        let botUniqueId = subSections[subSectionIndex+1].uniqueId;
+        dispatch({
+            type: 'ID_SETTER',
+            payload: {
+                topUniqueId,
+                botUniqueId,
+                identity: 106,
+            },
+            idType: 'FORM',
+        });
+    }
+
 }
 
 export { 

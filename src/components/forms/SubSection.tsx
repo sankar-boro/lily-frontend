@@ -7,36 +7,36 @@ const createNewSubSection = (props: {
     title: string;
     body: string;
 }, context: any) => {
-    // const { title, body } = props;
-    // const { formId, identity, bookId } = context;
-    // const { parentId } = formId;
+    const { title, body } = props;
+    const { formData, bookId } = context;
+    const { parentId, identity } = formData;
     console.log(context, props);
-    // axios
-    //     .post(
-    //         "http://localhost:8000/book/create/new/section",
-    //         {
-    //             title,
-    //             body,
-    //             identity,
-    //             parentId,
-    //             bookId,
-    //         },
-    //         {
-    //             withCredentials: true,
-    //         }
-    //     )
-    //     .then((res: AxiosResponse<{ status: number }>) => {
-    //         if (
-    //             res.status &&
-    //             typeof res.status === "number" &&
-    //             res.status === 200
-    //         ) {
-    //             // console.log(res);
-    //         }
-    //     })
-    //     .catch((err: AxiosError<any>) => {
-    //         // console.log("SignupError", err.response);
-    //     });
+    axios
+        .post(
+            "http://localhost:8000/book/create/new/section",
+            {
+                title,
+                body,
+                identity,
+                parentId,
+                bookId,
+            },
+            {
+                withCredentials: true,
+            }
+        )
+        .then((res: AxiosResponse<{ status: number }>) => {
+            if (
+                res.status &&
+                typeof res.status === "number" &&
+                res.status === 200
+            ) {
+                // console.log(res);
+            }
+        })
+        .catch((err: AxiosError<any>) => {
+            // console.log("SignupError", err.response);
+        });
 };
 
 const SubSection = (props: any) => {

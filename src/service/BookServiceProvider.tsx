@@ -87,14 +87,13 @@ const fetchData = (state: BookState, dispatch: Function) => {
             res.status === 200
         ) {
             let dataRes: Book[] = res.data;
-            let a = sortAll(dataRes);
-            console.log(a);
+            let bookData = sortAll(dataRes);
             dispatch({
                 ...state,
                 type: 'SUCCESS',
-                payload: a,
+                payload: bookData,
             });
-            setActiveId(a, state.bookId, dispatch);
+            setActiveId(bookData, state.bookId, dispatch);
         }
     })
     .catch((err: AxiosError<any>) => {
