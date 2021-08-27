@@ -19,6 +19,19 @@ type Book = {
     updatedAt: string;
 };
 
+type BookData = {
+    bookId: string;
+    body: string;
+    identity: number;
+    title: string;
+    parentId: string | null;
+    uniqueId: string;
+    authorId: string;
+    authorName: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
 enum FORM_TYPE {
     FRONT_COVER = "FRONT_COVER",
     BACK_COVER = "BACK_COVER",

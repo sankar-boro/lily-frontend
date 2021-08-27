@@ -2,20 +2,7 @@ import React, { useContext, useEffect, useState, useReducer } from "react";
 import { Option, None, Some } from "ts-results";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { sortAll } from "../globals/forms/index";
-import { FORM_TYPE, ID_TYPES } from "../globals/types";
-
-type Book = {
-    bookId: string;
-    authorId: string;
-    authorName: string;
-    title: string;
-    body: string;
-    parentId: string;
-    uniqueId: string;
-    createdAt: string;
-    updatedAt: string;
-    identity: number;
-};
+import { FORM_TYPE, ID_TYPES, Book } from "../globals/types";
 
 export type BookState = {
     data: any;

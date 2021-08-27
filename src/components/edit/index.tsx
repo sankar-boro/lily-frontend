@@ -5,20 +5,24 @@ import NavigationRenderer from "./NavigationRenderer";
 import { useAuthContext } from "../../service/AuthServiceProvider";
 import BookServiceProvider, { useBookContext} from "../../service/BookServiceProvider";
 
-const Main = () => {
+const Body = () => {
     const context = useBookContext();
     const authContext = useAuthContext();
     const history: any = useHistory();
+    const { dispatch } = context;
+    const { setRead } = authContext;
+    const { bookId } = history.location.state;
 
-    useEffect(() => {
-        context.dispatch({
+    const initState = () => {
+        dispatch({
             type: 'ID_SETTER',
             idType: 'BOOK',
-            payload: history.location.state.bookId,
+            payload: bookId,
         });
-        authContext.setRead(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        setRead(true);
+    }
+
+    useEffect(initState, [dispatch, setRead, bookId]);
 
     if(!context.data) return <div>Fetching...</div>;
 
@@ -32,8 +36,8 @@ const Renderer = () => {
     </div>  
 }
 
-export default function MainContext(props: any){
+export default function Main(props: any){
     return <BookServiceProvider>
-        <Main />
+        <Body />
     </BookServiceProvider>
 }

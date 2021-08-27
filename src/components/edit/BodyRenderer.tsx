@@ -1,7 +1,5 @@
 import { useHistory } from "react-router-dom";
 import Divider from "./Divider";
-import { editSubSection, createSubSection } from "./util";
-import AddSubSection from "./AddSubSection";
 import AddSection from "../forms/Section";
 import AddChapter from "../forms/Chapter";
 import SubSection from "../forms/SubSection";
@@ -13,7 +11,7 @@ const SubSectionBody = (section: any, subSectionIndex: number, props: any) => {
     const { uniqueId, title, body } = section;
     return <div key={uniqueId}>
         <div>
-            <h4>{title}</h4>
+            <h3 className="h3">{title}</h3>
             <div className="description">{body}</div>
         </div>
     </div>
@@ -22,7 +20,6 @@ const SubSectionBody = (section: any, subSectionIndex: number, props: any) => {
 const Body = (props: any) => {
     const context: any = useBookContext();
     const { activePageOrSection, sectionId } = props;
-    const { editSubSectionId } = context;
 
     if (context.viewState !== FORM_TYPE.NONE) {
         return <FormView />;
@@ -39,7 +36,7 @@ const Body = (props: any) => {
         <div className="con-80 flex">
             <div className="con-10" style={{ backgroundColor: "#f5fff0"}} />
             <div className="con-80">
-                <h3 className="h3" style={{marginBottom: 15 }}>{activePageOrSection.title}</h3>
+                <h3 className="h3">{activePageOrSection.title}</h3>
                 <div className="description">{activePageOrSection.body}</div>
                 {subSections.map((x: Book, subSectionIndex: number) => {
                     return SubSectionBody(x, subSectionIndex, props);
