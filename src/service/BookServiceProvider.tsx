@@ -1,13 +1,9 @@
 import React, { useContext, useEffect, useState, useReducer } from "react";
 import { Option, None, Some } from "ts-results";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { sortAll } from "../globals/forms/index";
 import { FORM_TYPE, ID_TYPES, Book } from "../globals/types";
-import { BookService, BookHandler } from "./BookService";
+import { BookService, BookHandler } from "./handlers/BookService";
 
 export type BookState = {
-    data: any;
-    service: BookService;
     bookId: string;
     activeId: string;
     sectionId: string;
@@ -20,10 +16,10 @@ export type BookState = {
     error: string;
     dispatch: Function,
     viewState: string,
+    service: BookService;
 };
 
 const bookState = {
-    data: [],
     bookId: '',
     activeId: '',
     sectionId: '',
@@ -40,8 +36,6 @@ const bookState = {
 }
 
 export const BookContext = React.createContext<BookState>({
-    data: [],
-    service: new BookHandler(),
     bookId: '',
     activeId: '',
     sectionId: '',
@@ -54,6 +48,7 @@ export const BookContext = React.createContext<BookState>({
     error: '',
     dispatch: (data: any) => {},
     viewState: FORM_TYPE.NONE,
+    service: new BookHandler(),
 });
 
 export const useBookContext = () => useContext(BookContext);
@@ -68,13 +63,12 @@ const fetchData = (state: BookState, dispatch: Function) => {
     });
     service.fetch(bookId).then((context: any) => {
         let res = context.map_res().data;
-        let bookData = sortAll(res);
         dispatch({
             ...state,
             type: 'SUCCESS',
-            payload: bookData,
+            payload: res,
         });
-        setActiveId(bookData, state.bookId, dispatch);
+        setActiveId(res, state.bookId, dispatch);
     })
 }
 

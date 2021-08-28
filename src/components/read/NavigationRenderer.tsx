@@ -4,7 +4,9 @@ import { useBookContext} from "../../service/BookServiceProvider";
 
 const ReadBookNavigation = (props: any) => {
     const context = useBookContext();
-    const { data, activeId, sectionId } = context;
+    const { service, activeId, sectionId } = context;
+    const { data } = service;
+    console.log('data', data);
     const doSome = (data: any) => {
         let child = [];
         if (data && data.child && Array.isArray(data.child)) {

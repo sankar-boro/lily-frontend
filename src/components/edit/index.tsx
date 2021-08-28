@@ -4,6 +4,7 @@ import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
 import { useAuthContext } from "../../service/AuthServiceProvider";
 import BookServiceProvider, { useBookContext} from "../../service/BookServiceProvider";
+import { Request } from '../../globals/types';
 
 const Body = () => {
     const context = useBookContext();
@@ -24,9 +25,10 @@ const Body = () => {
 
     useEffect(initState, [dispatch, setRead, bookId]);
 
-    if(!context.data) return <div>Fetching...</div>;
-
-    return <Renderer />
+    if(context.service.state === Request.INIT) return <div>Fetching...</div>;
+    if(context.service.state === Request.FETCH) return <div>Initializing...</div>;
+    if(context.service.state === Request.SUCCESS) return <Renderer />;
+    return null;
 }
 
 const Renderer = () => {

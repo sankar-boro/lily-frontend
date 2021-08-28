@@ -1,9 +1,9 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { FORM_TYPE, ID_TYPES, Book } from "../globals/types";
-import { sortAll } from "../globals/forms/index";
-import { resolve } from "url";
+import axios from "axios";
+import { sortAll } from "../../globals/forms/index";
+import { Request } from "../../globals/types/index";
 
 interface BookService {
+    readonly state: string;
     readonly data: any[];
     readonly err: any;
     payload: any;
@@ -20,20 +20,24 @@ const getAllBookData = async (url: string) => {
 }
 
 class BookHandler implements BookService {
-    data = [];
+    state = Request.INIT;
+    data: any;
     err: any;
     payload: any;
 
     fetch(bookId: string): Promise<any> {
+        this.state = Request.FETCH;
         const prefix = "http://localhost:8000/book/getall/";
         const url = `${prefix}${bookId}`;
         return new Promise(async (resolve, reject) => {
             getAllBookData(url)
             .then((res) => {
+                this.state = Request.SUCCESS;
                 this.payload = res;
                 resolve(this);
             })
             .catch((err) => {
+                this.state = Request.ERROR;
                 this.err = err;
                 reject(this);
             });
@@ -44,12 +48,17 @@ class BookHandler implements BookService {
         const { payload } = this;
         const { status, data } = payload;
         if (status && data && status === 200) {
-            this.data = data;
+            this.data = sortAll(data);
         }
         return this;
     }
 
     map_err(): any {
+        const { err } = this;
+        const { message } = err;
+        if(message) {
+            this.err = message;
+        }
         return this;
     }
 }
