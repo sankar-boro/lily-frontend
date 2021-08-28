@@ -3,9 +3,11 @@ import { Option, None, Some } from "ts-results";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { sortAll } from "../globals/forms/index";
 import { FORM_TYPE, ID_TYPES, Book } from "../globals/types";
+import { BookService, BookHandler } from "./BookService";
 
 export type BookState = {
     data: any;
+    service: BookService;
     bookId: string;
     activeId: string;
     sectionId: string;
@@ -34,10 +36,12 @@ const bookState = {
     error: '',
     dispatch: (data: any) => {},
     viewState: FORM_TYPE.NONE,
+    service: new BookHandler(),
 }
 
 export const BookContext = React.createContext<BookState>({
     data: [],
+    service: new BookHandler(),
     bookId: '',
     activeId: '',
     sectionId: '',
@@ -55,41 +59,23 @@ export const BookContext = React.createContext<BookState>({
 export const useBookContext = () => useContext(BookContext);
 
 const fetchData = (state: BookState, dispatch: Function) => {
-    const { apiState } = state;
+    const { apiState, service, bookId } = state;
     // We only want this function to be performed once
     if (apiState) return;
-
     dispatch({
         ...state,
         type: 'INIT',
     });
-    axios
-    .get(`http://localhost:8000/book/getall/${state.bookId}`, {
-        withCredentials: true,
-    })
-    .then((res: AxiosResponse<any>) => {
-        if (
-            res.status &&
-            typeof res.status === "number" &&
-            res.status === 200
-        ) {
-            let dataRes: Book[] = res.data;
-            let bookData = sortAll(dataRes);
-            dispatch({
-                ...state,
-                type: 'SUCCESS',
-                payload: bookData,
-            });
-            setActiveId(bookData, state.bookId, dispatch);
-        }
-    })
-    .catch((err: AxiosError<any>) => {
+    service.fetch(bookId).then((context: any) => {
+        let res = context.map_res().data;
+        let bookData = sortAll(res);
         dispatch({
             ...state,
-            type: 'ERROR',
-            payload: err.message,
+            type: 'SUCCESS',
+            payload: bookData,
         });
-    });
+        setActiveId(bookData, state.bookId, dispatch);
+    })
 }
 
 const idSetter = (state: any, action: any) => {
@@ -197,7 +183,7 @@ const setSectionId = (data: any, sectionId: string, dispatch: Function, activePa
 
 export default function BookServiceProvider(props: { children: object }){
     const [state, dispatch] = useReducer(reducer, bookState);
-    const { bookId, activeId, data, sectionId, activePage } = state;
+    const { bookId, activeId, data, sectionId, activePage, service } = state;
     
     useEffect(() => {
         if (bookId) {

@@ -96,7 +96,6 @@ const groupChapters = (parentId: string, chapters: any) => {
     let currentParentId = parentId;
     let orders: any = [];
     let times = 0;
-    console.log('chaptesr', chapters);
     while (times !== 3) {
         // eslint-disable-next-line no-loop-func
         chapters.forEach((chapter: any) => {
