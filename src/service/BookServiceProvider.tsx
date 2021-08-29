@@ -1,32 +1,30 @@
-import React, { useContext, useEffect, useState, useReducer } from "react";
-import { Option, None, Some } from "ts-results";
+import React, { useContext, useEffect, useReducer } from "react";
+import { sortAll } from "../globals/forms/index";
 import { FORM_TYPE, ID_TYPES, Book } from "../globals/types";
 import { BookService, BookHandler } from "./handlers/BookService";
 
 export type BookState = {
+    data: any;
+    service: BookService;
     bookId: string;
-    activeId: string;
-    sectionId: string;
     editSubSectionId: string;
     parentId: string;
     formData: object;
-    activePage: Book[];
+    activePage: Book[] | null;
     activeSection: null;
     apiState: string | null;
     error: string;
     dispatch: Function,
     viewState: string,
-    service: BookService;
 };
 
 const bookState = {
+    data: null,
     bookId: '',
-    activeId: '',
-    sectionId: '',
     editSubSectionId: '',
     parentId: '',
     formData: {},
-    activePage: [],
+    activePage: null,
     activeSection: null,
     apiState: null,
     error: '',
@@ -36,9 +34,9 @@ const bookState = {
 }
 
 export const BookContext = React.createContext<BookState>({
+    data: null,
+    service: new BookHandler(),
     bookId: '',
-    activeId: '',
-    sectionId: '',
     editSubSectionId: '',
     parentId: '',
     formData: {},
@@ -48,7 +46,6 @@ export const BookContext = React.createContext<BookState>({
     error: '',
     dispatch: (data: any) => {},
     viewState: FORM_TYPE.NONE,
-    service: new BookHandler(),
 });
 
 export const useBookContext = () => useContext(BookContext);
@@ -63,12 +60,18 @@ const fetchData = (state: BookState, dispatch: Function) => {
     });
     service.fetch(bookId).then((context: any) => {
         let res = context.map_res().data;
+        let bookData = sortAll(res);
         dispatch({
             ...state,
             type: 'SUCCESS',
-            payload: res,
+            payload: bookData,
         });
-        setActiveId(res, state.bookId, dispatch);
+        dispatch({
+            type: 'ACTIVE_PAGE',
+            pageId: state.bookId,
+            sectionId: null,
+        });
+        // setActiveId(bookData, state.bookId, dispatch);
     })
 }
 
@@ -117,6 +120,32 @@ const formPageUpdateSetter = (state: any, action: any) => {
 
 }
 
+const setActivePage = (state: any, action: any) => {
+    const { service } = state;
+    const { data } = service;
+    const { pageId, sectionId } = action;
+    let __state = state;
+    if (action.sectionId && action.pageId) {
+        data.forEach((page: any) => {
+            if (page.uniqueId === pageId) {
+                page.child.forEach((section: any) => {
+                    if (section.uniqueId === sectionId) {
+                        __state = { ...state, activePage: section };
+                    }
+                })
+            }
+        });
+    } else {
+        data.forEach((page: any) => {
+            if (page.uniqueId === pageId) {
+                __state = { ...state, activePage: page };
+            }
+        });
+    }
+
+    return __state;
+}
+
 const reducer = (state: any, action: any) => {
     switch (action.type) {
         case 'INIT':
@@ -141,7 +170,7 @@ const reducer = (state: any, action: any) => {
             return formPageUpdateSetter(state, action);
         
         case 'ACTIVE_PAGE':
-            return { ...state, activePage: action.payload };
+            return setActivePage(state, action);
 
         case 'ACTIVE_SECTION':
             return { ...state, activeSection: action.payload };
@@ -151,46 +180,16 @@ const reducer = (state: any, action: any) => {
     }
 }
 
-const setActiveId = (data: any, activeId: string, dispatch: Function) => {
-    data.forEach((a: any) => {
-        if (activeId === a.uniqueId) {
-            dispatch({
-                payload: a,
-                type: 'ACTIVE_PAGE'
-            });
-        }
-    });
-}
-
-const setSectionId = (data: any, sectionId: string, dispatch: Function, activePage: any) => {
-    if (sectionId && activePage.child && activePage.child.length > 0) {
-        activePage.child.forEach((a: Book) => {
-            if (a.uniqueId === sectionId) {
-                dispatch({
-                    payload: a,
-                    type: 'ACTIVE_SECTION'
-                });
-            }
-        });
-    }
-}
 
 export default function BookServiceProvider(props: { children: object }){
     const [state, dispatch] = useReducer(reducer, bookState);
-    const { bookId, activeId, data, sectionId, activePage, service } = state;
+    const { bookId } = state;
     
     useEffect(() => {
         if (bookId) {
             fetchData(state, dispatch);
         }
-        if (activeId) {
-            setActiveId(data, activeId, dispatch);
-        }
-
-        if (sectionId) {
-            setSectionId(data, sectionId, dispatch, activePage);
-        }
-    },[bookId, activeId, sectionId]);
+    },[bookId, state]);
 
     return (
         <BookContext.Provider

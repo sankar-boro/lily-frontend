@@ -1,12 +1,11 @@
-import { activeChBg, activeScBg } from "./util";
 import { useBookContext} from "../../service/BookServiceProvider";
 
 
 const ReadBookNavigation = (props: any) => {
     const context = useBookContext();
-    const { service, activeId, sectionId } = context;
+    const { service } = context;
     const { data } = service;
-    console.log('data', data);
+
     const doSome = (data: any) => {
         let child = [];
         if (data && data.child && Array.isArray(data.child)) {
@@ -29,20 +28,12 @@ const ReadBookNavigation = (props: any) => {
                             onClick={(e) => {
                                 e.preventDefault();
                                 context.dispatch({
-                                    type: 'ID_SETTER',
-                                    payload: chapter.uniqueId,
-                                    idType: 'ACTIVE',
-                                });
-                                context.dispatch({
-                                    type: 'ID_SETTER',
-                                    payload: null,
-                                    idType: 'SECTION',
+                                    type: 'ACTIVE_PAGE',
+                                    pageId: chapter.uniqueId,
+                                    sectionId: null,
                                 });
                             }}
-                            className={`chapter-nav hover ${activeChBg(
-                                chapter,
-                                activeId
-                            )}`}
+                            className="chapter-nav hover"
                         >
                             {chapter.title}
                         </div>
@@ -53,14 +44,9 @@ const ReadBookNavigation = (props: any) => {
                                         onClick={(e) => {
                                             e.preventDefault();
                                             context.dispatch({
-                                                type: 'ID_SETTER',
-                                                payload: chapter.uniqueId,
-                                                idType: 'ACTIVE',
-                                            });
-                                            context.dispatch({
-                                                type: 'ID_SETTER',
-                                                payload: c.uniqueId,
-                                                idType: 'SECTION',
+                                                type: 'ACTIVE_PAGE',
+                                                pageId: chapter.uniqueId,
+                                                sectionId: c.uniqueId,
                                             });
                                         }}
                                         key={c.uniqueId}

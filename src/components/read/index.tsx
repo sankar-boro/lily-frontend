@@ -4,8 +4,6 @@ import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
 import { useAuthContext } from "../../service/AuthServiceProvider";
 import BookServiceProvider, { useBookContext} from "../../service/BookServiceProvider";
-import { Request } from '../../globals/types';
-
 const Main = () => {
     const context = useBookContext();
     const authContext = useAuthContext();
@@ -21,10 +19,8 @@ const Main = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    if(context.service.state === Request.INIT) return <div>Initializing...</div>;
-    if(context.service.state === Request.FETCH) return <div>Fetching...</div>;
-    if(context.service.state === Request.SUCCESS) return <Renderer />;
-    return null;
+    if(!context.data) return <div>Fetching...</div>;
+    return <Renderer />;
 }
 
 const Renderer = () => {
