@@ -2,25 +2,36 @@ import { addNewChapter, addNewSection, sectionOnClick } from "./util";
 import { useBookContext} from "../../service/BookServiceProvider";
 
 const Sections = (props: any) => {
-    const { page } = props;
-    let pageSections = [];
+    const { page, context } = props;
+    const { dispatch } = context;
+
+    let sections: any = null;
 
     if (page.child && Array.isArray(page.child) && page.child.length > 0) {
-        pageSections = page.child;
+        sections = page.child;
     }
 
-    if (pageSections.length === 0) return null;
-    return <div> {pageSections.map((section: any, sectionIndex: number) => {
+    if (!sections) return null;
+    if (sections && sections.length === 0) return null;
+
+    return <div> {sections.map((section: any, sectionIndex: number) => {
         return (
-            <div>
+            <div key={`${sectionIndex}`}>
                 <div
-                    onClick={(e) => sectionOnClick(e, props, section)}
+                    onClick={(e) => {
+                        e.preventDefault();
+                        dispatch({
+                            type: 'ACTIVE_PAGE',
+                            pageId: page.uniqueId,
+                            sectionId: section.uniqueId,
+                        })
+                    }}
                     key={section.uniqueId}
                     className="section-nav"
                 >
                     {section.title}
                 </div>
-                <AddSection {...props} sectionIndex={sectionIndex} />
+                <AddSection {...props} sectionIndex={sectionIndex} sections={sections} />
             </div>
         );
     })} 
@@ -35,18 +46,8 @@ const PageTitle = (props: any) => {
     const setActivePage = (e: any) => {
         e.preventDefault();
         dispatch({
-            type: 'ID_SETTER',
-            payload: page.uniqueId,
-            idType: 'ACTIVE',
-        });
-        dispatch({
-            type: 'ID_SETTER',
-            payload: null,
-            idType: 'SECTION',
-        });
-        dispatch({
-            type: 'FORM_VIEW_SETTER',
-            viewType: 'NONE'
+            type: 'ACTIVE_PAGE',
+            pageId: page.uniqueId,
         });
     };
 
@@ -106,7 +107,7 @@ const Main = () => {
     return (
         <div className="con-20" style={{ padding: "0px 10px" }}>
             <div style={{ height: 35 }}/>
-            {bookPages.map((page: any, pageIndex: number) => <NavigationPages page={page} pageIndex={pageIndex} />)}
+            {bookPages.map((page: any, pageIndex: number) => <NavigationPages page={page} pageIndex={pageIndex} context={context} key={`${pageIndex}`} />)}
         </div>
     );
 };

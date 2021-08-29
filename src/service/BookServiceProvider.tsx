@@ -11,6 +11,7 @@ export type BookState = {
     parentId: string;
     formData: object;
     activePage: Book[] | null;
+    hideSection: boolean;
     apiState: string | null;
     error: string;
     dispatch: Function,
@@ -24,6 +25,7 @@ const bookState = {
     parentId: '',
     formData: {},
     activePage: null,
+    hideSection: true,
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
@@ -39,6 +41,7 @@ export const BookContext = React.createContext<BookState>({
     parentId: '',
     formData: {},
     activePage: [],
+    hideSection: true,
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
@@ -53,7 +56,6 @@ const fetchData = (state: BookState, dispatch: Function) => {
     if (apiState) return;
     service.fetch(bookId).then((context: any) => {
         let res = context.map_res().data;
-        console.log('res', res);
         dispatch({
             ...state,
             type: 'API_STATE',
@@ -87,24 +89,25 @@ const idSetter = (state: any, action: any) => {
     }
 }
 
-const formPageViewSetter = (state: any, action: any) => {
-    switch (action.viewType) {
+const formPageSetter = (state: any, action: any) => {
+    const { payload, viewType } = action;
+    switch (viewType) {
         case FORM_TYPE.FRONT_COVER:
-            return { ...state, viewState: FORM_TYPE.FRONT_COVER };
+            return { ...state, viewState: FORM_TYPE.FRONT_COVER, formData: payload  };
         case FORM_TYPE.BACK_COVER:
-            return { ...state, viewState: FORM_TYPE.BACK_COVER };
+            return { ...state, viewState: FORM_TYPE.BACK_COVER, formData: payload  };
         case FORM_TYPE.CHAPTER:
-            return { ...state, viewState: FORM_TYPE.CHAPTER };
+            return { ...state, viewState: FORM_TYPE.CHAPTER, formData: payload  };
         case FORM_TYPE.PAGE:
-            return { ...state, viewState: FORM_TYPE.PAGE };
+            return { ...state, viewState: FORM_TYPE.PAGE, formData: payload  };
         case FORM_TYPE.SECTION: 
-            return { ...state, viewState: FORM_TYPE.SECTION};
+            return { ...state, viewState: FORM_TYPE.SECTION, formData: payload };
         case FORM_TYPE.SUB_SECTION:
-            return { ...state, viewState: FORM_TYPE.SUB_SECTION };
+            return { ...state, viewState: FORM_TYPE.SUB_SECTION, formData: payload  };
         case FORM_TYPE.CREATE_UPDATE:
-            return { ...state, viewState: FORM_TYPE.CREATE_UPDATE };
+            return { ...state, viewState: FORM_TYPE.CREATE_UPDATE, formData: payload  };
         case FORM_TYPE.NONE:
-            return { ...state, viewState: FORM_TYPE.NONE };
+            return { ...state, viewState: FORM_TYPE.NONE, formData: payload  };
         default:
             throw new Error(`Unknown type: ${action.viewType}`);
     }
@@ -120,7 +123,7 @@ const setActivePage = (state: any, action: any) => {
             if (page.uniqueId === pageId) {
                 page.child.forEach((section: any) => {
                     if (section.uniqueId === sectionId) {
-                        __state = { ...state, activePage: section };
+                        __state = { ...state, activePage: section, hideSection: false };
                     }
                 })
             }
@@ -128,7 +131,7 @@ const setActivePage = (state: any, action: any) => {
     } else {
         data.forEach((page: any) => {
             if (page.uniqueId === pageId) {
-                __state = { ...state, activePage: page };
+                __state = { ...state, activePage: page, hideSection: true };
             }
         });
     }
@@ -166,8 +169,8 @@ const reducer = (state: any, action: any) => {
         case 'ID_SETTER':
             return idSetter(state, action);
 
-        case 'FORM_VIEW_SETTER': 
-            return formPageViewSetter(state, action);
+        case 'FORM_PAGE_SETTER': 
+            return formPageSetter(state, action);
         
         case 'ACTIVE_PAGE':
             return setActivePage(state, action);

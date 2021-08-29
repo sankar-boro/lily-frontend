@@ -165,40 +165,33 @@ const addNewSection = (
     props: any,
     context: any
 ) => {
-    console.log('props', props);
-    const { sectionIndex, sections, chapter } = props;
+    const { sectionIndex, page } = props;
+    let sections = page.child;
     const { dispatch } = context;
-    if (sectionIndex === null && sections.length === 0) {
+    if (!sectionIndex && sections.length === 0) {
         dispatch({
-            type: 'FORM_VIEW_SETTER',
+            type: 'FORM_PAGE_SETTER',
             viewType: FORM_TYPE.SECTION,
-        });
-        dispatch({
-            type: 'ID_SETTER',
             payload: {
-                parentId: chapter.uniqueId,
+                parentId: page.uniqueId,
                 identity: 105
             },
-            idType: 'FORM',
         });
         return;
     }
 
-    if (sectionIndex === null && sections.length > 0) {
-        const topUniqueId = chapter.uniqueId;
+    if (!sectionIndex && sections.length > 0) {
+        console.log('sections', sections);
+        const topUniqueId = page.uniqueId;
         const botUniqueId = sections[0].uniqueId;
         dispatch({
-            type: 'FORM_VIEW_SETTER',
-            viewType: FORM_TYPE.CREATE_UPDATE,
-        });
-        dispatch({
-            type: 'ID_SETTER',
+            type: 'FORM_PAGE_SETTER',
             payload: {
                 topUniqueId,
                 botUniqueId,
                 identity: 105,
             },
-            idType: 'FORM',
+            viewType: FORM_TYPE.CREATE_UPDATE,
         });
         return;
     }
@@ -208,16 +201,12 @@ const addNewSection = (
     if (sectionIndex === lastSectionIndex) {
         const uniqueId = sections[sectionIndex].uniqueId;
         dispatch({
-            type: 'FORM_VIEW_SETTER',
-            viewType: FORM_TYPE.SECTION,
-        });
-        dispatch({
-            type: 'ID_SETTER',
+            type: 'FORM_PAGE_SETTER',
             payload: {
                 parentId: uniqueId,
                 identity: 105,
             },
-            idType: 'FORM',
+            viewType: FORM_TYPE.SECTION,
         });
         return;
     }
@@ -226,55 +215,42 @@ const addNewSection = (
         const topUniqueId = sections[sectionIndex].uniqueId;
         const botUniqueId = sections[sectionIndex + 1].uniqueId;
         dispatch({
-            type: 'FORM_VIEW_SETTER',
-            viewType: FORM_TYPE.SECTION,
-        });
-        dispatch({
-            type: 'ID_SETTER',
+            type: 'FORM_PAGE_SETTER',
             payload: {
                 topUniqueId,
                 botUniqueId,
                 identity: 105,
             },
-            idType: 'FORM',
+            viewType: FORM_TYPE.SECTION,
         });
     }
 };
 
 const addNewChapter = (props: any, context: any) => {
-    const { chapter, data, chapterIndex } = props;
-    console.log('data', data);
-    const { dispatch } = context;
+    const { chapter, pageIndex } = props;
+    const { dispatch, data } = context;
     const lastPageIndex = data.length - 1;
     
-    if (chapterIndex === lastPageIndex) {
+    if (pageIndex === lastPageIndex) {
         dispatch({
-            type: 'FORM_VIEW_SETTER',
+            type: 'FORM_PAGE_SETTER',
             viewType: FORM_TYPE.CHAPTER,
-        });
-        dispatch({
-            type: 'ID_SETTER',
             payload: {
                 parentId: chapter.uniqueId,
                 identity: 104,
-            },
-            idType: 'FORM',
+            }
         });
     } else {
-        const topUniqueId = data[chapterIndex].uniqueId;
-        const botUniqueId = data[chapterIndex + 1].uniqueId;
+        const topUniqueId = data[pageIndex].uniqueId;
+        const botUniqueId = data[pageIndex + 1].uniqueId;
         dispatch({
-            type: 'FORM_VIEW_SETTER',
+            type: 'FORM_PAGE_SETTER',
             viewType: FORM_TYPE.CREATE_UPDATE,
-        });
-        dispatch({
-            type: 'ID_SETTER',
             payload: {
                 topUniqueId,
                 botUniqueId,
                 identity: 104,
-            },
-            idType: 'FORM',
+            }
         });
     }
 };
@@ -324,56 +300,43 @@ const createSubSection = (context: any, sectionId: string, subSectionIndex: numb
 
     if (!subSectionIndex && subSections.length === 0) {
         dispatch({
-            type: 'FORM_VIEW_SETTER',
+            type: 'FORM_PAGE_SETTER',
             viewType: FORM_TYPE.SUB_SECTION,
-        });
-        dispatch({
-            type: 'ID_SETTER',
             payload: {
                 parentId: sectionId,
                 identity: 106,
-            },
-            idType: 'FORM',
+            }
         });
         return;
     }
 
 
     if (!subSectionIndex && subSections.length > 0) {
-        dispatch({
-            type: 'FORM_VIEW_SETTER',
-            viewType: FORM_TYPE.CREATE_UPDATE,
-        });
         let topUniqueId = sectionId;
         let botUniqueId = subSections[0].uniqueId;
         dispatch({
-            type: 'ID_SETTER',
+            type: 'FORM_PAGE_SETTER',
             payload: {
                 topUniqueId,
                 botUniqueId,
                 identity: 106,
             },
-            idType: 'FORM',
+            viewType: FORM_TYPE.CREATE_UPDATE,
         });
         return;
     }
 
     if (subSectionIndex) {
-
-        dispatch({
-            type: 'FORM_VIEW_SETTER',
-            viewType: FORM_TYPE.CREATE_UPDATE,
-        });
         let topUniqueId = subSections[subSectionIndex].uniqueId;
         let botUniqueId = subSections[subSectionIndex+1].uniqueId;
         dispatch({
-            type: 'ID_SETTER',
+            type: 'FORM_PAGE_SETTER',
+            viewType: FORM_TYPE.CREATE_UPDATE,
             payload: {
                 topUniqueId,
                 botUniqueId,
                 identity: 106,
             },
-            idType: 'FORM',
         });
     }
 }
