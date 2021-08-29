@@ -3,8 +3,7 @@ import { useBookContext} from "../../service/BookServiceProvider";
 
 const ReadBookNavigation = (props: any) => {
     const context = useBookContext();
-    const { service } = context;
-    const { data } = service;
+    const { data } = context;
 
     const doSome = (data: any) => {
         let child = [];

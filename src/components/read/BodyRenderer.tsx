@@ -16,15 +16,15 @@ const Main = (props: any) => {
                 <div className="con-80 flex">
                     <div className="con-10" style={{backgroundColor: "#e8feff" }}/>
                     <div className="con-80" style={{ backgroundColor: "#e8e8ff" }}>
-                        <h3 className="h3" style={{marginBottom: 15 }}>{activePage.title}</h3>
+                        <h3 className="h3">{activePage.title}</h3>
                         <div className="description">{activePage.body}</div>
-                        {sectionId &&
+                        {activePage &&
                             activePage.child &&
                             activePage.child.length > 0 &&
                             activePage.child.map((x: Book) => {
                                 return (
                                     <div key={x.uniqueId}>
-                                        <h4>{x.title}</h4>
+                                        <h4 className="h4">{x.title}</h4>
                                         <div className="description">{x.body}</div>
                                     </div>
                                 );

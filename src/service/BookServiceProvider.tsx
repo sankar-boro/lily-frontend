@@ -11,7 +11,6 @@ export type BookState = {
     parentId: string;
     formData: object;
     activePage: Book[] | null;
-    activeSection: null;
     apiState: string | null;
     error: string;
     dispatch: Function,
@@ -25,7 +24,6 @@ const bookState = {
     parentId: '',
     formData: {},
     activePage: null,
-    activeSection: null,
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
@@ -41,7 +39,6 @@ export const BookContext = React.createContext<BookState>({
     parentId: '',
     formData: {},
     activePage: [],
-    activeSection: null,
     apiState: null,
     error: '',
     dispatch: (data: any) => {},
@@ -54,17 +51,14 @@ const fetchData = (state: BookState, dispatch: Function) => {
     const { apiState, service, bookId } = state;
     // We only want this function to be performed once
     if (apiState) return;
-    dispatch({
-        ...state,
-        type: 'INIT',
-    });
     service.fetch(bookId).then((context: any) => {
         let res = context.map_res().data;
-        let bookData = sortAll(res);
+        console.log('res', res);
         dispatch({
             ...state,
-            type: 'SUCCESS',
-            payload: bookData,
+            type: 'API_STATE',
+            status: 'SUCCESS',
+            payload: res,
         });
         dispatch({
             type: 'ACTIVE_PAGE',
@@ -116,10 +110,6 @@ const formPageViewSetter = (state: any, action: any) => {
     }
 }
 
-const formPageUpdateSetter = (state: any, action: any) => {
-
-}
-
 const setActivePage = (state: any, action: any) => {
     const { service } = state;
     const { data } = service;
@@ -146,19 +136,32 @@ const setActivePage = (state: any, action: any) => {
     return __state;
 }
 
-const reducer = (state: any, action: any) => {
-    switch (action.type) {
-        case 'INIT':
-          return { ...state, apiState: 'INIT' };
-    
-        case 'FETCHING':
-          return { ...state, apiState: 'FETCHING' };
-    
+const setApiState = (state: any, action: any) => {
+    const { status, payload } = action;
+    switch (status) {
         case 'SUCCESS':
-          return { ...state, data: action.payload, apiState: 'SUCCESS' };
-    
+          return { ...state, data: payload, apiState: 'SUCCESS' };
+
         case 'ERROR':
-          return { ...state, apiError: action.payload, apiState: 'ERROR' };
+            return { ...state, err: payload, apiState: 'ERROR' };      
+
+        case 'INIT':
+            return state;
+            
+        default:
+            throw new Error(`Unknown type: ${action.status}`);
+    }
+}
+
+const reducer = (state: any, action: any) => {
+    const { type, payload } = action;
+    
+    switch (type) {
+        case 'API_STATE':
+          return setApiState(state, action);
+
+        case 'API_DATA':
+            return { ...state, data: payload };      
 
         case 'ID_SETTER':
             return idSetter(state, action);
@@ -166,14 +169,8 @@ const reducer = (state: any, action: any) => {
         case 'FORM_VIEW_SETTER': 
             return formPageViewSetter(state, action);
         
-        case 'FORM_UPDATE_SETTER': 
-            return formPageUpdateSetter(state, action);
-        
         case 'ACTIVE_PAGE':
             return setActivePage(state, action);
-
-        case 'ACTIVE_SECTION':
-            return { ...state, activeSection: action.payload };
             
         default:
             throw new Error(`Unknown type: ${action.type}`);

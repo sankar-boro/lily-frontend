@@ -169,17 +169,23 @@ html, body {
 /* Headers */
 .h1 {
     font-family: 'SSP-SB', sans-serif;
-    font-size: 28px;
+    font-size: 32px;
     padding: 8px 0px;
     color: #4a4a4a;
 }
 .h2 {
     font-family: 'SSP-SB', sans-serif;
-    font-size: 24px;
+    font-size: 28px;
     padding: 8px 0px;
     color: #4a4a4a;
 }
 .h3 {
+    font-family: 'SSP-SB', sans-serif;
+    font-size: 24px;
+    padding: 8px 0px;
+    color: #4a4a4a;
+}
+.h4 {
     font-family: 'SSP-SB', sans-serif;
     font-size: 20px;
     padding: 8px 0px;
