@@ -163,9 +163,8 @@ const displayNone = (c: any, a: string) => {
 
 const addNewSection = (
     props: any,
-    context: any
 ) => {
-    const { sectionIndex, page } = props;
+    const { sectionIndex, page, context } = props;
     let sections = page.child;
     const { dispatch } = context;
     if (!sectionIndex && sections.length === 0) {
@@ -226,9 +225,9 @@ const addNewSection = (
     }
 };
 
-const addNewChapter = (props: any, context: any) => {
-    const { chapter, pageIndex } = props;
-    const { dispatch, data } = context;
+const addNewChapter = (props: any) => {
+    const { chapter, pageIndex, context } = props;
+    const { data, dispatch } = context;
     const lastPageIndex = data.length - 1;
     
     if (pageIndex === lastPageIndex) {

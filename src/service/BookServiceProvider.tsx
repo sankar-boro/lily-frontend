@@ -123,7 +123,7 @@ const setActivePage = (state: any, action: any) => {
             if (page.uniqueId === pageId) {
                 page.child.forEach((section: any) => {
                     if (section.uniqueId === sectionId) {
-                        __state = { ...state, activePage: section, hideSection: false };
+                        __state = { ...state, activePage: section, hideSection: false, viewState: FORM_TYPE.NONE };
                     }
                 })
             }
@@ -131,7 +131,7 @@ const setActivePage = (state: any, action: any) => {
     } else {
         data.forEach((page: any) => {
             if (page.uniqueId === pageId) {
-                __state = { ...state, activePage: page, hideSection: true };
+                __state = { ...state, activePage: page, hideSection: true, viewState: FORM_TYPE.NONE };
             }
         });
     }

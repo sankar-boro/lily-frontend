@@ -60,13 +60,12 @@ const PageTitle = (props: any) => {
 }
 
 const AddSection = (props: any) => {
-    const context = useBookContext();
     return <div 
         className="hover" 
         style={{marginTop:5}}
         onClick={(e: any) => {
             e.preventDefault();
-            addNewSection(props, context);
+            addNewSection(props);
         }}
     >
         <span style={{ marginLeft: 20, fontSize: 12 }}>+ Add section</span>
@@ -74,14 +73,13 @@ const AddSection = (props: any) => {
 }
 
 const AddChapter = (props: any) => {
-    const context = useBookContext();
     return (
         <div
             style={{marginTop:5}}
             className="hover"
             onClick={(e: any) => {
                 e.preventDefault();
-                addNewChapter(props, context);
+                addNewChapter(props);
             }}
         >
             <span style={{ fontSize: 12 }}>+ Add chapter</span>
@@ -103,11 +101,18 @@ const NavigationPages = (props: any) => {
 
 const Main = () => {
     const context = useBookContext();
-    const { data: bookPages } = context.service;
+    const { data: pages } = context;
     return (
         <div className="con-20" style={{ padding: "0px 10px" }}>
             <div style={{ height: 35 }}/>
-            {bookPages.map((page: any, pageIndex: number) => <NavigationPages page={page} pageIndex={pageIndex} context={context} key={`${pageIndex}`} />)}
+            {pages.map((page: any, pageIndex: number) => 
+                <NavigationPages 
+                    page={page} 
+                    pageIndex={pageIndex} 
+                    context={context} 
+                    key={page.uniqueId} 
+                />
+            )}
         </div>
     );
 };
