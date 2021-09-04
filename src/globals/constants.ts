@@ -3,6 +3,13 @@ const constants = {
     RESULT: 200,
     WAITING: 300,
     LOCKED: 409,
+    heights: {
+        fromTopNav: {
+            leftBar: 35,
+            rightBar: 35,
+            _sbody: 35,
+        }
+    }
 }
 
 export {constants};

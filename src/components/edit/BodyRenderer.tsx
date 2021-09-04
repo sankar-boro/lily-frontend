@@ -1,4 +1,6 @@
 import { useHistory } from "react-router-dom";
+import { MdHome } from 'react-icons/md';
+
 import Divider from "./Divider";
 import AddSection from "../forms/Section";
 import AddChapter from "../forms/Chapter";
@@ -59,14 +61,16 @@ const Body = (props: any) => {
 }
 
 const Main = (props: any) => {
-    const { title } = props;
+    const { title, history } = props;
     return (
-        <div className="con-80" style={{ backgroundColor: "#ceffc9" }}>
+        <div className="con-80" style={{ backgroundColor: "#ffedbd" }}>
             {/* Book title */}
-            <div className="flex" style={{ height: 35, alignItems: "center" }}>
+            <div className="flex" style={{ height: 35, alignItems: "center", backgroundColor: "#ffbdff" }}>
                 <div style={{ width:"20%" }}></div>
                 <div style={{ width:"60%" }}><h2 className="h2">{title}</h2></div>
-                <div style={{ width:"20%" }}></div>
+                <div style={{ width:"20%" }}>
+                    <MdHome className="hover" onClick={() => { history.replace({ pathname: "/"})}}/>
+                </div>
             </div>
             {/* Book title */}
             <Body {...props} />
@@ -98,7 +102,7 @@ const BodyRenderer = (props: any) => {
     const context: any = useBookContext();
     const { activePage, sectionId } = context;
 
-    const mainProps = { title, activePage, sectionId, context };
+    const mainProps = { title, activePage, sectionId, context, history };
 
     if (!activePage) return null;
     

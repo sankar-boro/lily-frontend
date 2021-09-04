@@ -226,7 +226,7 @@ const addNewSection = (
 };
 
 const addNewChapter = (props: any) => {
-    const { chapter, pageIndex, context } = props;
+    const { page, pageIndex, context } = props;
     const { data, dispatch } = context;
     const lastPageIndex = data.length - 1;
     
@@ -235,11 +235,12 @@ const addNewChapter = (props: any) => {
             type: 'FORM_PAGE_SETTER',
             viewType: FORM_TYPE.CHAPTER,
             payload: {
-                parentId: chapter.uniqueId,
+                parentId: page.uniqueId,
                 identity: 104,
             }
         });
     } else {
+        if (!data && !data[pageIndex]) return;
         const topUniqueId = data[pageIndex].uniqueId;
         const botUniqueId = data[pageIndex + 1].uniqueId;
         dispatch({
@@ -256,11 +257,11 @@ const addNewChapter = (props: any) => {
 
 const sectionOnClick = (e: any, props: any, section: any) => {
     e.preventDefault();
-    const { context, chapter } = props;
+    const { context, page } = props;
     console.log(props);
     context.dispatch({
         type: 'ID_SETTER',
-        payload: chapter.uniqueId,
+        payload: page.uniqueId,
         idType: 'ACTIVE',
     });
     context.dispatch({

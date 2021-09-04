@@ -27,7 +27,7 @@ const Sections = (props: any) => {
                         })
                     }}
                     key={section.uniqueId}
-                    className="section-nav"
+                    className="section-nav hover"
                 >
                     {section.title}
                 </div>
@@ -60,6 +60,10 @@ const PageTitle = (props: any) => {
 }
 
 const AddSection = (props: any) => {
+    const { pageIndex } = props;
+
+    if (pageIndex === 0) return null;
+    
     return <div 
         className="hover" 
         style={{marginTop:5}}

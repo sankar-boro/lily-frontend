@@ -1,7 +1,12 @@
 import { useHistory } from "react-router-dom";
+import { MdHome } from 'react-icons/md';
+
 import Divider from "./Divider";
 import { Book } from "../../globals/types/book";
 import { useBookContext } from "../../service/BookServiceProvider";
+import { constants } from "../../globals/constants";
+
+const { _sbody } = constants.heights.fromTopNav;
 
 const SubSections = (props: any) => {
     const { activePage, context } = props;
@@ -24,13 +29,16 @@ const SubSections = (props: any) => {
 }
 
 const Main = (props: any) => {
-    const { title, activePage } = props;
+    const { title, activePage, history } = props;
     return (
         <div className="con-80">
-            <div className="con-100 flex" style={{ height: 35, alignItems: "center", backgroundColor: "#e8eaff" }}>
+            <div className="con-100 flex" style={{ height: _sbody, alignItems: "center", backgroundColor: "#ffedbd" }}>
                 <div style={{ width:"20%" }}></div>
                 <div style={{ width:"60%" }}><h2 className="h2">{title}</h2></div>
-                <div style={{ width:"20%" }}></div>
+                <div style={{ width:"20%" }}>
+
+                    <MdHome className="hover" onClick={() => { history.replace({ pathname: "/"})}}/>
+                </div>
             </div>
             <div className="con-100 flex">
                 <div className="con-80 flex">
@@ -53,7 +61,7 @@ const BodyRenderer = (props: any) => {
     const { title } = history.location.state;
     const context: any = useBookContext();
     const { activePage, sectionId } = context;
-    const temp = {title, activePage, sectionId, context };
+    const temp = {title, activePage, sectionId, context, history };
 
     if (activePage === null) return null;
 
