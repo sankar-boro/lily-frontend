@@ -9,16 +9,6 @@ import CreateUpdate from "../forms/CreateUpdate";
 import { Book, FORM_TYPE } from "../../globals/types/index";
 import { useBookContext } from "../../service/BookServiceProvider";
 
-// const SubSectionBody = (section: any, subSectionIndex: number, props: any) => {
-//     const { uniqueId, title, body } = section;
-//     return <div key={uniqueId}>
-//         <div>
-//             <h3 className="h3">{title}</h3>
-//             <div className="description">{body}</div>
-//         </div>
-//     </div>
-// }
-
 const SubSections = (props: any) => {
     const { activePage, context } = props;
     const { hideSection } = context;
@@ -43,21 +33,34 @@ const Body = (props: any) => {
     const { activePage } = props;
 
     if (context.viewState !== FORM_TYPE.NONE) {
-        return <FormView />;
+        return (
+            <div className="flex" style={{ backgroundColor: "#feffc4" }}>
+                <div className="con-80 flex">
+                    <div className="con-10" style={{ backgroundColor: "#f5fff0"}} />
+                    <div className="con-80">
+                        <FormView />
+                    </div>
+                    <div className="con-10" style={{ backgroundColor: "#e8feff" }} />
+                </div>
+                <Divider {...props} />
+            </div>
+        );
     }
 
-    return <div className="flex" style={{ backgroundColor: "#feffc4" }}>
-        <div className="con-80 flex">
-            <div className="con-10" style={{ backgroundColor: "#f5fff0"}} />
-            <div className="con-80">
-                <h3 className="h3">{activePage.title}</h3>
-                <div className="description">{activePage.body}</div>
-                <SubSections {...props} />
+    return (
+        <div className="flex" style={{ backgroundColor: "#feffc4" }}>
+            <div className="con-80 flex">
+                <div className="con-10" style={{ backgroundColor: "#f5fff0"}} />
+                <div className="con-80">
+                    <h3 className="h3">{activePage.title}</h3>
+                    <div className="description">{activePage.body}</div>
+                    <SubSections {...props} />
+                </div>
+                <div className="con-10" style={{ backgroundColor: "#e8feff" }} />
             </div>
-            <div className="con-10" style={{ backgroundColor: "#e8feff" }} />
+            <Divider {...props} />
         </div>
-        <Divider activePage={activePage} />
-    </div>
+    );
 }
 
 const Main = (props: any) => {

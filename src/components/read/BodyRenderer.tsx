@@ -50,7 +50,7 @@ const Main = (props: any) => {
                     </div>
                     <div className="con-10" style={{ backgroundColor: "#fffee0" }}/>
                 </div>
-                <Divider />
+                <Divider {...props} />
             </div>
         </div>
     );

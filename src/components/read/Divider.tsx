@@ -1,9 +1,10 @@
 import { useHistory } from "react-router";
-import { useBookContext } from "../../service/BookServiceProvider";
+import { Book } from "../../globals/types/index";
 
-const Divider = () => {
+const Divider = (props: any) => {
+    const { activePage, sectionId, context, subSectionIndex } = props;
+    const { identity } = activePage;
     const history: any = useHistory();
-    const context = useBookContext();
     const { bookId } = context;
     const editNavigate = (e: any) => {
         e.preventDefault();
@@ -15,6 +16,13 @@ const Divider = () => {
     return <div className="con-20" style={{backgroundColor: "#ffebf2"}}>
         <div className="li-item hover" onClick={editNavigate}>Edit</div>
         <div className="li-item hover">Delete</div>
+        <div>
+            {identity === 105 && activePage.child.map((x: Book, subSectionIndex: number) => {
+                return <div className="li-item hover">
+                    {x.title}
+                </div>;
+            })}
+        </div>
     </div>
 }
 

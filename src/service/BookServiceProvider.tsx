@@ -10,6 +10,7 @@ export type BookState = {
     editSubSectionId: string;
     parentId: string;
     formData: object;
+    viewData: object;
     activePage: Book[] | null;
     hideSection: boolean;
     apiState: string | null;
@@ -24,6 +25,7 @@ const bookState = {
     editSubSectionId: '',
     parentId: '',
     formData: {},
+    viewData: {},
     activePage: null,
     hideSection: true,
     apiState: null,
@@ -40,6 +42,7 @@ export const BookContext = React.createContext<BookState>({
     editSubSectionId: '',
     parentId: '',
     formData: {},
+    viewData: {},
     activePage: [],
     hideSection: true,
     apiState: null,
@@ -123,7 +126,7 @@ const setActivePage = (state: any, action: any) => {
             if (page.uniqueId === pageId) {
                 page.child.forEach((section: any) => {
                     if (section.uniqueId === sectionId) {
-                        __state = { ...state, activePage: section, hideSection: false, viewState: FORM_TYPE.NONE };
+                        __state = { ...state, activePage: section, viewData: section, hideSection: false, viewState: FORM_TYPE.NONE };
                     }
                 })
             }
@@ -131,7 +134,7 @@ const setActivePage = (state: any, action: any) => {
     } else {
         data.forEach((page: any) => {
             if (page.uniqueId === pageId) {
-                __state = { ...state, activePage: page, hideSection: true, viewState: FORM_TYPE.NONE };
+                __state = { ...state, activePage: page, viewData: page, hideSection: true, viewState: FORM_TYPE.NONE };
             }
         });
     }

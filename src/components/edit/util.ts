@@ -180,7 +180,6 @@ const addNewSection = (
     }
 
     if (!sectionIndex && sections.length > 0) {
-        console.log('sections', sections);
         const topUniqueId = page.uniqueId;
         const botUniqueId = sections[0].uniqueId;
         dispatch({
@@ -258,7 +257,6 @@ const addNewChapter = (props: any) => {
 const sectionOnClick = (e: any, props: any, section: any) => {
     e.preventDefault();
     const { context, page } = props;
-    console.log(props);
     context.dispatch({
         type: 'ID_SETTER',
         payload: page.uniqueId,
@@ -272,7 +270,6 @@ const sectionOnClick = (e: any, props: any, section: any) => {
 }
 
 const editSubSection = (subSectionIndex: number | null, props: any, chapterId: undefined | string) => {
-    console.log('props', props);
     const { context, sections } = props;
     
     if (chapterId) {
@@ -293,10 +290,12 @@ const editSubSection = (subSectionIndex: number | null, props: any, chapterId: u
     }
 }
 
-const createSubSection = (context: any, sectionId: string, subSectionIndex: number | null, subSections: Book[]) => {
-    
-    if (!sectionId) return;
+const createSubSection = (props: any) => {
+    const { context, subSectionIndex, activePage } = props;
+    const { viewData } = context;
+    const subSections = activePage.child;
     const { dispatch } = context;
+    const sectionId = viewData.uniqueId;
 
     if (!subSectionIndex && subSections.length === 0) {
         dispatch({
@@ -326,15 +325,30 @@ const createSubSection = (context: any, sectionId: string, subSectionIndex: numb
         return;
     }
 
-    if (subSectionIndex) {
+    const subSectionsLength = subSections.length - 1;
+
+    if (subSectionIndex && subSectionIndex < subSectionsLength) {
         let topUniqueId = subSections[subSectionIndex].uniqueId;
         let botUniqueId = subSections[subSectionIndex+1].uniqueId;
         dispatch({
             type: 'FORM_PAGE_SETTER',
-            viewType: FORM_TYPE.CREATE_UPDATE,
             payload: {
                 topUniqueId,
                 botUniqueId,
+                identity: 106,
+            },
+            viewType: FORM_TYPE.CREATE_UPDATE,
+        });
+        return;
+    }
+
+    if (subSectionIndex && subSectionIndex === subSectionsLength) {
+        let topUniqueId = subSections[subSectionIndex].uniqueId;
+        dispatch({
+            type: 'FORM_PAGE_SETTER',
+            viewType: FORM_TYPE.SUB_SECTION,
+            payload: {
+                parentId: topUniqueId,
                 identity: 106,
             },
         });
