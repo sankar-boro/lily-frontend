@@ -7,10 +7,10 @@ export type BookState = {
     data: any;
     service: BookService;
     bookId: string;
-    editSubSectionId: string;
     parentId: string;
     formData: object;
     viewData: object;
+    editData: object;
     activePage: Book[] | null;
     hideSection: boolean;
     apiState: string | null;
@@ -22,10 +22,10 @@ export type BookState = {
 const bookState = {
     data: null,
     bookId: '',
-    editSubSectionId: '',
     parentId: '',
     formData: {},
     viewData: {},
+    editData: {},
     activePage: null,
     hideSection: true,
     apiState: null,
@@ -39,10 +39,10 @@ export const BookContext = React.createContext<BookState>({
     data: null,
     service: new BookHandler(),
     bookId: '',
-    editSubSectionId: '',
     parentId: '',
     formData: {},
     viewData: {},
+    editData: {},
     activePage: [],
     hideSection: true,
     apiState: null,
@@ -74,19 +74,14 @@ const fetchData = (state: BookState, dispatch: Function) => {
     })
 }
 
-const idSetter = (state: any, action: any) => {
+const setters = (state: any, action: any) => {
     const { payload } = action;
     switch (action.idType) {
-        case ID_TYPES.BOOK:
+        case 'EDIT_DATA':
+            return { ...state, editData: payload };
+        case 'BOOK_ID':
             return { ...state, bookId: payload };
-        case ID_TYPES.ACTIVE:
-            return { ...state, activeId: payload };
-        case ID_TYPES.SECTION:
-            return { ...state, sectionId: payload };
-        case ID_TYPES.PARENT:
-            return { ...state, parentId: payload };
-        case ID_TYPES.FORM: 
-            return { ...state, formData: payload };
+            
         default:
             throw new Error(`Unknown type: ${action.idType}`);
     }
@@ -126,7 +121,8 @@ const setActivePage = (state: any, action: any) => {
             if (page.uniqueId === pageId) {
                 page.child.forEach((section: any) => {
                     if (section.uniqueId === sectionId) {
-                        __state = { ...state, activePage: section, viewData: section, hideSection: false, viewState: FORM_TYPE.NONE };
+                        const { child, ...others } = section;
+                        __state = { ...state, activePage: section, viewData: others, hideSection: false, viewState: FORM_TYPE.NONE };
                     }
                 })
             }
@@ -134,7 +130,8 @@ const setActivePage = (state: any, action: any) => {
     } else {
         data.forEach((page: any) => {
             if (page.uniqueId === pageId) {
-                __state = { ...state, activePage: page, viewData: page, hideSection: true, viewState: FORM_TYPE.NONE };
+                const { child, ...others } = page;
+                __state = { ...state, activePage: page, viewData: others, hideSection: true, viewState: FORM_TYPE.NONE };
             }
         });
     }
@@ -169,8 +166,8 @@ const reducer = (state: any, action: any) => {
         case 'API_DATA':
             return { ...state, data: payload };      
 
-        case 'ID_SETTER':
-            return idSetter(state, action);
+        case 'SETTERS':
+            return setters(state, action);
 
         case 'FORM_PAGE_SETTER': 
             return formPageSetter(state, action);

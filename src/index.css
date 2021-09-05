@@ -156,7 +156,10 @@ html, body {
     justify-content: center;
     align-items: center;
 }
-
+.center {
+    justify-content: center;
+    align-items: center;
+}
 /* Custom page containers */
 .container-login {
     width: 345px;

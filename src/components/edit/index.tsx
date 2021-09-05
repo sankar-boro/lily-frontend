@@ -15,8 +15,8 @@ const Body = () => {
 
     const initState = () => {
         dispatch({
-            type: 'ID_SETTER',
-            idType: 'BOOK',
+            type: 'SETTERS',
+            idType: 'BOOK_ID',
             payload: bookId,
         });
         setRead(true);

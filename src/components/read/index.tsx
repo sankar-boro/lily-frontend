@@ -11,8 +11,8 @@ const Main = () => {
 
     useEffect(() => {
         context.dispatch({
-            type: 'ID_SETTER',
-            idType: 'BOOK',
+            type: 'SETTERS',
+            idType: 'BOOK_ID',
             payload: history.location.state.bookId,
         });
         authContext.setRead(true);

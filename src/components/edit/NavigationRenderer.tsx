@@ -1,4 +1,4 @@
-import { addNewChapter, addNewSection, sectionOnClick } from "./util";
+import { addNewChapter, addNewSection } from "./util";
 import { useBookContext} from "../../service/BookServiceProvider";
 
 const Sections = (props: any) => {

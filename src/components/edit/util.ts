@@ -254,27 +254,12 @@ const addNewChapter = (props: any) => {
     }
 };
 
-const sectionOnClick = (e: any, props: any, section: any) => {
-    e.preventDefault();
-    const { context, page } = props;
-    context.dispatch({
-        type: 'ID_SETTER',
-        payload: page.uniqueId,
-        idType: 'ACTIVE',
-    });
-    context.dispatch({
-        type: 'ID_SETTER',
-        payload: section.uniqueId,
-        idType: 'SECTION',
-    });
-}
-
 const editSubSection = (subSectionIndex: number | null, props: any, chapterId: undefined | string) => {
     const { context, sections } = props;
     
     if (chapterId) {
         context.dispatch({
-            type: 'ID_SETTER',
+            type: 'SETTERS',
             payload: chapterId,
             idType: 'SECTION',
         });
@@ -283,7 +268,7 @@ const editSubSection = (subSectionIndex: number | null, props: any, chapterId: u
     if (subSectionIndex) {
         const section = sections[subSectionIndex];
         context.dispatch({
-            type: 'ID_SETTER',
+            type: 'SETTERS',
             payload: section.uniqueId,
             idType: 'SECTION',
         });
@@ -363,8 +348,6 @@ export {
     getPages, 
     addNewChapter, 
     addNewSection, 
-    sectionOnClick,
-    editSubSection,
     createSubSection
 };
 

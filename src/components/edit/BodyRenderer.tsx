@@ -1,5 +1,5 @@
 import { useHistory } from "react-router-dom";
-import { MdHome } from 'react-icons/md';
+import { MdHome, MdModeEdit } from 'react-icons/md';
 
 import Divider from "./Divider";
 import AddSection from "../forms/Section";
@@ -8,6 +8,25 @@ import SubSection from "../forms/SubSection";
 import CreateUpdate from "../forms/CreateUpdate";
 import { Book, FORM_TYPE } from "../../globals/types/index";
 import { useBookContext } from "../../service/BookServiceProvider";
+
+
+const FormView = () => {
+    const context: any = useBookContext();
+
+    if (context.viewState === FORM_TYPE.CHAPTER) {
+        return <AddChapter />;
+    }
+    if (context.viewState === FORM_TYPE.SECTION) {
+        return <AddSection />;
+    }
+    if (context.viewState === FORM_TYPE.SUB_SECTION) {
+        return <SubSection />;
+    }
+    if (context.viewState === FORM_TYPE.CREATE_UPDATE) {
+        return <CreateUpdate />;
+    }
+    return null;
+};
 
 const SubSections = (props: any) => {
     const { activePage, context } = props;
@@ -21,7 +40,14 @@ const SubSections = (props: any) => {
     return sections.map((x: Book) => {
         return (
             <div key={x.uniqueId}>
-                <h4 className="h4">{x.title}</h4>
+                <div className="flex center">
+                    <div className="con-95">
+                        <h3 className="h3">{x.title}</h3>
+                    </div>
+                    <div className="con-5 hover">
+                        <MdModeEdit />
+                    </div>
+                </div>
                 <div className="description">{x.body}</div>
             </div>
         );
@@ -52,7 +78,16 @@ const Body = (props: any) => {
             <div className="con-80 flex">
                 <div className="con-10" style={{ backgroundColor: "#f5fff0"}} />
                 <div className="con-80">
-                    <h3 className="h3">{activePage.title}</h3>
+                    <div className="flex center">
+                        <div className="con-95">
+                            <h3 className="h3">{activePage.title}</h3>
+                        </div>
+                        <div className="con-5 hover">
+                            <MdModeEdit onClick={() => {
+                                
+                            }}/>
+                        </div>
+                    </div>
                     <div className="description">{activePage.body}</div>
                     <SubSections {...props} />
                 </div>
@@ -81,25 +116,7 @@ const Main = (props: any) => {
     );
 }
 
-const FormView = () => {
-    const context: any = useBookContext();
-
-    if (context.viewState === FORM_TYPE.CHAPTER) {
-        return <AddChapter />;
-    }
-    if (context.viewState === FORM_TYPE.SECTION) {
-        return <AddSection />;
-    }
-    if (context.viewState === FORM_TYPE.SUB_SECTION) {
-        return <SubSection />;
-    }
-    if (context.viewState === FORM_TYPE.CREATE_UPDATE) {
-        return <CreateUpdate />;
-    }
-    return null;
-};
-
-const BodyRenderer = (props: any) => {
+const BodyRenderer = () => {
     const history: any = useHistory();
     const { title } = history.location.state;
     const context: any = useBookContext();
