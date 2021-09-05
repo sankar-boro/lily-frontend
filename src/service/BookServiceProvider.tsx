@@ -81,10 +81,14 @@ const setters = (state: any, action: any) => {
             return { ...state, editData: payload };
         case 'BOOK_ID':
             return { ...state, bookId: payload };
-            
         default:
             throw new Error(`Unknown type: ${action.idType}`);
     }
+}
+
+const setter = (state: any, action: any) => {
+    const { payload, _setter } = action;
+    return { ...state, [_setter]: payload };
 }
 
 const formPageSetter = (state: any, action: any) => {
@@ -106,6 +110,8 @@ const formPageSetter = (state: any, action: any) => {
             return { ...state, viewState: FORM_TYPE.CREATE_UPDATE, formData: payload  };
         case FORM_TYPE.NONE:
             return { ...state, viewState: FORM_TYPE.NONE, formData: payload  };
+        case FORM_TYPE.UPDATE:
+                return { ...state, viewState: FORM_TYPE.UPDATE, formData: payload  };
         default:
             throw new Error(`Unknown type: ${action.viewType}`);
     }
@@ -168,6 +174,9 @@ const reducer = (state: any, action: any) => {
 
         case 'SETTERS':
             return setters(state, action);
+
+        case 'SETTER':
+            return setter(state, action);
 
         case 'FORM_PAGE_SETTER': 
             return formPageSetter(state, action);

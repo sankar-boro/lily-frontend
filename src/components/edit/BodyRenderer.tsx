@@ -2,6 +2,7 @@ import { useHistory } from "react-router-dom";
 import { MdHome, MdModeEdit } from 'react-icons/md';
 
 import Divider from "./Divider";
+import Update from "../forms/Update";
 import AddSection from "../forms/Section";
 import AddChapter from "../forms/Chapter";
 import SubSection from "../forms/SubSection";
@@ -25,30 +26,40 @@ const FormView = () => {
     if (context.viewState === FORM_TYPE.CREATE_UPDATE) {
         return <CreateUpdate />;
     }
+    if (context.viewState === FORM_TYPE.UPDATE) {
+        return <Update />;
+    }
     return null;
 };
 
 const SubSections = (props: any) => {
     const { activePage, context } = props;
-    const { hideSection } = context;
+    const { hideSection, dispatch } = context;
     if (hideSection) return null;
     if (!activePage) return null;
     if (!activePage.child) return null;
     if (!Array.isArray(activePage.child)) return null;
     const sections = activePage.child;
 
-    return sections.map((x: Book) => {
+    return sections.map((section: any) => {
         return (
-            <div key={x.uniqueId}>
+            <div key={section.uniqueId}>
                 <div className="flex center">
                     <div className="con-95">
-                        <h3 className="h3">{x.title}</h3>
+                        <h3 className="h3">{section.title}</h3>
                     </div>
                     <div className="con-5 hover">
-                        <MdModeEdit />
+                        <MdModeEdit onClick={() => {
+                            const { child, ...others } = section;
+                            dispatch({
+                                type: 'FORM_PAGE_SETTER',
+                                viewType: FORM_TYPE.UPDATE,
+                                payload: others,
+                            });
+                        }}/>
                     </div>
                 </div>
-                <div className="description">{x.body}</div>
+                <div className="description">{section.body}</div>
             </div>
         );
     })
@@ -56,6 +67,7 @@ const SubSections = (props: any) => {
 
 const Body = (props: any) => {
     const context: any = useBookContext();
+    const { dispatch } = context;
     const { activePage } = props;
 
     if (context.viewState !== FORM_TYPE.NONE) {
@@ -84,7 +96,12 @@ const Body = (props: any) => {
                         </div>
                         <div className="con-5 hover">
                             <MdModeEdit onClick={() => {
-                                
+                                const { child, ...others } = activePage;
+                                dispatch({
+                                    type: 'FORM_PAGE_SETTER',
+                                    viewType: FORM_TYPE.UPDATE,
+                                    payload: others,
+                                });
                             }}/>
                         </div>
                     </div>

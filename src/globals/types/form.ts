@@ -15,6 +15,7 @@ enum FORM_TYPE {
     SUB_SECTION = "SUB_SECTION",
     CREATE_UPDATE = "CREATE_UPDATE",
     NONE = "NONE",
+    UPDATE = "UPDATE",
 }
 
 enum ID_TYPES {

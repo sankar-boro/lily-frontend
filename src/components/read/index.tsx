@@ -8,12 +8,13 @@ const Main = () => {
     const context = useBookContext();
     const authContext = useAuthContext();
     const history: any = useHistory();
+    const { bookId } = history.location.state;
 
     useEffect(() => {
         context.dispatch({
-            type: 'SETTERS',
-            idType: 'BOOK_ID',
-            payload: history.location.state.bookId,
+            type: 'SETTER',
+            _setter: 'bookId',
+            payload: bookId,
         });
         authContext.setRead(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
