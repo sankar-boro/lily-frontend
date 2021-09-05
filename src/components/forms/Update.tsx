@@ -1,45 +1,31 @@
 import { useEffect, useState } from "react";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { Book } from "../../globals/types/book";
-import { Form } from "../../globals/types";
+import axios from "axios";
 import { textareaRows, textareaCols } from "../../globals/forms";
 import { useBookContext } from "../../service/BookServiceProvider";
 
-const submitBook = (props: {
-}) => {
-    axios
-        .post(
-            "http://localhost:8000/book/create/new/book",
-            {
-            },
-            {
-                withCredentials: true,
-            }
-        )
-        .then((res: AxiosResponse<{ status: number; data: Book }>) => {
-            if (
-                res.status &&
-                typeof res.status === "number" &&
-                res.status === 200
-            ) {
-            }
-        })
-        .catch((err: AxiosError<any>) => {
-            // console.log("SignupError", err.response);
-        });
+const submitBook = (props: any) => {
+    const url = "http://localhost:8000/book/update";
+    axios.post(
+        url,
+        props,
+        {
+            withCredentials: true,
+        }
+    );
 };
 
 const Update = () => {
     const context: any = useBookContext();
-    const { formData } = context;
+    const { formData, bookId } = context;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [identity, setIdentity] = useState<number | null>(null);
-
+    
     useEffect(() => {
-        setTitle(formData.title);
-        setBody(formData.body);
-        setIdentity(formData.identity);
+        const { title, body, identity } = formData;
+        setTitle(title);
+        setBody(body);
+        setIdentity(identity);
     }, []);
 
     return (
@@ -88,7 +74,9 @@ const Update = () => {
                                 submitBook({
                                     title,
                                     body,
-                                    identity: 101,
+                                    identity,
+                                    bookId,
+                                    uniqueId: formData.uniqueId,
                                 });
                             }}
                         >
