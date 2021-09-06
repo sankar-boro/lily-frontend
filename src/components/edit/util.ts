@@ -254,27 +254,6 @@ const addNewChapter = (props: any) => {
     }
 };
 
-const editSubSection = (subSectionIndex: number | null, props: any, chapterId: undefined | string) => {
-    const { context, sections } = props;
-    
-    if (chapterId) {
-        context.dispatch({
-            type: 'SETTERS',
-            payload: chapterId,
-            idType: 'SECTION',
-        });
-    }
-
-    if (subSectionIndex) {
-        const section = sections[subSectionIndex];
-        context.dispatch({
-            type: 'SETTERS',
-            payload: section.uniqueId,
-            idType: 'SECTION',
-        });
-    }
-}
-
 const createSubSection = (props: any) => {
     const { context, subSectionIndex, activePage } = props;
     const { viewData } = context;

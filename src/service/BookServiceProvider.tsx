@@ -1,26 +1,9 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import { sortAll } from "../globals/forms/index";
-import { FORM_TYPE, ID_TYPES, Book } from "../globals/types";
-import { BookService, BookHandler } from "./handlers/BookService";
-
-export type BookState = {
-    data: any;
-    service: BookService;
-    bookId: string;
-    parentId: string;
-    formData: object;
-    viewData: object;
-    editData: object;
-    activePage: Book[] | null;
-    hideSection: boolean;
-    apiState: string | null;
-    error: string;
-    dispatch: Function,
-    viewState: string,
-};
+import { FORM_TYPE, BOOK_SERVICE } from "../globals/types";
+import { BookHandler } from "./handlers/BookService";
 
 const bookState = {
-    data: null,
+    apiData: null,
     bookId: '',
     parentId: '',
     formData: {},
@@ -35,8 +18,8 @@ const bookState = {
     service: new BookHandler(),
 }
 
-export const BookContext = React.createContext<BookState>({
-    data: null,
+export const BookContext = React.createContext({
+    apiData: null,
     service: new BookHandler(),
     bookId: '',
     parentId: '',
@@ -53,7 +36,7 @@ export const BookContext = React.createContext<BookState>({
 
 export const useBookContext = () => useContext(BookContext);
 
-const fetchData = (state: BookState, dispatch: Function) => {
+const fetchData = (state: any, dispatch: Function) => {
     const { apiState, service, bookId } = state;
     // We only want this function to be performed once
     if (apiState) return;
@@ -72,18 +55,6 @@ const fetchData = (state: BookState, dispatch: Function) => {
         });
         // setActiveId(bookData, state.bookId, dispatch);
     })
-}
-
-const setters = (state: any, action: any) => {
-    const { payload } = action;
-    switch (action.idType) {
-        case 'EDIT_DATA':
-            return { ...state, editData: payload };
-        case 'BOOK_ID':
-            return { ...state, bookId: payload };
-        default:
-            throw new Error(`Unknown type: ${action.idType}`);
-    }
 }
 
 const setter = (state: any, action: any) => {
@@ -149,7 +120,7 @@ const setApiState = (state: any, action: any) => {
     const { status, payload } = action;
     switch (status) {
         case 'SUCCESS':
-          return { ...state, data: payload, apiState: 'SUCCESS' };
+          return { ...state, apiData: payload, apiState: 'SUCCESS' };
 
         case 'ERROR':
             return { ...state, err: payload, apiState: 'ERROR' };      
@@ -166,29 +137,20 @@ const reducer = (state: any, action: any) => {
     const { type, payload } = action;
     
     switch (type) {
-        case 'API_STATE':
+        case BOOK_SERVICE.API_STATE:
           return setApiState(state, action);
-
-        case 'API_DATA':
-            return { ...state, data: payload };      
-
-        case 'SETTERS':
-            return setters(state, action);
-
-        case 'SETTER':
+        case BOOK_SERVICE.API_DATA:
+            return { ...state, data: payload };     
+        case BOOK_SERVICE.SETTER:
             return setter(state, action);
-
-        case 'FORM_PAGE_SETTER': 
+        case BOOK_SERVICE.FORM_PAGE_SETTER: 
             return formPageSetter(state, action);
-        
-        case 'ACTIVE_PAGE':
+        case BOOK_SERVICE.ACTIVE_PAGE:
             return setActivePage(state, action);
-            
         default:
             throw new Error(`Unknown type: ${action.type}`);
     }
 }
-
 
 export default function BookServiceProvider(props: { children: object }){
     const [state, dispatch] = useReducer(reducer, bookState);

@@ -20,7 +20,7 @@ const Main = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    if(!context.data) return <div>Fetching...</div>;
+    if(!context.apiData) return <div>Fetching...</div>;
     return <Renderer />;
 }
 

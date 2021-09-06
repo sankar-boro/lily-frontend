@@ -104,8 +104,8 @@ const NavigationPages = (props: any) => {
 }
 
 const Main = () => {
-    const context = useBookContext();
-    const { data: pages } = context;
+    const context: any = useBookContext();
+    const { apiData: pages } = context;
     return (
         <div className="con-20" style={{ padding: "0px 10px" }}>
             <div style={{ height: 35 }}/>

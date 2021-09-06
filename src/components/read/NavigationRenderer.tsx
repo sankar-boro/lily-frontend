@@ -4,8 +4,8 @@ import { constants } from "../../globals/constants";
 const { leftBar } = constants.heights.fromTopNav;
 
 const ReadBookNavigation = (props: any) => {
-    const context = useBookContext();
-    const { data } = context;
+    const context: any = useBookContext();
+    const { apiData } = context;
 
     const doSome = (data: any) => {
         let child = [];
@@ -21,7 +21,7 @@ const ReadBookNavigation = (props: any) => {
     return (
         <div className="con-20 scroll-view" style={{ backgroundColor: "#ceffc9", padding: "0px 10px" }}>
             <div style={{height: leftBar }}/>
-            {data.map((value: any, index: number) => {
+            {apiData.map((value: any, index: number) => {
                 const { chapter, sections } = doSome(value);
                 return (
                     <div key={chapter.title}>
