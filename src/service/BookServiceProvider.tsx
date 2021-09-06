@@ -43,49 +43,21 @@ const fetchData = (state: any, dispatch: Function) => {
     service.fetch(bookId).then((context: any) => {
         let res = context.map_res().data;
         dispatch({
-            ...state,
-            type: 'API_STATE',
-            status: 'SUCCESS',
-            payload: res,
+            type: BOOK_SERVICE.SETTERS,
+            _setters: ['apiData', 'apiState'],
+            _payloads: [res, 'SUCCESS'],
         });
         dispatch({
             type: 'ACTIVE_PAGE',
             pageId: state.bookId,
             sectionId: null,
         });
-        // setActiveId(bookData, state.bookId, dispatch);
     })
 }
 
 const setter = (state: any, action: any) => {
     const { payload, _setter } = action;
     return { ...state, [_setter]: payload };
-}
-
-const formPageSetter = (state: any, action: any) => {
-    const { payload, viewType } = action;
-    switch (viewType) {
-        case FORM_TYPE.FRONT_COVER:
-            return { ...state, viewState: FORM_TYPE.FRONT_COVER, formData: payload  };
-        case FORM_TYPE.BACK_COVER:
-            return { ...state, viewState: FORM_TYPE.BACK_COVER, formData: payload  };
-        case FORM_TYPE.CHAPTER:
-            return { ...state, viewState: FORM_TYPE.CHAPTER, formData: payload  };
-        case FORM_TYPE.PAGE:
-            return { ...state, viewState: FORM_TYPE.PAGE, formData: payload  };
-        case FORM_TYPE.SECTION: 
-            return { ...state, viewState: FORM_TYPE.SECTION, formData: payload };
-        case FORM_TYPE.SUB_SECTION:
-            return { ...state, viewState: FORM_TYPE.SUB_SECTION, formData: payload  };
-        case FORM_TYPE.CREATE_UPDATE:
-            return { ...state, viewState: FORM_TYPE.CREATE_UPDATE, formData: payload  };
-        case FORM_TYPE.NONE:
-            return { ...state, viewState: FORM_TYPE.NONE, formData: payload  };
-        case FORM_TYPE.UPDATE:
-                return { ...state, viewState: FORM_TYPE.UPDATE, formData: payload  };
-        default:
-            throw new Error(`Unknown type: ${action.viewType}`);
-    }
 }
 
 const setActivePage = (state: any, action: any) => {
@@ -116,35 +88,25 @@ const setActivePage = (state: any, action: any) => {
     return __state;
 }
 
-const setApiState = (state: any, action: any) => {
-    const { status, payload } = action;
-    switch (status) {
-        case 'SUCCESS':
-          return { ...state, apiData: payload, apiState: 'SUCCESS' };
-
-        case 'ERROR':
-            return { ...state, err: payload, apiState: 'ERROR' };      
-
-        case 'INIT':
-            return state;
-            
-        default:
-            throw new Error(`Unknown type: ${action.status}`);
-    }
+const setters = (state: any, action: any) => {
+    const { _setters, _payloads } = action;
+    let _state = state;
+    _setters.forEach((s: string, index: number) => {
+        _state[s] = _payloads[index];
+    });
+    return _state;
 }
 
 const reducer = (state: any, action: any) => {
-    const { type, payload } = action;
+    const { type, payload, viewType } = action;
     
-    switch (type) {
-        case BOOK_SERVICE.API_STATE:
-          return setApiState(state, action);
-        case BOOK_SERVICE.API_DATA:
-            return { ...state, data: payload };     
+    switch (type) { 
         case BOOK_SERVICE.SETTER:
             return setter(state, action);
+        case BOOK_SERVICE.SETTERS:
+            return setters(state, action);
         case BOOK_SERVICE.FORM_PAGE_SETTER: 
-            return formPageSetter(state, action);
+            return { ...state, viewState: viewType, formData: payload };
         case BOOK_SERVICE.ACTIVE_PAGE:
             return setActivePage(state, action);
         default:

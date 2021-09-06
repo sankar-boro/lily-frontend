@@ -23,7 +23,7 @@ const Body = () => {
     }
 
     useEffect(initState, [dispatch, setRead, bookId]);
-
+    console.log(context, 'context');
     if(!context.apiData) return <div>Fetching...</div>;
     
     return <Renderer />;

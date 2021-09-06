@@ -226,8 +226,8 @@ const addNewSection = (
 
 const addNewChapter = (props: any) => {
     const { page, pageIndex, context } = props;
-    const { data, dispatch } = context;
-    const lastPageIndex = data.length - 1;
+    const { apiData, dispatch } = context;
+    const lastPageIndex = apiData.length - 1;
     
     if (pageIndex === lastPageIndex) {
         dispatch({
@@ -239,9 +239,9 @@ const addNewChapter = (props: any) => {
             }
         });
     } else {
-        if (!data && !data[pageIndex]) return;
-        const topUniqueId = data[pageIndex].uniqueId;
-        const botUniqueId = data[pageIndex + 1].uniqueId;
+        if (!apiData && !apiData[pageIndex]) return;
+        const topUniqueId = apiData[pageIndex].uniqueId;
+        const botUniqueId = apiData[pageIndex + 1].uniqueId;
         dispatch({
             type: 'FORM_PAGE_SETTER',
             viewType: FORM_TYPE.CREATE_UPDATE,
