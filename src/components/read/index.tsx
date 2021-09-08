@@ -7,7 +7,7 @@ import BookServiceProvider, { useBookContext} from "../../service/BookServicePro
 
 const Main = () => {
     const context = useBookContext();
-    const { dispatch } = context;
+    const { dispatch, apiState } = context;
     const authContext = useAuthContext();
     const { setRead } = authContext;
     const history: any = useHistory();
@@ -20,9 +20,15 @@ const Main = () => {
             payload: bookId,
         });
         setRead(true);
+        if (apiState === "SUCCESS") {
+            dispatch({
+                type: 'ACTIVE_PAGE',
+                pageId: bookId,
+                sectionId: null,
+            });
+        }
     }
-    useEffect(initState, [dispatch, bookId]);
-
+    useEffect(initState, [dispatch, bookId, apiState]);
     if(!context.apiData) return <div>Fetching...</div>;
     return <Renderer />;
 }

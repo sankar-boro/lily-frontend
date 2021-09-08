@@ -43,14 +43,14 @@ const fetchData = (state: any, dispatch: Function) => {
     service.fetch(bookId).then((context: any) => {
         let res = context.map_res().data;
         dispatch({
-            type: BOOK_SERVICE.SETTERS,
-            _setters: ['apiData', 'apiState'],
-            _payloads: [res, 'SUCCESS'],
+            type: BOOK_SERVICE.SETTER,
+            _setter: 'apiData',
+            payload: res,
         });
         dispatch({
-            type: 'ACTIVE_PAGE',
-            pageId: state.bookId,
-            sectionId: null,
+            type: BOOK_SERVICE.SETTER,
+            _setter: 'apiState',
+            payload: 'SUCCESS',
         });
     })
 }

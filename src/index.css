@@ -53,14 +53,18 @@ table {
     font-family: "SSP-R";
     src: local("SSP-R"),
     url("./fonts/SourceSansPro-Regular.ttf") format("truetype");
-    font-weight: bold;
 }
 
 @font-face {
     font-family: "SSP-SB";
     src: local("SSP-SB"),
     url("./fonts/SourceSansPro-SemiBold.ttf") format("truetype");
-    font-weight: bold;
+}
+
+@font-face {
+    font-family: "OS-L";
+    src: local("OS-L"),
+    url("./fonts/OpenSans-Light.ttf") format("truetype");
 }
 
 html, body {
@@ -194,6 +198,9 @@ html, body {
     padding: 8px 0px;
     color: #4a4a4a;
 }
+.book-title {
+    font-family: 'OS-L';
+}
 
 /* Form */
 .form-section {
@@ -320,7 +327,8 @@ input:focus, textarea:focus, select:focus {
 /* Read book */
 .description {
     white-space: pre-wrap;
-    font-size: 18px;
+    font-size: 17px;
+    line-height: 1.45em;
 }
 .li-item {
     font-family: "SSP-SB";
@@ -342,7 +350,11 @@ input:focus, textarea:focus, select:focus {
     padding-right: 5%;
 }
 .scroll-view {
-    overflow: auto;
+    overflow-y:hidden;
+    height: 100%;
+}
+.scroll-view:hover {
+    overflow-y:scroll;
 }
 .flex {
     display: flex;

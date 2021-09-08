@@ -9,7 +9,7 @@ const Body = () => {
     const context = useBookContext();
     const authContext = useAuthContext();
     const history: any = useHistory();
-    const { dispatch } = context;
+    const { dispatch, apiState } = context;
     const { setRead } = authContext;
     const { bookId } = history.location.state;
 
@@ -20,10 +20,17 @@ const Body = () => {
             payload: bookId,
         });
         setRead(true);
+        if (apiState === "SUCCESS") {
+            dispatch({
+                type: 'ACTIVE_PAGE',
+                pageId: bookId,
+                sectionId: null,
+            });
+        }
     }
 
-    useEffect(initState, [dispatch, setRead, bookId]);
-    console.log(context, 'context');
+    useEffect(initState, [dispatch, setRead, bookId, apiState]);
+
     if(!context.apiData) return <div>Fetching...</div>;
     
     return <Renderer />;

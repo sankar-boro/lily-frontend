@@ -13,13 +13,15 @@ const Divider = (props: any) => {
             state: history.location.state,
         });
     }
-    return <div className="con-20" style={{backgroundColor: "#ffebf2"}}>
+    return <div className="con-20">
         <div className="li-item hover" onClick={editNavigate}>Edit</div>
         <div className="li-item hover">Delete</div>
         <div>
             {identity === 105 && activePage.child.map((x: Book, subSectionIndex: number) => {
                 return <div className="li-item hover">
-                    {x.title}
+                    <a href={`#${x.uniqueId}`}>    
+                        {x.title}
+                    </a>
                 </div>;
             })}
         </div>

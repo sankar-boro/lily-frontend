@@ -21,7 +21,7 @@ const SubSections = (props: any) => {
     return sections.map((x: Book) => {
         return (
             <div key={x.uniqueId}>
-                <h4 className="h4">{x.title}</h4>
+                <h4 className="h4" id={x.uniqueId}>{x.title}</h4>
                 <div className="description">{x.body}</div>
             </div>
         );
@@ -31,24 +31,24 @@ const SubSections = (props: any) => {
 const Main = (props: any) => {
     const { title, activePage, history } = props;
     return (
-        <div className="con-80">
-            <div className="con-100 flex" style={{ height: _sbody, alignItems: "center", backgroundColor: "#ffedbd" }}>
-                <div style={{ width:"20%" }}></div>
-                <div style={{ width:"60%" }}><h2 className="h2">{title}</h2></div>
-                <div style={{ width:"20%" }}>
-
+        <div className="con-80" style={{ marginLeft: "20%" }}>
+            <div className="con-100 flex" style={{ height: _sbody, alignItems: "center" }}>
+                <div className="con-80 flex center">
+                    <h2 className="h2 book-title">{title}</h2>
+                </div>
+                <div className="con-20 flex">
                     <MdHome className="hover" onClick={() => { history.replace({ pathname: "/"})}}/>
                 </div>
             </div>
             <div className="con-100 flex">
-                <div className="con-80 flex">
-                    <div className="con-10" style={{backgroundColor: "#e8feff" }}/>
-                    <div className="con-80" style={{ backgroundColor: "#e8e8ff" }}>
-                        <h3 className="h3">{activePage.title}</h3>
+                <div className="con-80 flex" style={{ paddingTop: 50 }}>
+                    <div className="con-10" />
+                    <div className="con-80">
+                        <h3 className="h2" id={activePage.uniqueId}>{activePage.title}</h3>
                         <div className="description">{activePage.body}</div>
                         <SubSections {...props} />
                     </div>
-                    <div className="con-10" style={{ backgroundColor: "#fffee0" }}/>
+                    <div className="con-10"/>
                 </div>
                 <Divider {...props} />
             </div>

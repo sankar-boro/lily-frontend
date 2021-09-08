@@ -7,7 +7,6 @@ const createNewChapter = (props: {
     title: string;
     body: string;
 }, context: any) => {
-    console.log('context', context);
     const { title, body } = props;
     const { formData, bookId } = context;
     const { parentId, identity } = formData;

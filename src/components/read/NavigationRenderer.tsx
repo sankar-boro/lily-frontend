@@ -19,7 +19,7 @@ const ReadBookNavigation = (props: any) => {
         };
     };
     return (
-        <div className="con-20 scroll-view" style={{ backgroundColor: "#ceffc9", padding: "0px 10px" }}>
+        <div className="con-20 scroll-view" style={{ padding: "0px 10px", position: "fixed", height: "100%" }}>
             <div style={{height: leftBar }}/>
             {apiData.map((value: any, index: number) => {
                 const { chapter, sections } = doSome(value);
