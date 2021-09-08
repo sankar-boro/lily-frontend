@@ -107,7 +107,7 @@ const Main = () => {
     const context: any = useBookContext();
     const { apiData: pages } = context;
     return (
-        <div className="con-20" style={{ padding: "0px 10px" }}>
+        <div className="con-19 scroll-view" style={{ padding: "0px 10px", position: "fixed", height: "100%" }}>
             <div style={{ height: 35 }}/>
             {pages.map((page: any, pageIndex: number) => 
                 <NavigationPages 

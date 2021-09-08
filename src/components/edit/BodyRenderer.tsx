@@ -1,5 +1,5 @@
 import { useHistory } from "react-router-dom";
-import { MdHome, MdModeEdit } from 'react-icons/md';
+import { MdHome, MdModeEdit, MdSearch } from 'react-icons/md';
 
 import Divider from "./Divider";
 import Update from "../forms/Update";
@@ -9,6 +9,9 @@ import SubSection from "../forms/SubSection";
 import CreateUpdate from "../forms/CreateUpdate";
 import { Book, FORM_TYPE } from "../../globals/types/index";
 import { useBookContext } from "../../service/BookServiceProvider";
+import { constants } from "../../globals/constants";
+
+const { _sbody } = constants.heights.fromTopNav;
 
 
 const FormView = () => {
@@ -72,13 +75,13 @@ const Body = (props: any) => {
 
     if (context.viewState !== FORM_TYPE.NONE) {
         return (
-            <div className="flex" style={{ backgroundColor: "#feffc4" }}>
+            <div className="flex">
                 <div className="con-80 flex">
-                    <div className="con-10" style={{ backgroundColor: "#f5fff0"}} />
+                    <div className="con-10" />
                     <div className="con-80">
                         <FormView />
                     </div>
-                    <div className="con-10" style={{ backgroundColor: "#e8feff" }} />
+                    <div className="con-10" />
                 </div>
                 <Divider {...props} />
             </div>
@@ -86,10 +89,10 @@ const Body = (props: any) => {
     }
 
     return (
-        <div className="flex" style={{ backgroundColor: "#feffc4" }}>
+        <div className="flex">
             <div className="con-80 flex">
-                <div className="con-10" style={{ backgroundColor: "#f5fff0"}} />
-                <div className="con-80">
+                <div className="con-10" />
+                <div className="con-80" style={{ paddingTop: 50 }}>
                     <div className="flex center">
                         <div className="con-95">
                             <h3 className="h3">{activePage.title}</h3>
@@ -108,7 +111,7 @@ const Body = (props: any) => {
                     <div className="description">{activePage.body}</div>
                     <SubSections {...props} />
                 </div>
-                <div className="con-10" style={{ backgroundColor: "#e8feff" }} />
+                <div className="con-10" />
             </div>
             <Divider {...props} />
         </div>
@@ -118,12 +121,19 @@ const Body = (props: any) => {
 const Main = (props: any) => {
     const { title, history } = props;
     return (
-        <div className="con-80" style={{ backgroundColor: "#ffedbd" }}>
+        <div className="con-80" style={{ marginLeft: "20%" }}>
             {/* Book title */}
-            <div className="flex" style={{ height: 35, alignItems: "center", backgroundColor: "#ffbdff" }}>
-                <div style={{ width:"20%" }}></div>
-                <div style={{ width:"60%" }}><h2 className="h2">{title}</h2></div>
-                <div style={{ width:"20%" }}>
+            <div className="con-100 flex" style={{ height: _sbody, alignItems: "center" }}>
+                <div className="con-80 flex">
+                    <div className="flex con-10" style={{ alignItems: "center" }}>
+                        <MdSearch className="hover" style={{ padding: 15 }}/>
+                    </div>
+                    <div className="con-80 flex center">
+                        <h2 className="h2 book-title">{title}</h2>
+                    </div>
+                    <div className="con-10" />
+                </div>
+                <div className="con-20 flex">
                     <MdHome className="hover" onClick={() => { history.replace({ pathname: "/"})}}/>
                 </div>
             </div>

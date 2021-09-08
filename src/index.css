@@ -143,6 +143,12 @@ html, body {
 .con-15 {
     width: 15%;
 }
+.con-18 {
+    width: 18%;
+}
+.con-19 {
+    width: 19%;
+}
 .con-10 {
     width: 10%;
 }
@@ -334,6 +340,10 @@ input:focus, textarea:focus, select:focus {
     font-family: "SSP-SB";
     color: #4d4d4d;
     padding: 5px 0px;
+}
+.li-item a {
+    text-decoration: none;
+    color: black;
 }
 .li-item:hover, .section-nav:hover, .chapter-nav:hover {
     color:#0080f0;

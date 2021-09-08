@@ -16,7 +16,7 @@ const Divider = (props: any) => {
     const { identity } = activePage;
     const context = useBookContext();
 
-    return <div className="con-20" style={{backgroundColor: "#ffebf2"}}>
+    return <div className="con-20">
         <div className="li-item hover">Delete</div>
         <AddSubSection {...props} context={context} subSectionIndex={null} />
         {identity === 105 && activePage.child.map((subSection: any, subSectionIndex: number) => {

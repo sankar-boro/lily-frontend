@@ -1,5 +1,5 @@
 import { useHistory } from "react-router-dom";
-import { MdHome } from 'react-icons/md';
+import { MdHome, MdSearch } from 'react-icons/md';
 
 import Divider from "./Divider";
 import { Book } from "../../globals/types/book";
@@ -33,8 +33,14 @@ const Main = (props: any) => {
     return (
         <div className="con-80" style={{ marginLeft: "20%" }}>
             <div className="con-100 flex" style={{ height: _sbody, alignItems: "center" }}>
-                <div className="con-80 flex center">
-                    <h2 className="h2 book-title">{title}</h2>
+                <div className="con-80 flex">
+                    <div className="flex con-10" style={{ alignItems: "center" }}>
+                        <MdSearch className="hover" style={{ padding: 15 }}/>
+                    </div>
+                    <div className="con-80 flex center">
+                        <h2 className="h2 book-title">{title}</h2>
+                    </div>
+                    <div className="con-10" />
                 </div>
                 <div className="con-20 flex">
                     <MdHome className="hover" onClick={() => { history.replace({ pathname: "/"})}}/>
