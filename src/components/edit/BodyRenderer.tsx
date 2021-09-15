@@ -1,6 +1,7 @@
 import { useHistory } from "react-router-dom";
-import { MdHome, MdModeEdit, MdSearch } from 'react-icons/md';
+import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 
+import { deleteSection, deletePage } from "./util";
 import Divider from "./Divider";
 import Update from "../forms/Update";
 import AddSection from "../forms/Section";
@@ -37,14 +38,14 @@ const FormView = () => {
 
 const SubSections = (props: any) => {
     const { activePage, context } = props;
-    const { hideSection, dispatch } = context;
+    const { hideSection, dispatch, bookId } = context;
     if (hideSection) return null;
     if (!activePage) return null;
     if (!activePage.child) return null;
     if (!Array.isArray(activePage.child)) return null;
     const sections = activePage.child;
 
-    return sections.map((section: any) => {
+    return sections.map((section: any, sectionIndex: number) => {
         return (
             <div key={section.uniqueId}>
                 <div className="flex center">
@@ -60,6 +61,13 @@ const SubSections = (props: any) => {
                                 payload: others,
                             });
                         }}/>
+                        <MdDelete onClick={() => deleteSection({
+                            activePage,
+                            sectionIndex,
+                            section,
+                            sections,
+                            bookId
+                        })}/>
                     </div>
                 </div>
                 <div className="description">{section.body}</div>
@@ -106,6 +114,10 @@ const Body = (props: any) => {
                                     payload: others,
                                 });
                             }}/>
+                            <MdDelete onClick={() => deletePage({
+                                activePage,
+                                context,
+                            })}/>
                         </div>
                     </div>
                     <div className="description">{activePage.body}</div>

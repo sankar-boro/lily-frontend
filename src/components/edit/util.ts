@@ -319,6 +319,33 @@ const createSubSection = (props: any) => {
     }
 }
 
+const isLastElement = (_array: any, index: number) => {
+    const l = _array.length - 1;
+    if (index === l) return true;
+    return false;
+} 
+
+const deleteSection = (props: any) => {
+    const { activePage, sectionIndex, section, sections, bookId } = props;
+    let _isLast = false;
+    if (sectionIndex && sections && Array.isArray(sections)) {
+        _isLast = isLastElement(sections, sectionIndex);
+    }
+
+    if (_isLast) {
+        let _deleteData = {
+            bookId: null,
+            deleteId: null,
+        };
+        _deleteData.bookId = bookId;
+        _deleteData.deleteId = section.uniqueId;
+        return;
+    }
+}
+
+const deletePage = (props: any) => {
+}
+
 export { 
     sortAll, 
     activeChBg, 
@@ -327,7 +354,9 @@ export {
     getPages, 
     addNewChapter, 
     addNewSection, 
-    createSubSection
+    createSubSection,
+    deleteSection,
+    deletePage,
 };
 
 export type { Book };
