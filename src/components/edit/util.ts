@@ -319,10 +319,6 @@ const createSubSection = (props: any) => {
     }
 }
 
-
-const deletePage = (props: any) => {
-}
-
 export { 
     sortAll, 
     activeChBg, 
@@ -332,7 +328,6 @@ export {
     addNewChapter, 
     addNewSection, 
     createSubSection,
-    deletePage,
 };
 
 export type { Book };

@@ -1,8 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 
-import { deletePage } from "./util";
-import { deleteSection } from "./crud/delete";
+import { deleteSection, deletePage } from "./crud/delete";
 import Divider from "./Divider";
 import Update from "../forms/Update";
 import AddSection from "../forms/Section";

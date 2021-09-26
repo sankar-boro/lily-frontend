@@ -108,16 +108,70 @@ const deleteSection = (props: any) => {
         });
         return;
     }
-
     if (sectionIndex === 0) {
         deleteFirstElement(props);
         return;
     }
-
-
     deleteAnySection(props);
+}
+
+const deleteSectionMain = (props: any) => {
+    const { activePage, context } = props;
+    const { bookId } = context;
+    let prevData: any = null;
+    let nextData: any = null;
+    let found = false;
+    if (activePage.identity === 105) {
+        const s = context.apiData.forEach((f: any) => {
+            f.child.forEach((e: any, index: number) => {
+                if (found) {
+                    nextData = e;
+                    found = false;
+                }
+                if (activePage.uniqueId === e.uniqueId) {
+                    if (index === 0) {
+                        prevData = f;
+                        found = true;
+                    }
+                    if (index !== 0) {
+                        prevData = f.child[index - 1];
+                        found = false;
+                    }
+                }
+            });
+        });
+    }
+
+    if (nextData && nextData.uniqueId && prevData && prevData.uniqueId) {
+        let updateData = {
+            uniqueId: nextData.uniqueId,
+            newParentId: prevData.uniqueId,
+        }
+
+        let deleteData: any = [];
+        activePage.child.forEach((e: any) => {
+            deleteData.push({
+                uniqueId: e.uniqueId
+            });
+        });
+        let dd = {
+            bookId,
+            data: JSON.stringify({ updateData, deleteData }),
+        };
+        let url = "http://localhost:8000/book/delete/main_section"
+        _deleteSection(dd, url);
+    }
+} 
+
+const deletePage = (props: any) => {
+    // console.log('deletePage',props);
+    const { activePage, context } = props;
+    if (activePage.identity === 105) {
+        deleteSectionMain(props);
+    }
 }
 
 export {
     deleteSection,
+    deletePage,
 }
