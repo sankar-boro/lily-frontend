@@ -1,8 +1,7 @@
-import { activeScBg, getChapterData } from "./util";
+import { getChapterData } from "./util";
 import { Form, FORM_TYPE } from "../../globals/types";
 import { None, Some } from "ts-results";
 import { Dispatch, SetStateAction } from "react";
-import { FormatLineSpacingOutlined } from "@material-ui/icons";
 
 type BookNavigationProps = {
     title: string;

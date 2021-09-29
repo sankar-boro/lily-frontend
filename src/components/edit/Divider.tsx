@@ -18,11 +18,11 @@ const Divider = (props: any) => {
 
     return <div className="con-20">
         <div className="li-item hover">Delete</div>
-        <AddSubSection {...props} context={context} subSectionIndex={null} />
+        <AddSubSection {...props} context={context} subSectionIndex={null} sectionId={activePage.uniqueId} subSection={null} />
         {identity === 105 && activePage.child.map((subSection: any, subSectionIndex: number) => {
             return <div key={subSection.uniqueId}>
                 {subSection.title}
-                <AddSubSection {...props} context={context} subSection={subSection} subSectionIndex={subSectionIndex} />
+                <AddSubSection {...props} context={context} sectionId={activePage.uniqueId} subSection={subSection} subSectionIndex={subSectionIndex} />
             </div>;
         })}
     </div>

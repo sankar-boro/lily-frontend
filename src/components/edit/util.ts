@@ -255,13 +255,14 @@ const addNewChapter = (props: any) => {
 };
 
 const createSubSection = (props: any) => {
-    const { context, subSectionIndex, activePage } = props;
+    console.log('createSubSection', props);
+    const { context, subSectionIndex, activePage, subSection } = props;
     const { viewData } = context;
     const subSections = activePage.child;
     const { dispatch } = context;
     const sectionId = viewData.uniqueId;
 
-    if (!subSectionIndex && subSections.length === 0) {
+    if (subSections.length === 0) {
         dispatch({
             type: 'FORM_PAGE_SETTER',
             viewType: FORM_TYPE.SUB_SECTION,
@@ -274,7 +275,7 @@ const createSubSection = (props: any) => {
     }
 
 
-    if (!subSectionIndex && subSections.length > 0) {
+    if (subSections.length > 0 && subSection === null) {
         let topUniqueId = sectionId;
         let botUniqueId = subSections[0].uniqueId;
         dispatch({
@@ -291,7 +292,7 @@ const createSubSection = (props: any) => {
 
     const subSectionsLength = subSections.length - 1;
 
-    if (subSectionIndex && subSectionIndex < subSectionsLength) {
+    if (subSection && subSectionIndex < subSectionsLength) {
         let topUniqueId = subSections[subSectionIndex].uniqueId;
         let botUniqueId = subSections[subSectionIndex+1].uniqueId;
         dispatch({
@@ -306,7 +307,7 @@ const createSubSection = (props: any) => {
         return;
     }
 
-    if (subSectionIndex && subSectionIndex === subSectionsLength) {
+    if (subSection && subSectionIndex === subSectionsLength) {
         let topUniqueId = subSections[subSectionIndex].uniqueId;
         dispatch({
             type: 'FORM_PAGE_SETTER',
