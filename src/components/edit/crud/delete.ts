@@ -115,59 +115,126 @@ const deleteSection = (props: any) => {
     deleteAnySection(props);
 }
 
-const deleteSectionMain = (props: any) => {
-    const { activePage, context } = props;
-    const { bookId } = context;
-    let prevData: any = null;
-    let nextData: any = null;
-    let found = false;
-    if (activePage.identity === 105) {
-        const s = context.apiData.forEach((f: any) => {
-            f.child.forEach((e: any, index: number) => {
-                if (found) {
-                    nextData = e;
-                    found = false;
-                }
-                if (activePage.uniqueId === e.uniqueId) {
-                    if (index === 0) {
-                        prevData = f;
-                        found = true;
-                    }
-                    if (index !== 0) {
-                        prevData = f.child[index - 1];
-                        found = false;
-                    }
-                }
-            });
-        });
-    }
+const getPageProperties = () => {
+    return {};
+}
 
-    if (nextData && nextData.uniqueId && prevData && prevData.uniqueId) {
-        let updateData = {
-            uniqueId: nextData.uniqueId,
-            newParentId: prevData.uniqueId,
+const deleteIds = (activePage: any) => {
+    const ids = [];
+    activePage.child.forEach((e: any) => {
+        ids.push(e.uniqueId);
+    });
+    ids.push(activePage.uniqueId);
+    return ids;
+}
+
+const do_ = (chapter: any, index: number) => {
+    let sectionsLength = chapter.child.length;
+
+    // if sectionsLength === 1, lastIndex = 0;
+    let lastIndex = sectionsLength - 1;
+    
+    console.log(lastIndex, index);
+    // If section to delete is last, there is nothing to update
+    // if lastIndex === 5 && index === 5, there is nothing to update
+    if (lastIndex === index) return null;
+
+    // If there is only 1 section in this chapter there is nothing to update
+    if (lastIndex === 0) return null;
+
+    if (index < lastIndex) {
+        let parentUId = chapter.uniqueId;
+        if (index >= 1) {
+            parentUId = chapter.child[index - 1].uniqueId;
         }
-
-        let deleteData: any = [];
-        activePage.child.forEach((e: any) => {
-            deleteData.push({
-                uniqueId: e.uniqueId
-            });
-        });
-        let dd = {
-            bookId,
-            data: JSON.stringify({ updateData, deleteData }),
-        };
-        let url = "http://localhost:8000/book/delete/main_section"
-        _deleteSection(dd, url);
+        let uniqueId = chapter.child[index + 1].uniqueId;
+        return {
+            uniqueId,
+            newParentId: parentUId,
+        }
     }
+}
+
+const updateData = (props: any) => {
+    const { activePage, context } = props;
+    const bookData = context.apiData;
+    let r = null;
+    bookData.forEach((chapter: any) => {
+        chapter.child.forEach((section: any, index: number) => {
+            if (section.uniqueId === activePage.uniqueId) {
+                r = do_(chapter, index);
+            }
+        });
+    });
+    return r;
+}
+
+const deleteSectionMain = (props: any) => {
+   const { activePage, context } = props;
+   let a = deleteIds(activePage);
+   let b = updateData(props);
+   console.log(context.apiData);
+   console.log(a);
+   console.log('updateData', b);
 } 
 
-const deletePage = (props: any) => {
-    // console.log('deletePage',props);
+const deleteChapterIds = (activeChapter: any) => {
+    const ids = [];
+    activeChapter.child.forEach((section: any) => {
+        section.child.forEach((subSection: any) => {
+            ids.push(subSection.uniqueId);
+        });
+        ids.push(section.uniqueId);
+    });
+    ids.push(activeChapter.uniqueId);
+    return ids;
+}
+
+const updateChapterIds = (props: any) => {
+    const { context, activePage } = props;
+    const chapters = context.apiData;
+    let currentIndex: any = null;
+    let prevChapter: any = null;
+    let nextChapter: any = null;
+    chapters.forEach((chapter: any, index: number) => {
+        if (chapter.uniqueId === activePage.uniqueId && index !== 0) {
+            currentIndex = index;
+            prevChapter = chapters[index - 1];
+        }
+    });
+
+    if (currentIndex && chapters[currentIndex + 1]) {
+        nextChapter = chapters[currentIndex + 1];
+    } else {
+        return null;
+    }
+
+    if (nextChapter && prevChapter) {
+        return {
+            uniqueId: nextChapter.uniqueId,
+            newParentId: prevChapter.uniqueId,
+        }
+    }
+    
+}
+
+const deleteChapterMain = (props: any) => {
     const { activePage, context } = props;
+    let d = deleteChapterIds(activePage);
+    let u = updateChapterIds(props);
+    console.log('deleteChapter', d);
+    console.log('updateChapter', u);
+}
+
+const deletePage = (props: any) => {
+    const { activePage, context } = props;
+    console.log('deletePage', activePage);
     if (activePage.identity === 105) {
         deleteSectionMain(props);
+    }
+
+    if (activePage.identity === 104) {
+        deleteChapterMain(props);
     }
 }
 
