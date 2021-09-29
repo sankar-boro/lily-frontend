@@ -1,31 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-// "http://localhost:8000/book/section/delete",
-
-const _delete = (data: any, url: string) => {
+const updateOrDelete = (url: string, data: any) => {
     axios.post(url, data, {
         withCredentials: true,
     });
-}
-
-const _deleteSection = (data: any, url: string) => {
-    axios.post(url, data, {
-        withCredentials: true,
-    });
-}
-
-const deleteLastElement = (props: {
-    totalSections: number, bookId: string, sectionIndex: number, uniqueId: string
-}) => {
-    const { totalSections, bookId, sectionIndex, uniqueId } = props;
-    let lastIndex = totalSections - 1;
-    if (sectionIndex === lastIndex && totalSections > 0) {
-        let url = "http://localhost:8000/book/delete/sub_section/last";
-        _delete({
-            bookId,
-            uniqueId,
-        }, url);
-    }
 }
 
 const deleteFirstElement = (props: {
@@ -39,17 +17,13 @@ const deleteFirstElement = (props: {
     const { sectionIndex, activePage, section, bookId, sections } = props;
     const activePageUniqueId = activePage.uniqueId;
 
-    let deleteData = {
-        bookId,
-        deleteUniqueId: "",
-    };
+    const deleteData = [];
 
     if (sectionIndex === 0) {
-        deleteData.deleteUniqueId = section.uniqueId;
+        deleteData.push(section.uniqueId);
 
         if (sections.length >= 1) {        
             let updateData = {
-                bookId,
                 uniqueId: "",
                 newParentId: "",
             };
@@ -57,10 +31,17 @@ const deleteFirstElement = (props: {
             updateData.uniqueId = nextSection.uniqueId;
             updateData.newParentId = activePageUniqueId;
 
-            let url = "http://localhost:8000/book/delete/sub_section/first";
-            _deleteSection({
-                data: JSON.stringify({updateData, deleteData})
-            }, url);
+            let url = "http://localhost:8000/book/update_or_delete";
+            updateOrDelete(
+                url,
+                {
+                    bookId,
+                    json: JSON.stringify({
+                        updateData,
+                        deleteData,
+                    })
+                }
+            );
         }
     }
 }
@@ -68,29 +49,48 @@ const deleteFirstElement = (props: {
 const deleteAnySection = (props: any) => {
     const { sectionIndex, sections, bookId, section } = props;
     if (sectionIndex > 0 && sections.length > 0) {
-        let deleteData = {
-            bookId,
-            deleteUniqueId: section.uniqueId
-        }
+        let deleteData = [section.uniqueId];
+
         const nextSection = sections[sectionIndex + 1];
         const prevSection = sections[sectionIndex - 1];
         if (nextSection && prevSection) {
             const updateData = {
-                bookId,
                 uniqueId: nextSection.uniqueId,
                 newParentId: prevSection.uniqueId,
             }
 
-            const d = {
-                updateData,
-                deleteData,
-            }
-
-            let url = "http://localhost:8000/book/delete/sub_section/first";
-            _deleteSection({
-                data: JSON.stringify(d)
-            }, url);
+            let url = "http://localhost:8000/book/update_or_delete";
+            updateOrDelete(
+                url,
+                {
+                    bookId,
+                    json: JSON.stringify({
+                        updateData,
+                        deleteData,
+                    })
+                }
+            );
         }
+    }
+}
+
+const deleteLastElement = (props: {
+    totalSections: number, bookId: string, sectionIndex: number, uniqueId: string
+}) => {
+    const { totalSections, bookId, sectionIndex, uniqueId } = props;
+    let lastIndex = totalSections - 1;
+    if (sectionIndex === lastIndex && totalSections > 0) {
+        let url = "http://localhost:8000/book/delete/update_or_delete";
+        updateOrDelete(
+            url, 
+            {
+                bookId,
+                json: JSON.stringify({
+                    updateData: null,
+                    deleteData: [uniqueId]
+                })
+            }
+        );
     }
 }
 
@@ -115,9 +115,6 @@ const deleteSection = (props: any) => {
     deleteAnySection(props);
 }
 
-const getPageProperties = () => {
-    return {};
-}
 
 const deleteIds = (activePage: any) => {
     const ids = [];
@@ -155,7 +152,7 @@ const do_ = (chapter: any, index: number) => {
     }
 }
 
-const updateData = (props: any) => {
+const __updateData = (props: any) => {
     const { activePage, context } = props;
     const bookData = context.apiData;
     let r = null;
@@ -170,12 +167,14 @@ const updateData = (props: any) => {
 }
 
 const deleteSectionMain = (props: any) => {
-   const { activePage, context } = props;
-   let a = deleteIds(activePage);
-   let b = updateData(props);
-   console.log(context.apiData);
-   console.log(a);
-   console.log('updateData', b);
+   const { activePage } = props;
+   const updateData = __updateData(props);
+   const deleteData = deleteIds(activePage);
+
+   return {
+       updateData,
+       deleteData,
+   }
 } 
 
 const deleteChapterIds = (activeChapter: any) => {
@@ -220,22 +219,37 @@ const updateChapterIds = (props: any) => {
 
 const deleteChapterMain = (props: any) => {
     const { activePage, context } = props;
-    let d = deleteChapterIds(activePage);
-    let u = updateChapterIds(props);
-    console.log('deleteChapter', d);
-    console.log('updateChapter', u);
+    const updateData = updateChapterIds(props);
+    const deleteData = deleteChapterIds(activePage);
+
+    return {
+        updateData,
+        deleteData,
+    }
 }
 
 const deletePage = (props: any) => {
     const { activePage, context } = props;
-    console.log('deletePage', activePage);
+    const { bookId } = context;
+    let url = "http://localhost:8000/book/update_or_delete";
+    
+    let json_data = null;
+
     if (activePage.identity === 105) {
-        deleteSectionMain(props);
+        json_data = deleteSectionMain(props);
     }
 
     if (activePage.identity === 104) {
-        deleteChapterMain(props);
+        json_data = deleteChapterMain(props);
     }
+
+    updateOrDelete(
+        url,
+        {
+            bookId,
+            json: JSON.stringify(json_data),
+        }
+    );
 }
 
 export {
