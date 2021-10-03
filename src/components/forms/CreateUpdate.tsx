@@ -15,7 +15,7 @@ const createAndUpdate = (props: {
     const { identity, topUniqueId, botUniqueId } = formData;
     axios
         .post(
-            "http://localhost:8000/book/create/update/chapter",
+            "http://localhost:8000/book/create/update",
             {
                 title,
                 body,

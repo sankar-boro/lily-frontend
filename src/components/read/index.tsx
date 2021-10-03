@@ -4,6 +4,7 @@ import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
 import { useAuthContext } from "../../service/AuthServiceProvider";
 import BookServiceProvider, { useBookContext} from "../../service/BookServiceProvider";
+import FormServiceProvider from "../../service/FormServiceProvider";
 
 const Main = () => {
     const context = useBookContext();
@@ -42,6 +43,8 @@ const Renderer = () => {
 
 export default function MainContext(){
     return <BookServiceProvider>
-        <Main />
+        <FormServiceProvider>
+            <Main />
+        </FormServiceProvider>
     </BookServiceProvider>
 }

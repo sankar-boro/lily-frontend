@@ -80,7 +80,7 @@ const deleteLastElement = (props: {
     const { totalSections, bookId, sectionIndex, uniqueId } = props;
     let lastIndex = totalSections - 1;
     if (sectionIndex === lastIndex && totalSections > 0) {
-        let url = "http://localhost:8000/book/delete/update_or_delete";
+        let url = "http://localhost:8000/book/update_or_delete";
         updateOrDelete(
             url, 
             {

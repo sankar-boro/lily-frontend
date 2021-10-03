@@ -2,21 +2,34 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { textareaRows, textareaCols } from "../../globals/forms";
 import { useBookContext } from "../../service/BookServiceProvider";
+import { useFormContext } from "../../service/FormServiceProvider";
+import { useHistory } from "react-router";
 
-const submitBook = (props: any) => {
+const submitBook = (data: any, props: any) => {
+    const { history, formContext } = props;
     const url = "http://localhost:8000/book/update";
     axios.post(
         url,
-        props,
+        data,
         {
             withCredentials: true,
         }
-    );
+    ).then((res) => {
+        formContext.dispatch({
+            type: 'SETTER',
+            cache: data,
+        });
+    }).then(() => {
+        history.goBack();
+    });
+    // history.goBack();
 };
 
 const Update = () => {
     const context: any = useBookContext();
-    const { formData, bookId } = context;
+    const formContext: any = useFormContext();
+    const history: any = useHistory();
+    const { formData, bookId, dispatch } = context;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [identity, setIdentity] = useState<number | null>(null);
@@ -77,7 +90,12 @@ const Update = () => {
                                     identity,
                                     bookId,
                                     uniqueId: formData.uniqueId,
-                                });
+                                }, 
+                                {
+                                    history,
+                                    formContext
+                                }
+                                );
                             }}
                         >
                             Submit

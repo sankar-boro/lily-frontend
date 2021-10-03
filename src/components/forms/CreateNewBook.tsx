@@ -38,7 +38,7 @@ const submitBook = (props: {
         });
 };
 
-const Form101 = (props: {
+const CreateNewBook = (props: {
     sectionId: string | null;
     currentFormType: Form;
     setCurrentFormType: Function;
@@ -114,4 +114,4 @@ const Form101 = (props: {
     );
 };
 
-export default Form101;
+export default CreateNewBook;

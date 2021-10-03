@@ -67,7 +67,7 @@ table {
     url("./fonts/OpenSans-Light.ttf") format("truetype");
 }
 
-html, body {
+html, body, .home, .body {
     font-family: 'SSP-R', sans-serif;
     height: 100%;
 }
