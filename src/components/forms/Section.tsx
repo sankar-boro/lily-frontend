@@ -102,7 +102,7 @@ const Section = (props: any) => {
                 </div>
                 <div className="con-10" />
             </div>
-            <div className="con-20" style={{ backgroundColor: "#fffee0" }} />    
+            <div className="con-20" />    
         </div>
     );
 };

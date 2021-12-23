@@ -234,7 +234,8 @@ const deletePage = (props: any) => {
     let url = "http://localhost:8000/book/update_or_delete";
     
     let json_data = null;
-
+    
+    console.log("activePage", activePage);
     if (activePage.identity === 105) {
         json_data = deleteSectionMain(props);
     }

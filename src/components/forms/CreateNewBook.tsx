@@ -55,7 +55,7 @@ const CreateNewBook = (props: {
     const { allPages, setBookRows, bookRows } = props;
     return (
         <div className="container">
-            <div className="container-create-book">
+            <div className="con-65">
                 <div className="h1">Create Front Cover</div>
                 <div className="container-form">
                     <form action="#" method="post">

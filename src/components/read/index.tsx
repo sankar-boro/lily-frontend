@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
-import BodyRenderer from "./BodyRenderer";
+import Body from "./Body";
 import NavigationRenderer from "./NavigationRenderer";
 import { useAuthContext } from "../../service/AuthServiceProvider";
 import BookServiceProvider, { useBookContext} from "../../service/BookServiceProvider";
@@ -37,7 +37,7 @@ const Main = () => {
 const Renderer = () => {
     return <div className="flex">
         <NavigationRenderer />
-        <BodyRenderer />
+        <Body />
     </div>  
 }
 

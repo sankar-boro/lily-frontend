@@ -164,64 +164,65 @@ const displayNone = (c: any, a: string) => {
 const addNewSection = (
     props: any,
 ) => {
+    console.log(props);
     const { sectionIndex, page, context } = props;
     let sections = page.child;
+    let totalSections = sections.length;
     const { dispatch } = context;
-    if (!sectionIndex && sections.length === 0) {
+    let formType = "";
+    let parentId = "";
+    let identity = 105;
+    let topUniqueId = "";
+    let botUniqueId = "";
+
+    if (sectionIndex === undefined || sectionIndex === null) {
+        if (totalSections === 0) {
+            formType = "newSection";
+            parentId = page.uniqueId;
+        } else if (totalSections > 0) {
+            formType = "createUpdate";
+            topUniqueId = page.uniqueId;
+            botUniqueId = sections[0].uniqueId;
+        }
+    }
+
+    if (sectionIndex !== undefined && typeof sectionIndex === "number") {
+        const lastSectionIndex = totalSections - 1;
+        if (sectionIndex === lastSectionIndex) {
+            formType = "newSection";
+            parentId = sections[sectionIndex].uniqueId;
+        } else if (sectionIndex !== lastSectionIndex) {
+            formType = "createUpdate";
+            topUniqueId = sections[sectionIndex].uniqueId;
+            botUniqueId = sections[sectionIndex + 1].uniqueId;
+        }
+    }
+
+    if (formType === "newSection") {
         dispatch({
             type: 'FORM_PAGE_SETTER',
-            viewType: FORM_TYPE.SECTION,
             payload: {
-                parentId: page.uniqueId,
-                identity: 105
+                parentId,
+                identity,
             },
+            viewType: FORM_TYPE.SECTION,
         });
         return;
     }
 
-    if (!sectionIndex && sections.length > 0) {
-        const topUniqueId = page.uniqueId;
-        const botUniqueId = sections[0].uniqueId;
+    if (formType === "createUpdate") {
         dispatch({
             type: 'FORM_PAGE_SETTER',
             payload: {
                 topUniqueId,
                 botUniqueId,
-                identity: 105,
+                identity,
             },
             viewType: FORM_TYPE.CREATE_UPDATE,
         });
         return;
     }
 
-    const lastSectionIndex = sections.length - 1;
-
-    if (sectionIndex === lastSectionIndex) {
-        const uniqueId = sections[sectionIndex].uniqueId;
-        dispatch({
-            type: 'FORM_PAGE_SETTER',
-            payload: {
-                parentId: uniqueId,
-                identity: 105,
-            },
-            viewType: FORM_TYPE.SECTION,
-        });
-        return;
-    }
-
-    if (sectionIndex !== lastSectionIndex) {
-        const topUniqueId = sections[sectionIndex].uniqueId;
-        const botUniqueId = sections[sectionIndex + 1].uniqueId;
-        dispatch({
-            type: 'FORM_PAGE_SETTER',
-            payload: {
-                topUniqueId,
-                botUniqueId,
-                identity: 105,
-            },
-            viewType: FORM_TYPE.SECTION,
-        });
-    }
 };
 
 const addNewChapter = (props: any) => {

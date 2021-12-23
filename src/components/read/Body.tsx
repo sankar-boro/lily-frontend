@@ -1,7 +1,5 @@
 import { useHistory } from "react-router-dom";
 import { MdHome, MdSearch } from 'react-icons/md';
-
-import Divider from "./Divider";
 import { Book } from "../../globals/types/book";
 import { useBookContext } from "../../service/BookServiceProvider";
 import { constants } from "../../globals/constants";
@@ -28,6 +26,53 @@ const SubSections = (props: any) => {
     })
 }
 
+const Padding_H_10 = () => {
+    return <div className="con-10" />
+}
+
+const Divider = (props: any) => {
+    const { activePage, sectionId, context, subSectionIndex } = props;
+    const { identity } = activePage;
+    const history: any = useHistory();
+    const { bookId } = context;
+    const editNavigate = (e: any) => {
+        e.preventDefault();
+        history.push({
+            pathname: `/book/edit/${bookId}`,
+            state: history.location.state,
+        });
+    }
+    return <div className="con-20">
+        <div className="li-item hover" onClick={editNavigate}>Edit</div>
+        <div className="li-item hover">Delete</div>
+        <div>
+            {identity === 105 && activePage.child.map((x: Book, subSectionIndex: number) => {
+                return <div className="li-item hover">
+                    <a href={`#${x.uniqueId}`}>    
+                        {x.title}
+                    </a>
+                </div>;
+            })}
+        </div>
+    </div>
+}
+
+const ReadBodyContainer = (props: any) => {
+    const {activePage} = props;
+    return  <div className="con-100 flex">
+        <div className="con-80 flex" style={{ paddingTop: 50 }}>
+            <Padding_H_10 />
+            <div className="con-80">
+                <h3 className="h2" id={activePage.uniqueId}>{activePage.title}</h3>
+                <div className="description">{activePage.body}</div>
+                <SubSections {...props} />
+            </div>
+            <Padding_H_10 />
+        </div>
+        <Divider {...props} />
+    </div>
+}
+
 const Main = (props: any) => {
     const { title, activePage, history } = props;
     return (
@@ -46,18 +91,7 @@ const Main = (props: any) => {
                     <MdHome className="hover" onClick={() => { history.replace({ pathname: "/"})}}/>
                 </div>
             </div>
-            <div className="con-100 flex">
-                <div className="con-80 flex" style={{ paddingTop: 50 }}>
-                    <div className="con-10" />
-                    <div className="con-80">
-                        <h3 className="h2" id={activePage.uniqueId}>{activePage.title}</h3>
-                        <div className="description">{activePage.body}</div>
-                        <SubSections {...props} />
-                    </div>
-                    <div className="con-10"/>
-                </div>
-                <Divider {...props} />
-            </div>
+            <ReadBodyContainer activePage={activePage} {...props} />
         </div>
     );
 }
