@@ -1,0 +1,1 @@
+On deleting second chapter, below chapter was also getting updated.

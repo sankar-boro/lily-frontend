@@ -1,7 +1,18 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 
+const MUST_DELETE_COULD_UPDATE = "http://localhost:8000/book/update_or_delete";
+
 const updateOrDelete = (url: string, data: any) => {
     axios.post(url, data, {
+        withCredentials: true,
+    });
+}
+
+const __deleteSubSection = (data: {
+    bookId: string,
+    json: string
+}) => {
+    axios.post(MUST_DELETE_COULD_UPDATE, data, {
         withCredentials: true,
     });
 }
@@ -113,6 +124,45 @@ const deleteSection = (props: any) => {
         return;
     }
     deleteAnySection(props);
+}
+
+const deleteSubSection = (props: any) => {
+    const { activePage, sectionIndex, section, subSections, bookId } = props;
+    const totalSections = subSections.length;
+    const uniqueId = section.uniqueId;
+    const lastIndex = totalSections - 1;
+
+    // init delete or udpate data
+    let deleteData = [uniqueId];
+    let updateData = null;
+
+
+    if (sectionIndex === lastIndex) {
+        console.log("Deleting last element of Sub-Section.");
+    } else if (sectionIndex === 0) {
+        console.log("Deleting first element of Sub-Section.");
+        const nextSubSection = subSections[sectionIndex + 1];
+        updateData = {
+            uniqueId: nextSubSection.uniqueId,
+            newParentId: activePage.uniqueId,
+        };
+    } else if (sectionIndex > 0) {
+        console.log("Deleting in-between element of Sub-Section.");
+        const nextSubSection = subSections[sectionIndex + 1];
+        const prevSubSection = subSections[sectionIndex - 1];
+        updateData = {
+            uniqueId: nextSubSection.uniqueId,
+            newParentId: prevSubSection.uniqueId,
+        };
+    }
+
+    __deleteSubSection({
+        bookId,
+        json: JSON.stringify({
+            deleteData,
+            updateData
+        })
+    });
 }
 
 
@@ -234,8 +284,7 @@ const deletePage = (props: any) => {
     let url = "http://localhost:8000/book/update_or_delete";
     
     let json_data = null;
-    
-    console.log("activePage", activePage);
+
     if (activePage.identity === 105) {
         json_data = deleteSectionMain(props);
     }
@@ -243,6 +292,8 @@ const deletePage = (props: any) => {
     if (activePage.identity === 104) {
         json_data = deleteChapterMain(props);
     }
+
+    console.log(json_data);
 
     updateOrDelete(
         url,
@@ -255,5 +306,6 @@ const deletePage = (props: any) => {
 
 export {
     deleteSection,
+    deleteSubSection,
     deletePage,
 }

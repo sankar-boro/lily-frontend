@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 
-import { deleteSection, deletePage } from "./crud/delete";
+import { deleteSubSection, deletePage } from "./crud/delete";
 import Divider from "./Divider";
 import Update from "../forms/Update";
 import AddSection from "../forms/Section";
@@ -43,9 +43,9 @@ const SubSections = (props: any) => {
     if (!activePage) return null;
     if (!activePage.child) return null;
     if (!Array.isArray(activePage.child)) return null;
-    const sections = activePage.child;
+    const subSections = activePage.child;
 
-    return sections.map((section: any, sectionIndex: number) => {
+    return subSections.map((section: any, sectionIndex: number) => {
         return (
             <div key={section.uniqueId}>
                 <div className="flex center">
@@ -61,11 +61,11 @@ const SubSections = (props: any) => {
                                 payload: others,
                             });
                         }}/>
-                        <MdDelete onClick={() => deleteSection({
+                        <MdDelete onClick={() => deleteSubSection({
                             activePage,
                             sectionIndex,
                             section,
-                            sections,
+                            subSections,
                             bookId
                         })}/>
                     </div>
