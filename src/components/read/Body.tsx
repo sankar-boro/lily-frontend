@@ -4,7 +4,7 @@ import { Book } from "../../globals/types/book";
 import { useBookContext } from "../../service/BookServiceProvider";
 import { constants } from "../../globals/constants";
 
-const { _sbody } = constants.heights.fromTopNav;
+const { topBar } = constants.heights.fromTopNav;
 
 const SubSections = (props: any) => {
     const { activePage, context } = props;
@@ -77,7 +77,7 @@ const Main = (props: any) => {
     const { title, activePage, history } = props;
     return (
         <div className="con-80" style={{ marginLeft: "20%" }}>
-            <div className="con-100 flex" style={{ height: _sbody, alignItems: "center" }}>
+            <div className="con-100 flex" style={{ height: topBar, alignItems: "center" }}>
                 <div className="con-80 flex">
                     <div className="flex con-10" style={{ alignItems: "center" }}>
                         <MdSearch className="hover" style={{ padding: 15 }}/>

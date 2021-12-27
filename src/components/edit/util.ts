@@ -228,6 +228,8 @@ const addNewSection = (
 const addNewChapter = (props: any) => {
     const { page, pageIndex, context } = props;
     const { apiData, dispatch } = context;
+    if (!apiData && !apiData[pageIndex]) return;
+    console.log(props);
     const lastPageIndex = apiData.length - 1;
     
     if (pageIndex === lastPageIndex) {

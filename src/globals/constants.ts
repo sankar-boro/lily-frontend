@@ -7,7 +7,8 @@ const constants = {
         fromTopNav: {
             leftBar: 35,
             rightBar: 35,
-            _sbody: 45,
+            topBar: 45,
+
         }
     }
 }

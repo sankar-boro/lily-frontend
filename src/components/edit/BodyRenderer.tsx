@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 
-import { deleteSubSection, deletePage } from "./crud/delete";
+import { deleteSection, deletePage } from "./crud/index";
 import Divider from "./Divider";
 import Update from "../forms/Update";
 import AddSection from "../forms/Section";
@@ -12,88 +12,88 @@ import { Book, FORM_TYPE } from "../../globals/types/index";
 import { useBookContext } from "../../service/BookServiceProvider";
 import { constants } from "../../globals/constants";
 
-const { _sbody } = constants.heights.fromTopNav;
+const { topBar } = constants.heights.fromTopNav;
 
-
-const FormView = () => {
-    const context: any = useBookContext();
-
-    if (context.viewState === FORM_TYPE.CHAPTER) {
+const FormView = (props: any) => {
+    const { state } = props;
+    if (state === FORM_TYPE.CHAPTER) {
         return <AddChapter />;
     }
-    if (context.viewState === FORM_TYPE.SECTION) {
+    if (state === FORM_TYPE.SECTION) {
         return <AddSection />;
     }
-    if (context.viewState === FORM_TYPE.SUB_SECTION) {
+    if (state === FORM_TYPE.SUB_SECTION) {
         return <SubSection />;
     }
-    if (context.viewState === FORM_TYPE.CREATE_UPDATE) {
+    if (state === FORM_TYPE.CREATE_UPDATE) {
         return <CreateUpdate />;
     }
-    if (context.viewState === FORM_TYPE.UPDATE) {
+    if (state === FORM_TYPE.UPDATE) {
         return <Update />;
     }
     return null;
 };
 
-const SubSections = (props: any) => {
-    const { activePage, context } = props;
-    const { hideSection, dispatch, bookId } = context;
-    if (hideSection) return null;
-    if (!activePage) return null;
-    if (!activePage.child) return null;
-    if (!Array.isArray(activePage.child)) return null;
-    const subSections = activePage.child;
-
-    return subSections.map((section: any, sectionIndex: number) => {
-        return (
-            <div key={section.uniqueId}>
-                <div className="flex center">
-                    <div className="con-95">
-                        <h3 className="h3">{section.title}</h3>
-                    </div>
-                    <div className="con-5 hover">
-                        <MdModeEdit onClick={() => {
-                            const { child, ...others } = section;
-                            dispatch({
-                                type: 'FORM_PAGE_SETTER',
-                                viewType: FORM_TYPE.UPDATE,
-                                payload: others,
-                            });
-                        }}/>
-                        <MdDelete onClick={() => deleteSubSection({
-                            activePage,
-                            sectionIndex,
-                            section,
-                            subSections,
-                            bookId
-                        })}/>
-                    </div>
-                </div>
-                <div className="description">{section.body}</div>
-            </div>
-        );
-    })
+const logger = (identity: number) => {
+    if (identity === 104) {
+        console.log("Page");
+    } else if (identity === 105) {
+        console.log("Section");
+    } else {
+        console.log("Home");
+    }
 }
 
-const Body = (props: any) => {
+const Body = () => {
     const context: any = useBookContext();
-    const { dispatch } = context;
-    const { activePage } = props;
+    const { dispatch, activePage, viewState } = context;
+    
+    if (activePage === null) return null;
+    const { child, ...activePageDetails } = activePage;
+    const { identity } = activePageDetails;
+    
+    logger(identity);
 
-    if (context.viewState !== FORM_TYPE.NONE) {
+    if (viewState !== FORM_TYPE.NONE) {
         return (
             <div className="flex">
                 <div className="con-80 flex">
                     <div className="con-10" />
                     <div className="con-80">
-                        <FormView />
+                        <FormView state={viewState} />
                     </div>
                     <div className="con-10" />
                 </div>
-                <Divider {...props} />
+                <Divider {...context} />
             </div>
         );
+    }
+
+    /** 
+     * This sections only contains delete and edit for
+     * 104, 105.
+     * 101 not yet implemented.
+     */
+    const Edit = () => {
+        const edit = () => dispatch({
+            type: 'FORM_PAGE_SETTER',
+            viewType: FORM_TYPE.UPDATE,
+            payload: activePageDetails,
+        });
+        return <MdModeEdit onClick={edit}/>
+    }
+    const Delete = () => {
+        const _deletePage = (e: any) => {
+            e.preventDefault();
+            deletePage(context);
+        };
+        const _deleteSection = (e: any) => {
+            e.preventDefault();
+            deleteSection(activePage);
+        };
+        if (identity === 104) return <MdDelete onClick={_deletePage}/>
+        if (identity === 105) return <MdDelete onClick={_deleteSection}/>
+        return null;
     }
 
     return (
@@ -106,66 +106,47 @@ const Body = (props: any) => {
                             <h3 className="h3">{activePage.title}</h3>
                         </div>
                         <div className="con-5 hover">
-                            <MdModeEdit onClick={() => {
-                                const { child, ...others } = activePage;
-                                dispatch({
-                                    type: 'FORM_PAGE_SETTER',
-                                    viewType: FORM_TYPE.UPDATE,
-                                    payload: others,
-                                });
-                            }}/>
-                            <MdDelete onClick={() => deletePage({
-                                activePage,
-                                context,
-                            })}/>
+                            <Edit />
+                            <Delete />
                         </div>
                     </div>
                     <div className="description">{activePage.body}</div>
-                    <SubSections {...props} />
+                    {/* <SubSections {...props} /> */}
                 </div>
                 <div className="con-10" />
             </div>
-            <Divider {...props} />
+            <Divider {...context} />
         </div>
     );
 }
 
-const Main = (props: any) => {
-    const { title, history } = props;
-    return (
-        <div className="con-80" style={{ marginLeft: "20%" }}>
-            {/* Book title */}
-            <div className="con-100 flex" style={{ height: _sbody, alignItems: "center" }}>
-                <div className="con-80 flex">
-                    <div className="flex con-10" style={{ alignItems: "center" }}>
-                        <MdSearch className="hover" style={{ padding: 15 }}/>
-                    </div>
-                    <div className="con-80 flex center">
-                        <h2 className="h2 book-title">{title}</h2>
-                    </div>
-                    <div className="con-10" />
-                </div>
-                <div className="con-20 flex">
-                    <MdHome className="hover" onClick={() => { history.replace({ pathname: "/"})}}/>
-                </div>
+const Header = () => {
+    const history: any = useHistory();
+    const { title } = history.location.state;
+
+    const goHome = () => { history.replace({ pathname: "/"})};
+
+    return <div className="con-100 flex" style={{ height: topBar, alignItems: "center" }}>
+        <div className="con-80 flex">
+            <div className="flex con-10" style={{ alignItems: "center" }}>
+                <MdSearch className="hover" style={{ padding: 15 }}/>
             </div>
-            {/* Book title */}
-            <Body {...props} />
+            <div className="con-80 flex center">
+                <h2 className="h2 book-title">{title}</h2>
+            </div>
+            <div className="con-10" />
         </div>
-    );
+        <div className="con-20 flex">
+            <MdHome className="hover" onClick={goHome}/>
+        </div>
+    </div>
 }
 
 const BodyRenderer = () => {
-    const history: any = useHistory();
-    const { title } = history.location.state;
-    const context: any = useBookContext();
-    const { activePage, sectionId } = context;
-
-    const mainProps = { title, activePage, sectionId, context, history };
-
-    if (!activePage) return null;
-    
-    return <Main {...mainProps} />
+    return <div className="con-80" style={{ marginLeft: "20%" }}>
+        <Header />
+        <Body />
+    </div>
 };
 
 export default BodyRenderer;
