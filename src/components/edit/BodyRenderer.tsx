@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 
-import { deleteSection, deletePage, deleteSubSection } from "./crud/index";
+import { deleteSection, deletePage, deleteSubSection } from "./crud/delete/index";
 import Divider from "./Divider";
 import Update from "../forms/Update";
 import AddSection from "../forms/Section";
@@ -91,8 +91,6 @@ const Body = () => {
     const { child, ...activePageDetails } = activePage;
     const { identity } = activePageDetails;
     
-    logger(identity);
-
     if (viewState !== FORM_TYPE.NONE) {
         return (
             <div className="flex">

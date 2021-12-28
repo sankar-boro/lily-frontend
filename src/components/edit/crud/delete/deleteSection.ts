@@ -1,9 +1,6 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
 import { Result, Ok, Err } from "ts-results";
-
-
-const UPDATE_OR_DELETE = "http://localhost:8000/book/update_or_delete";
-const test = false;
+import { ENV, URLS} from "../../../../globals/constants";
 
 const updateOrDelete = (url: string, data: any) => {
     axios.post(url, data, {
@@ -163,7 +160,7 @@ const deleteSection = (context: any) => {
     }
     
     // test logger
-        if (test) {
+        if (ENV.LOG) {
             console.log(deleteIds);
             console.log({
                 updateData,
@@ -173,7 +170,7 @@ const deleteSection = (context: any) => {
         }
     //
 
-    updateOrDelete(UPDATE_OR_DELETE, update_delete_data);
+    updateOrDelete(URLS.UPDATE_OR_DELETE, update_delete_data);
 }
 
 export default deleteSection;

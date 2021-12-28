@@ -13,4 +13,12 @@ const constants = {
     }
 }
 
-export {constants};
+const URLS = {
+    UPDATE_OR_DELETE: "http://localhost:8000/book/update_or_delete",
+}
+
+const ENV = {
+    LOG: true,
+}
+
+export {constants, URLS, ENV};
