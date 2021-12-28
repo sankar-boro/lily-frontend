@@ -1,4 +1,4 @@
-import { addNewChapter, addNewSection } from "./util";
+import { createChapter, createSection } from "./crud/create";
 import { useBookContext} from "../../service/BookServiceProvider";
 
 const Sections = (props: any) => {
@@ -69,7 +69,7 @@ const AddSection = (props: any) => {
         style={{marginTop:5}}
         onClick={(e: any) => {
             e.preventDefault();
-            addNewSection(props);
+            createSection(props);
         }}
     >
         <span style={{ marginLeft: 20, fontSize: 12 }}>+ Add section</span>
@@ -83,7 +83,7 @@ const AddChapter = (props: any) => {
             className="hover"
             onClick={(e: any) => {
                 e.preventDefault();
-                addNewChapter(props);
+                createChapter(props);
             }}
         >
             <span style={{ fontSize: 12 }}>+ Add chapter</span>
