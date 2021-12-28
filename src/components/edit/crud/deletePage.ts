@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-
 import { Result, Ok, Err } from "ts-results";
 
 const UPDATE_OR_DELETE = "http://localhost:8000/book/update_or_delete";
@@ -12,6 +11,7 @@ const updateOrDelete = (url: string, data: any) => {
 }
 
 class Data {
+    parent: any = null;
     context: any = null;
     apiData: any = null;
     activePage: any = null;
@@ -36,6 +36,20 @@ class Data {
 
     setActivePage(activePage: any) {
         this.activePage = activePage;
+    }
+
+    setActiveSection() {
+        const { apiData, activePage } = this.context;
+        let _parent = null;
+        apiData.forEach((chapter: any) => {
+            chapter.child.forEach((section: any) => {
+                if (section.uniqueId === activePage.uniqueId) {
+                    _parent = chapter;
+                }
+            });
+        });
+        this.activeSection = activePage;
+        this.parent = _parent;
     }
 }
 

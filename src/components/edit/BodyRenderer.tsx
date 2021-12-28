@@ -1,7 +1,7 @@
 import { useHistory } from "react-router-dom";
 import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 
-import { deleteSection, deletePage } from "./crud/index";
+import { deleteSection, deletePage, deleteSubSection } from "./crud/index";
 import Divider from "./Divider";
 import Update from "../forms/Update";
 import AddSection from "../forms/Section";
@@ -42,6 +42,45 @@ const logger = (identity: number) => {
     } else {
         console.log("Home");
     }
+}
+
+
+const SubSections = (props: any) => {
+    const { activePage, context } = props;
+    const { hideSection, dispatch, bookId } = context;
+    if (hideSection) return null;
+    if (!activePage) return null;
+    if (!activePage.child) return null;
+    if (!Array.isArray(activePage.child)) return null;
+    const subSections = activePage.child;
+
+    return subSections.map((subSection: any, sectionIndex: number) => {
+        return (
+            <div key={subSection.uniqueId}>
+                <div className="flex center">
+                    <div className="con-95">
+                        <h3 className="h3">{subSection.title}</h3>
+                    </div>
+                    <div className="con-5 hover">
+                        <MdModeEdit onClick={() => {
+                            const { child, ...others } = subSection;
+                            dispatch({
+                                type: 'FORM_PAGE_SETTER',
+                                viewType: FORM_TYPE.UPDATE,
+                                payload: others,
+                            });
+                        }}/>
+                        <MdDelete onClick={() => {deleteSubSection({
+                            section: activePage, 
+                            subSection,
+                            bookId,
+                        })}}/>
+                    </div>
+                </div>
+                <div className="description">{subSection.body}</div>
+            </div>
+        );
+    })
 }
 
 const Body = () => {
@@ -89,7 +128,7 @@ const Body = () => {
         };
         const _deleteSection = (e: any) => {
             e.preventDefault();
-            deleteSection(activePage);
+            deleteSection(context);
         };
         if (identity === 104) return <MdDelete onClick={_deletePage}/>
         if (identity === 105) return <MdDelete onClick={_deleteSection}/>
@@ -111,7 +150,7 @@ const Body = () => {
                         </div>
                     </div>
                     <div className="description">{activePage.body}</div>
-                    {/* <SubSections {...props} /> */}
+                    <SubSections activePage={activePage} context={context} />
                 </div>
                 <div className="con-10" />
             </div>
