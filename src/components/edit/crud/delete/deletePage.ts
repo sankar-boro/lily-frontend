@@ -1,206 +1,196 @@
 import axios from "axios";
-import { Result, Ok, Err } from "ts-results";
+import { Result, Ok, Err, Some, None, Option } from "ts-results";
 import { ENV, URLS} from "../../../../globals/constants";
+import { Book } from "../../../../globals/types";
 
-const updateOrDelete = (data: any) => {
+const updateOrDelete = (data: any, bookId: string) => {
     if (ENV.LOG) {
-        return ;
+        console.log(data);
+        return;
     }
-    axios.post(URLS.UPDATE_OR_DELETE, data, {
+    axios.post(URLS.UPDATE_OR_DELETE, {
+        bookId,
+        json: JSON.stringify(data),
+    }, {
         withCredentials: true,
     });
 }
 
-enum DeletePageError {
-    ActivePageNotSet = "ActivePageNotSet",
-    SectionsEmpty = "SectionsEmpty",
-    NothingToDelete = "NothingToDelete",
-};
-
 type ActivePage = {
-    child: any [],
-    uniqueId: string,
+    child?: any [],
+    uniqueId?: string,
 }
 
 interface AdjacentPageData {
-    topPageData: any | null;
-    botPageData: any | null;
+    topPageData: Option<Book>;
+    botPageData: Option<Book>;
 }
 
 interface AdjacentPageId {
-    topPageUId: string | null,
-    botPageUId: string | null,
+    topPageUId: Option<string>,
+    botPageUId: Option<string>,
 }
 
-type ApiData = any[];
+type TopAndBotId =  {
+    topUniqueId: string | null,
+    botUniqueId: string | null,
+}
+
+type ApiData = Book[];
+
 
 class DeletePage {
 
-    activePage: ActivePage | null = null;
-    apiData: ApiData | null = null;
+    activePage: ActivePage;
+    apiData: ApiData;
+    sections: Option<any[]> = None;
+    activePageId: Option<string> = None;
 
-    deletePageIds: string[] = [];
-    updatePageData: AdjacentPageData | null = null;
-    updatePageId: AdjacentPageId | null = null;
-    
-    err: boolean | null = null;
-    ok: boolean | null = null;
-    val: any = null;
+    deletePageIds: Option<string[]> = None;
+    updatePageData: Option<AdjacentPageData> = None;
 
-    setActivePage(activePage: ActivePage) {
-        this.activePage = activePage;
-        return this;
-    }
-
-    setApiData(apiData: ApiData) {
+    constructor(apiData: ApiData, activePage: ActivePage) {
         this.apiData = apiData;
-        return this;
+        this.activePage = activePage;
     }
 
-    private createDeleteIdsFrom104() : Result<string, string> { // page | chapter
-        if (!this.activePage) return Err(DeletePageError.ActivePageNotSet);
-        if (!this.activePage.child) return Err(DeletePageError.SectionsEmpty);
-
-        const deletePageIds: string[] = [];
-        let sections = this.activePage.child;
+    private createDeleteIds(activePageId: string, sections: any[]) {
+        const deletePageIds: string[] = [activePageId];
         sections.forEach((section: any) => {
             section.child.forEach((subSection: any) => {
                 deletePageIds.push(subSection.uniqueId); // push subSection
             });
             deletePageIds.push(section.uniqueId); // push section
         });
-        deletePageIds.push(this.activePage.uniqueId); // push the page id
-        
-        if (deletePageIds.length === 0) {
-            return Err(DeletePageError.NothingToDelete);
-        }
-
-        this.deletePageIds = deletePageIds; // ids include [pageId, sectionId, subSectionId]
-        return Ok("success");
+        this.deletePageIds = Some(deletePageIds); // ids include [pageId, sectionId, subSectionId]
     }
 
-    private createAdjacentDataFromActivePage() : Result<string, string> {
-        const { apiData, activePage } = this;
-        let topPageData = null;
-        let botPageData = null;
-
-        if (!apiData) return Err("Cannot delete Page. No apiData.");
-
+    private createAdjacentDataFromActivePage(apiData: ApiData, activePage: ActivePage) : Result<string, string> {
+        let topPageData: Option<any> = None;
+        let botPageData: Option<any> = None;
+        const activePageId = this.activePageId.unwrap();
+        
         let totalPages = apiData.length;
+        if (totalPages <= 1) return Err("Cannot delete chapter.");
+
         let lastChapterIndex = totalPages - 1;
         let deleteType = null;
-        if (!activePage) return Err("activePage not set");
-        if(!activePage.uniqueId) return Err("missing active page uniqueId.");
-        if (totalPages <= 1) return Err("cannot delete chapter.");
-
+        
         for (let i=0; i <= lastChapterIndex; i++) {
-            if (!apiData[i]) return Err(`no data from index: ${i}`);
-            if (apiData[i].uniqueId === activePage.uniqueId) {
+            if (!apiData[i]) return Err(`!apiData[i]`);
+            if (!apiData[i].uniqueId) return Err(`!apiData[i].uniqueId`);
+            if (apiData[i].uniqueId === activePageId) {
                 if (apiData[i+1]) {
                     deleteType = "deleteUpdate";
-                    botPageData = apiData[i + 1];
+                    botPageData = Some(apiData[i + 1]);
                 } else {
                     deleteType = "deleteOnly";
                 }
                 break;
             }
-            topPageData = apiData[i];
+            topPageData = Some(apiData[i]);
         }
 
-        if (!topPageData) return Err("cannot delete page if parentPage does not exist.");
-
-        // parentPage will never be null, nextPage could be null.
-        this.updatePageData = {
-            topPageData,
-            botPageData
-        };
-
+        if (topPageData.none) {
+            return Err("topPageData.none");
+        } 
+        this.updatePageData = Some({
+            topPageData: topPageData,
+            botPageData: botPageData,
+        });
         return Ok("success");
     }
 
-    error(val: any) {
-        this.ok = false;
-        this.err = true;
-        this.val = val;
+    init(): Result<string, string> {
+        const { activePage } = this;
+        if (!activePage.uniqueId) return Err("!uniqueId");
+        this.activePageId = Some(activePage.uniqueId);
+
+        if (!activePage.child) return Err("!activePage.child");
+        this.sections = Some(activePage.child);
+
+        return Ok("Success.");
     }
 
-    success() {
-        this.ok = true;
-        this.err = false;
-    }
+    run(): Result<string, string> {
+        const init = this.init();
+        if (init.err) return init;
 
-    run() {
-        let res1 = this.createDeleteIdsFrom104();
-        let res2 = this.createAdjacentDataFromActivePage();
-        if (res1.err || res2.err) {
-            if (res1.err) {
-                this.error(res1.err);
-            } else if (res2.err) {
-                this.error(res2.err);
-            }
-        } else {
-            this.success();
-        }
-        return this;
+        let { apiData, activePage, activePageId, sections } = this;
+        let _sections = sections.some ? sections.val : [];
+        this.createDeleteIds(activePageId.unwrap(), _sections);
+
+        const adjacentIds =  this.createAdjacentDataFromActivePage(apiData, activePage);
+        if (adjacentIds.err) return adjacentIds;
+        return Ok("Success.");
     }
 
     getData() : Result<any, string> {
-        if (this.err) {
-            return Err(this.val);
-        } 
-        let adjacentIds = getAdjacentIds(this.updatePageData);
-        if (adjacentIds.err) {
-            return Err(adjacentIds.val);
+        
+        let adjacentIds: Result<Option<AdjacentPageId>, string> = Ok(None);
+        let topAndBotIds: Option<TopAndBotId> = None;
+
+        if (this.updatePageData.some) {
+            adjacentIds = getAdjacentIds(this.updatePageData.val);
+            if (adjacentIds.err) return adjacentIds;
         }
-        let topAndBotIds = adjacentIdsToTopAndBotIds(adjacentIds.unwrap());
-        const returnData = {
+
+        let _adjacentIds = adjacentIds.val;
+        if(_adjacentIds.none) {
+            const returnData = {
+                deleteData: this.deletePageIds,
+                updateData: null,
+            };
+            return Ok(returnData);    
+        }
+
+        topAndBotIds = adjacentIdsToTopAndBotIds(_adjacentIds.val);
+        return Ok({
             deleteData: this.deletePageIds,
-            updateData: topAndBotIds
-        };
-        if (ENV.LOG) {
-            this.apiData?.forEach((chapter) => {
-                console.log('chapter', chapter.uniqueId);
-            });
-            console.log(returnData);
-        }
-        return Ok(returnData);
+            updateData: topAndBotIds,
+        }); 
+
     }
 }
 
-const getAdjacentIds = (adjacentPageData: AdjacentPageData | null): Result<AdjacentPageId, string> => {
-    if (!adjacentPageData) return Err("Adjacent Data not set.");
+const getAdjacentIds = (adjacentPageData: AdjacentPageData): Result<Option<AdjacentPageId>, string> => {
     const { topPageData, botPageData } = adjacentPageData;
-    let topPageUId = topPageData ? topPageData.uniqueId : null;
-    let botPageUId = botPageData ? botPageData.uniqueId : null;
-    return Ok({
+    if (topPageData.none) return Err("!topPageData");
+    if (topPageData.some && botPageData.none) return Ok(None);
+
+    let topPageUId = topPageData.some && topPageData.val.uniqueId ? Some(topPageData.val.uniqueId) : None;
+    let botPageUId = botPageData.some && botPageData.val.uniqueId ? Some(botPageData.val.uniqueId) : None;
+    return Ok(Some({
         topPageUId,
         botPageUId,
-    })    
+    }));    
 }
 
-const adjacentIdsToTopAndBotIds = (ids: AdjacentPageId) => {
+const adjacentIdsToTopAndBotIds = (ids: AdjacentPageId): Option<TopAndBotId> => {
     const { botPageUId, topPageUId } = ids;
-    let updateData = null;
-    if (botPageUId !== null && topPageUId !== null) {
-        // NOTE: 
-        return {
-            topUniqueId: topPageUId,
-            botUniqueId: botPageUId
-        }
-    }
-    return updateData;
+    if (!botPageUId && !topPageUId) return None;
+
+    return Some({
+        topUniqueId: topPageUId.some ? topPageUId.val : null,
+        botUniqueId: botPageUId.some ? botPageUId.val : null,
+    });
 }
 
-const deletePage = (context: any) => {
+const deletePage = (context: any): Result<string, string> => {
     const {activePage, apiData, bookId} = context;
-    const json = new DeletePage()
-    .setActivePage(activePage)
-    .setApiData(apiData)
-    .run()
-    .getData();
-    updateOrDelete(json);
+    if (!apiData) return Err("!apiData");
+    if (!activePage) return Err("!activePage");
+
+    const deletePage = new DeletePage(apiData, activePage);
+    const runRes = deletePage.run();
+    if( runRes.err) return runRes;
+    
+    let json = deletePage.getData();
+    if (json.err) return json;
+
+    updateOrDelete(json, bookId);
+    return Ok("Success.");
 }
 
 
 export default deletePage;
-// all possible error handled.
