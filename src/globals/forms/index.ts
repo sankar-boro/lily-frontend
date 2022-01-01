@@ -1,4 +1,4 @@
-import { Book } from "../types/book";
+import { Node } from "../types";
 
 const textareaRows = 32;
 const textareaCols = 50;
@@ -74,7 +74,7 @@ function buildSectionsReturnSections(
     });
 }
 
-function groups(book_data: Book[]) {
+function groups(book_data: Node[]) {
     let gs: any = {
         101: [],
         102: [],
@@ -84,7 +84,7 @@ function groups(book_data: Book[]) {
         106: [],
     };
 
-    book_data.forEach((d: Book) => {
+    book_data.forEach((d: Node) => {
         if (gs[d.identity]) {
             gs[d.identity].push(d);
         }
@@ -109,14 +109,14 @@ const groupChapters = (parentId: string, chapters: any) => {
     return orders;
 };
 
-const sortAll = (data: Book[]) => {
+const sortAll = (data: Node[]) => {
     let gs = groups(data);
     let ozf = gs[105];
     let ozs = gs[106];
 
     let c = { 101: gs[101], 102: gs[102], 103: gs[103], 104: gs[104] };
     c[104] = groupChapters(c[101][0].uniqueId, c[104]);
-    let chapters: Book[] = [];
+    let chapters: Node[] = [];
     Object.values(c).forEach((v) => {
         let a = buildSectionsReturnSections(v, ozf, ozs);
         chapters = [...chapters, ...a];

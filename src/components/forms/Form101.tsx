@@ -1,19 +1,6 @@
 import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-type Book = {
-    bookId: string;
-    body: string;
-    identity: number;
-    title: string;
-    parentId: string | null;
-    uniqueId: string;
-    authorId: string;
-    authorName: string;
-    createdAt: string;
-    updatedAt: string;
-};
-
 const submitBook = (props: {
     title: string;
     body: string;

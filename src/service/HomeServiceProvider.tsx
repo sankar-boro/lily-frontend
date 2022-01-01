@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useReducer } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Book } from "../globals/types/book";
+import { Node } from "../globals/types/book";
 
 export type HomeState = {
-    books: Book[],
+    books: Node[],
     error: string;
     dispatch: Function,
 };

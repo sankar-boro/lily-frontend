@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Result, Ok, Err, Some, None, Option } from "ts-results";
 import { ENV, URLS} from "../../../../globals/constants";
-import { Book } from "../../../../globals/types";
+import { Node } from "../../../../globals/types";
 
 const updateOrDelete = (data: any, bookId: string) => {
     if (ENV.LOG) {
@@ -21,12 +21,12 @@ type ActivePage = {
     uniqueId?: string,
 }
 
-interface AdjacentPageData {
-    topPageData: Option<Book>;
-    botPageData: Option<Book>;
+type AdjacentPageData = {
+    topPageData: Option<Node>;
+    botPageData: Option<Node>;
 }
 
-interface AdjacentPageId {
+type AdjacentPageId = {
     topPageUId: Option<string>,
     botPageUId: Option<string>,
 }
@@ -36,8 +36,15 @@ type TopAndBotId =  {
     botUniqueId: string | null,
 }
 
-type ApiData = Book[];
+type ApiData = Node[];
 
+class Section {
+    section: ActivePage;
+    constructor(section: ActivePage
+        ) {
+        this.section = section;
+    }
+}
 
 class DeletePage {
 
@@ -54,13 +61,14 @@ class DeletePage {
         this.activePage = activePage;
     }
 
+    private getSubSectionIds(section: any) {
+        return section.child.map((subSection: any) => subSection.uniqueId);
+    }
+
     private createDeleteIds(activePageId: string, sections: any[]) {
-        const deletePageIds: string[] = [activePageId];
+        let deletePageIds: string[] = [activePageId];
         sections.forEach((section: any) => {
-            section.child.forEach((subSection: any) => {
-                deletePageIds.push(subSection.uniqueId); // push subSection
-            });
-            deletePageIds.push(section.uniqueId); // push section
+            deletePageIds = [section.uniqueId, ...deletePageIds, ...this.getSubSectionIds(section)];
         });
         this.deletePageIds = Some(deletePageIds); // ids include [pageId, sectionId, subSectionId]
     }

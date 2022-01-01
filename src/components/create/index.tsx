@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 
 import { sortAll } from "./util";
 import CreateBook from "../forms/CreateNewBook";
-import { Book, Form, FORM_TYPE } from "../../globals/types";
+import { Node, Form, FORM_TYPE } from "../../globals/types";
 import CreateBodyComponent from "./BodyComponent";
 import { BookNavigation } from "./BookNavigation";
 
@@ -20,8 +20,8 @@ const EditBook = () => {
     const history: {
         location: {
             state: {
-                main: Book;
-                allPages: Book[];
+                main: Node;
+                allPages: Node[];
             };
         };
     } = useHistory();
@@ -32,7 +32,7 @@ const EditBook = () => {
     const [body, setBody] = useState("");
     const [bookId, setBookId] = useState<string | null>(null);
     const [bookRows, setBookRows] = useState([]);
-    const [allPages, setAllPages] = useState<Book[]>([]);
+    const [allPages, setAllPages] = useState<Node[]>([]);
     const [activeId, setActiveId] = useState<string | null>(null);
     const [parentId, setParentId] = useState<string | null>(null);
     const [sectionId, setSectionId] = useState<string | null>(null);
@@ -91,7 +91,7 @@ const RenderBody = (props: {
     parentId: string | null;
     activeId: string | null;
     setBookRows: Function;
-    bookRows: Book[];
+    bookRows: Node[];
 }) => {
     const { sectionId, currentFormType, allPages, activeId } = props;
     let currentData: any = null;
@@ -158,7 +158,7 @@ const FormView = (props: {
     parentId: string | null;
     activeId: string | null;
     setBookRows: Function;
-    bookRows: Book[];
+    bookRows: Node[];
 }) => {
     const { currentFormType } = props;
     if (currentFormType.formType === FORM_TYPE.FRONT_COVER) {

@@ -1,7 +1,7 @@
 import { Some, Option, None } from "ts-results";
-import { Book, FORM_TYPE } from "../../globals/types/index";
+import { Node, FORM_TYPE } from "../../globals/types/index";
 
-const sortAll = (data: Book[], parentId: string) => {
+const sortAll = (data: Node[], parentId: string) => {
     let lastParentId = parentId;
     let newData: any = [];
     data.forEach((b) => {

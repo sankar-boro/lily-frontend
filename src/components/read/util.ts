@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { Node } from "../../globals/types";
 
 type Book = {
     bookId: string;
@@ -24,7 +25,7 @@ const getPages = (setAllPages: Function, bookId: string) => {
             typeof res.status === "number" &&
             res.status === 200
         ) {
-            let dataRes: Book[] = res.data;
+            let dataRes: Node[] = res.data;
             let x = sortAll(dataRes);
             setAllPages(x);
         }
@@ -105,7 +106,7 @@ function buildSectionsReturnSections(
     });
 }
 
-function groups(book_data: Book[]) {
+function groups(book_data: Node[]) {
     let gs: any = {
         101: [],
         102: [],
@@ -115,7 +116,7 @@ function groups(book_data: Book[]) {
         106: [],
     };
 
-    book_data.forEach((d: Book) => {
+    book_data.forEach((d: Node) => {
         if (gs[d.identity]) {
             gs[d.identity].push(d);
         }
@@ -123,13 +124,13 @@ function groups(book_data: Book[]) {
     return gs;
 }
 
-const sortAll = (data: Book[]) => {
+const sortAll = (data: Node[]) => {
     let gs = groups(data);
     let ozf = gs[105];
     let ozs = gs[106];
 
     let c = { 101: gs[101], 102: gs[102], 103: gs[103], 104: gs[104] };
-    let chapters: Book[] = [];
+    let chapters: Node[] = [];
     Object.values(c).forEach((v) => {
         let a = buildSectionsReturnSections(v, ozf, ozs);
         chapters = [...chapters, ...a];

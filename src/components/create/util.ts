@@ -1,18 +1,5 @@
 import { Some, Option, None } from "ts-results";
-
-type Book = {
-    bookId: string;
-    authorId: string;
-    authorName: string;
-    title: string;
-    body: string;
-    parentId: string | null;
-    uniqueId: string;
-    createdAt: string;
-    updatedAt: string;
-    identity: number;
-    child: [];
-};
+import { Node } from "../../globals/types"
 
 type FormData = {
     topUniqueId: string;
@@ -107,7 +94,7 @@ function buildSectionsReturnSections(
     });
 }
 
-function groups(book_data: Book[]) {
+function groups(book_data: Node[]) {
     let gs: any = {
         101: [],
         102: [],
@@ -117,7 +104,7 @@ function groups(book_data: Book[]) {
         106: [],
     };
 
-    book_data.forEach((d: Book) => {
+    book_data.forEach((d: Node) => {
         if (gs[d.identity]) {
             gs[d.identity].push(d);
         }
@@ -125,13 +112,13 @@ function groups(book_data: Book[]) {
     return gs;
 }
 
-const sortAll = (data: Book[]) => {
+const sortAll = (data: Node[]) => {
     let gs = groups(data);
     let ozf = gs[105];
     let ozs = gs[106];
 
     let c = { 101: gs[101], 102: gs[102], 103: gs[103], 104: gs[104] };
-    let chapters: Book[] = [];
+    let chapters: Node[] = [];
     Object.values(c).forEach((v) => {
         let a = buildSectionsReturnSections(v, ozf, ozs);
         chapters = [...chapters, ...a];
@@ -260,4 +247,4 @@ export {
     FormType,
     // getSectionData,
 };
-export type { Book, Form, FormData, FormType as FormTypes };
+export type { Node, Form, FormData, FormType as FormTypes };

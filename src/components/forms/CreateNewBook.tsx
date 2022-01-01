@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Book } from "../../globals/types/book";
+import { Node } from "../../globals/types/book";
 import { Form } from "../../globals/types";
 import { textareaRows, textareaCols } from "../../globals/forms";
 
@@ -9,7 +9,7 @@ const submitBook = (props: {
     body: string;
     identity: number;
     setBookRows: Function;
-    bookRows: Book[];
+    bookRows: Node[];
 }) => {
     const { title, body, identity, setBookRows, bookRows } = props;
     axios
@@ -24,7 +24,7 @@ const submitBook = (props: {
                 withCredentials: true,
             }
         )
-        .then((res: AxiosResponse<{ status: number; data: Book }>) => {
+        .then((res: AxiosResponse<{ status: number; data: Node }>) => {
             if (
                 res.status &&
                 typeof res.status === "number" &&
@@ -47,7 +47,7 @@ const CreateNewBook = (props: {
     parentId: string | null;
     activeId: string | null;
     setBookRows: Function;
-    bookRows: Book[];
+    bookRows: Node[];
 }) => {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
