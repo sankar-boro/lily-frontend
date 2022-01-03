@@ -2,6 +2,7 @@ import axios from "axios";
 import { Result, Ok, Err, Some, None, Option } from "ts-results";
 import { ENV, URLS} from "../../../../globals/constants";
 import { Node } from "../../../../globals/types";
+import { Page, Section, } from "../../../utils/page";
 
 const updateOrDelete = (data: any, bookId: string) => {
     if (ENV.LOG) {
@@ -38,14 +39,6 @@ type TopAndBotId =  {
 
 type ApiData = Node[];
 
-class Section {
-    section: ActivePage;
-    constructor(section: ActivePage
-        ) {
-        this.section = section;
-    }
-}
-
 class DeletePage {
 
     activePage: ActivePage;
@@ -61,15 +54,9 @@ class DeletePage {
         this.activePage = activePage;
     }
 
-    private getSubSectionIds(section: any) {
-        return section.child.map((subSection: any) => subSection.uniqueId);
-    }
-
-    private createDeleteIds(activePageId: string, sections: any[]) {
-        let deletePageIds: string[] = [activePageId];
-        sections.forEach((section: any) => {
-            deletePageIds = [section.uniqueId, ...deletePageIds, ...this.getSubSectionIds(section)];
-        });
+    private createDeleteIds(activePage: ActivePage) {
+        let deletePageIds: string[] = [];
+        Page(activePage).allIdsFromPage(deletePageIds)
         this.deletePageIds = Some(deletePageIds); // ids include [pageId, sectionId, subSectionId]
     }
 
@@ -124,9 +111,8 @@ class DeletePage {
         const init = this.init();
         if (init.err) return init;
 
-        let { apiData, activePage, activePageId, sections } = this;
-        let _sections = sections.some ? sections.val : [];
-        this.createDeleteIds(activePageId.unwrap(), _sections);
+        let { apiData, activePage } = this;
+        this.createDeleteIds(activePage);
 
         const adjacentIds =  this.createAdjacentDataFromActivePage(apiData, activePage);
         if (adjacentIds.err) return adjacentIds;
