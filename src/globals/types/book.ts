@@ -1,4 +1,6 @@
-type Node = {
+import { Option } from "ts-results";
+
+export type Node = {
     bookId: string;
     body: string;
     identity: number;
@@ -10,8 +12,7 @@ type Node = {
     createdAt: string;
     updatedAt: string;
 };
-
-type Section = {
+export type Section = {
     bookId: string;
     body: string;
     child: Node[],
@@ -23,8 +24,7 @@ type Section = {
     createdAt: string;
     updatedAt: string;
 }
-
-type Chapter = {
+export type Chapter = {
     bookId: string;
     body: string;
     child: Section[],
@@ -36,7 +36,10 @@ type Chapter = {
     createdAt: string;
     updatedAt: string;
 }
-
-type ApiData = Chapter[];
-
-export type { Node, Section, Chapter, ApiData };
+export type ApiData = Chapter[];
+export type ChapterParentNode = Chapter;
+export type ChapterChildNode = Chapter;
+export type ParentChildNode = {
+    parentNode: Option<Chapter>,
+    childNode: Option<Chapter>,
+}

@@ -1,8 +1,9 @@
 import axios from "axios";
 import { Result, Ok, Err, Some, None, Option } from "ts-results";
+
+import { Page, Book } from "../../../../utils/delete";
 import { ENV, URLS} from "../../../../globals/constants";
-import { Node } from "../../../../globals/types";
-import { Page, Section, } from "../../../utils/page";
+import { Chapter, ApiData, ChapterChildNode, ChapterParentNode } from "../../../../globals/types";
 
 const updateOrDelete = (data: any, bookId: string) => {
     if (ENV.LOG) {
@@ -17,14 +18,9 @@ const updateOrDelete = (data: any, bookId: string) => {
     });
 }
 
-type ActivePage = {
-    child?: any [],
-    uniqueId?: string,
-}
-
 type AdjacentPageData = {
-    topPageData: Option<Node>;
-    botPageData: Option<Node>;
+    topPageData: Option<ChapterParentNode>;
+    botPageData: Option<ChapterChildNode>;
 }
 
 type AdjacentPageId = {
@@ -37,11 +33,9 @@ type TopAndBotId =  {
     botUniqueId: string | null,
 }
 
-type ApiData = Node[];
-
 class DeletePage {
 
-    activePage: ActivePage;
+    activePage: Chapter;
     apiData: ApiData;
     sections: Option<any[]> = None;
     activePageId: Option<string> = None;
@@ -49,50 +43,36 @@ class DeletePage {
     deletePageIds: Option<string[]> = None;
     updatePageData: Option<AdjacentPageData> = None;
 
-    constructor(apiData: ApiData, activePage: ActivePage) {
+    constructor(apiData: ApiData, activePage: Chapter) {
         this.apiData = apiData;
         this.activePage = activePage;
     }
 
-    private createDeleteIds(activePage: ActivePage) {
+    private createDeleteIds(activePage: Chapter) {
         let deletePageIds: string[] = [];
         Page(activePage).allIdsFromPage(deletePageIds)
         this.deletePageIds = Some(deletePageIds); // ids include [pageId, sectionId, subSectionId]
     }
 
-    private createAdjacentDataFromActivePage(apiData: ApiData, activePage: ActivePage) : Result<string, string> {
-        let topPageData: Option<any> = None;
-        let botPageData: Option<any> = None;
-        const activePageId = this.activePageId.unwrap();
+    private createAdjacentDataFromActivePage(apiData: ApiData) : Result<string, string> {
         
         let totalPages = apiData.length;
         if (totalPages <= 1) return Err("Cannot delete chapter.");
 
-        let lastChapterIndex = totalPages - 1;
-        let deleteType = null;
-        
-        for (let i=0; i <= lastChapterIndex; i++) {
-            if (!apiData[i]) return Err(`!apiData[i]`);
-            if (!apiData[i].uniqueId) return Err(`!apiData[i].uniqueId`);
-            if (apiData[i].uniqueId === activePageId) {
-                if (apiData[i+1]) {
-                    deleteType = "deleteUpdate";
-                    botPageData = Some(apiData[i + 1]);
-                } else {
-                    deleteType = "deleteOnly";
-                }
-                break;
-            }
-            topPageData = Some(apiData[i]);
-        }
+        let updateData = Book(apiData).getAdjacentFromPage(this.activePageId.unwrap());
 
-        if (topPageData.none) {
-            return Err("topPageData.none");
-        } 
-        this.updatePageData = Some({
-            topPageData: topPageData,
-            botPageData: botPageData,
-        });
+        if (updateData.err) {
+            return Err(updateData.val);
+        }
+        
+        let updateData1 = updateData.unwrap();
+        if (updateData1.some) {
+            let updateData2 = updateData1.unwrap();            
+            this.updatePageData = Some({
+                topPageData: updateData2.parentNode,
+                botPageData: updateData2.childNode,
+            });
+        }
         return Ok("success");
     }
 
@@ -114,7 +94,7 @@ class DeletePage {
         let { apiData, activePage } = this;
         this.createDeleteIds(activePage);
 
-        const adjacentIds =  this.createAdjacentDataFromActivePage(apiData, activePage);
+        const adjacentIds =  this.createAdjacentDataFromActivePage(apiData);
         if (adjacentIds.err) return adjacentIds;
         return Ok("Success.");
     }
