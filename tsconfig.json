@@ -1,22 +1,22 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "allowJs": true,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "noFallthroughCasesInSwitch": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noEmit": true,
-        "jsx": "react-jsx",
-        "rootDir": "src",
-        "outDir": "build"
+  "extends": "./config/tsconfig.json",
+  "exclude": [
+    "build/**/*",
+    "**/build/**/*"
+  ],
+  "compilerOptions": {
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@lily/apps/*": ["packages/apps/src/*"],
+      "@lily/apps": ["packages/apps/src"],
+      "@lily/react-components": [ "packages/react-components/src" ],
+      "@lily/react-components/*": [ "packages/react-components/src/*" ]
     },
-    "include": ["src"]
+    "skipLibCheck": true,
+    "typeRoots": [
+      "./node_modules/lily/ts",
+      "./node_modules/@types"
+    ]
+  }
 }
