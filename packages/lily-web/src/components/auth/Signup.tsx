@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { signup } from "./util";
 
 const Login = () => {
@@ -7,7 +7,7 @@ const Login = () => {
     const [password, setPassword] = useState("sankar");
     const [fname, setFname] = useState("Sankar");
     const [lname, setLname] = useState("boro");
-    const history = useNavigate();
+    const history = useHistory();
 
     //
     return (

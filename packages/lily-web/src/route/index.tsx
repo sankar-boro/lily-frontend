@@ -1,5 +1,4 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "../components/home";
 import Login from "../components/auth/Login";
 import Signup from "../components/auth/Signup";
@@ -11,11 +10,11 @@ import AuthServiceProvider, {
 const AuthRoute = () => {
     return (
         <Router>
-            <Routes>
-                <Route path="/" element={<Home/>} />
-                    {/* <Home />
-                </Route> */}
-            </Routes>
+            <Switch>
+                <Route path="/">
+                    <Home />
+                </Route>
+            </Switch>
         </Router>
     );
 };
@@ -24,14 +23,14 @@ const AuthRoute = () => {
 const NotAuthRoute = () => {
     return (
         <Router>
-            <Routes>
-                <Route path="/signup" element={<Signup />} />
-                    {/* <Signup /> */}
-                {/* </Route> */}
-                <Route path="/" element={<Login />} />
-                    {/* <Login /> */}
-                {/* </Route> */}
-            </Routes>
+            <Switch>
+                <Route path="/signup">
+                    <Signup />
+                </Route>
+                <Route path="/">
+                    <Login />
+                </Route>
+            </Switch>
         </Router>
     );
 };

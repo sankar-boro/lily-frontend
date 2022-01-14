@@ -17,7 +17,7 @@
                         <div className="settings"></div>
                     </div>
 
-                    <Routes>
+                    <Switch>
                         <Route path="/document">
                             <ViewDocument />
                         </Route>
@@ -30,6 +30,6 @@
                         <Route path="/">
                             <HomeDocBody />
                         </Route>
-                    </Routes>
+                    </Switch>
                 </div>
             </div>

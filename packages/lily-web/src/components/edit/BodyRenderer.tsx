@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { MdHome, MdModeEdit, MdSearch, MdDelete } from 'react-icons/md';
 
 import { deleteSection, deletePage, deleteSubSection } from "./crud/delete/index";
@@ -158,7 +158,7 @@ const Body = () => {
 }
 
 const Header = () => {
-    const history: any = useNavigate();
+    const history: any = useHistory();
     const { title } = history.location.state;
 
     const goHome = () => { history.replace({ pathname: "/"})};

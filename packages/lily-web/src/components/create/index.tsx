@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { None } from "ts-results";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { sortAll } from "./util";
 import CreateBook from "../forms/CreateNewBook";
@@ -24,7 +24,7 @@ const EditBook = () => {
                 allPages: Node[];
             };
         };
-    } = useNavigate();
+    } = useHistory();
     const { location } = history;
     // const { state } = location;
     // const { title, bookId } = state.main;

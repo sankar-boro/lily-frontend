@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import Body from "./Body";
 import NavigationRenderer from "./NavigationRenderer";
@@ -11,7 +11,7 @@ const Main = () => {
     const { dispatch, apiState } = context;
     const authContext = useAuthContext();
     const { setRead } = authContext;
-    const history: any = useNavigate();
+    const history: any = useHistory();
     const { bookId } = history.location.state;
 
     const initState = () => {

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { MdHome, MdSearch } from 'react-icons/md';
 import { Node } from "../../globals/types/book";
 import { useBookContext } from "../../service/BookServiceProvider";
@@ -33,14 +33,14 @@ const Padding_H_10 = () => {
 const Divider = (props: any) => {
     const { activePage, sectionId, context, subSectionIndex } = props;
     const { identity } = activePage;
-    const history: any = useNavigate();
+    const history: any = useHistory();
     const { bookId } = context;
     const editNavigate = (e: any) => {
         e.preventDefault();
-        // history.push({
-        //     pathname: `/book/edit/${bookId}`,
-        //     state: history.location.state,
-        // });
+        history.push({
+            pathname: `/book/edit/${bookId}`,
+            state: history.location.state,
+        });
     }
     return <div className="con-20">
         <div className="li-item hover" onClick={editNavigate}>Edit</div>
@@ -97,7 +97,7 @@ const Main = (props: any) => {
 }
 
 const BodyRenderer = (props: any) => {
-    const history: any = useNavigate();
+    const history: any = useHistory();
     const { title } = history.location.state;
     const context: any = useBookContext();
     const { activePage, sectionId } = context;

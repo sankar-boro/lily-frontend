@@ -1,17 +1,17 @@
-import { useNavigate } from "react-router";
+import { useHistory } from "react-router";
 
 const Card = (props: { data: any }) => {
-    const history = useNavigate();
+    const history = useHistory();
     const { data } = props;
     return (
         <div
             className="card"
             key={data.bookId}
             onClick={() => {
-                // history({
-                //     pathname: `/book/view/${data.bookId}`,
-                //     state: data,
-                // });
+                history.push({
+                    pathname: `/book/view/${data.bookId}`,
+                    state: data,
+                });
             }}
             style={{marginRight: 25}}
         >

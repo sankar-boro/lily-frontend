@@ -3,7 +3,7 @@ import axios from "axios";
 import { textareaRows, textareaCols } from "../../globals/forms";
 import { useBookContext } from "../../service/BookServiceProvider";
 import { useFormContext } from "../../service/FormServiceProvider";
-import { useNavigate } from "react-router";
+import { useHistory } from "react-router";
 
 const submitBook = (data: any, props: any) => {
     const { history, formContext, context } = props;
@@ -59,7 +59,7 @@ const submitBook = (data: any, props: any) => {
 const Update = () => {
     const context: any = useBookContext();
     const formContext: any = useFormContext();
-    const history: any = useNavigate();
+    const history: any = useHistory();
     const { formData, bookId, dispatch } = context;
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");

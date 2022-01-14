@@ -14,7 +14,8 @@ module.exports = merge(
     devServer: {
       open: false,
       port: 3000,
-      static: path.resolve(__dirname, 'build')
+      static: path.resolve(__dirname, 'build'),
+      historyApiFallback: true,
     },
     plugins: [
       new HtmlWebpackPlugin({

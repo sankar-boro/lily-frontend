@@ -1,5 +1,4 @@
-import React from 'react';
-import { Routes, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Header from "./Header";
 import ViewBook from "../read";
 import Profile from "../profile";
@@ -13,14 +12,26 @@ const Main = () => {
         <div className="home">
             <Header />
             <div className="body">
-                <Routes>
-                    <Route path="/book/view/:bookId" element={ <ViewBook /> } />
-                    <Route path="/profile" element={ <Profile /> } />
-                    <Route path="/new/book" element={ <NewBook /> } />
-                    <Route path="/new/blog" element={ <NewBlog /> } />
-                    <Route path="/book/edit/:bookId" element={ <EditBook /> } />
-                    <Route path="/" element={<Home />} />
-                </Routes>
+                <Switch>
+                    <Route path="/book/view/:bookId">
+                        <ViewBook />
+                    </Route>
+                    <Route path="/profile">
+                        <Profile />
+                    </Route>
+                    <Route path="/new/book">
+                        <NewBook />
+                    </Route>
+                    <Route path="/new/blog">
+                        <NewBlog />
+                    </Route>
+                    <Route path="/book/edit/:bookId">
+                        <EditBook />
+                    </Route>
+                    <Route path="/">
+                        <Home />
+                    </Route>
+                </Switch>
             </div>
         </div>
     );

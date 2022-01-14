@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import BodyRenderer from "./BodyRenderer";
 import NavigationRenderer from "./NavigationRenderer";
@@ -8,7 +8,7 @@ import BookServiceProvider, { useBookContext} from "../../service/BookServicePro
 const Body = () => {
     const context = useBookContext();
     const authContext = useAuthContext();
-    const history: any = useNavigate();
+    const history: any = useHistory();
     const { dispatch, apiState } = context;
     const { setRead } = authContext;
     const { bookId } = history.location.state;
