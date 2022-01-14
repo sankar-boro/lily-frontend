@@ -1,4 +1,4 @@
-// Copyright 2017-2021 lily authors & contributors
+// Copyright 2021 @lily authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 const fs = require('fs');
@@ -24,7 +24,7 @@ module.exports = {
     '^.+\\.(js|jsx|ts|tsx)$': require.resolve('babel-jest')
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!@axia|@babel/runtime/helpers/esm/)'
+    '/node_modules/(?!@lily|@babel/runtime/helpers/esm/)'
   ],
   verbose: true
 };

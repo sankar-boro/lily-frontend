@@ -1,11 +1,11 @@
-// Copyright 2021 @lily/frontend authors & contributors
+// Copyright 2021 @lily authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 const fs = require('fs');
 const pinataSDK = require('@pinata/sdk');
 const CrustPinner = require('@crustio/crust-pin').default;
 const cloudflare = require('dnslink-cloudflare');
-const execSync = require('@axia-js/dev/scripts/execSync.cjs');
+const execSync = require('./execSync.cjs');
 
 const { createWsEndpoints } = require('../packages/apps-config/build/endpoints/index.cjs');
 const pkgJson = require('../package.json');

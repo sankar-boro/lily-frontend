@@ -8,10 +8,10 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@lily/apps/*": ["packages/apps/src/*"],
-      "@lily/apps": ["packages/apps/src"],
-      "@lily/react-components": [ "packages/react-components/src" ],
-      "@lily/react-components/*": [ "packages/react-components/src/*" ]
+      "lily-web/*": ["packages/lily-web/src/*"],
+      "lily-web": ["packages/lily-web/src"],
+      "lily-components": [ "packages/lily-components/src" ],
+      "lily-components/*": [ "packages/lily-components/src/*" ]
     },
     "skipLibCheck": true,
     "typeRoots": [

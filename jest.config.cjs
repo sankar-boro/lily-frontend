@@ -1,4 +1,4 @@
-// Copyright 2021 @lily/frontend authors & contributors
+// Copyright 2021 @lily authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 const config = require('./config/jest.cjs');
@@ -9,14 +9,14 @@ module.exports = {
   moduleNameMapper: {
     ...(
       findPackages()
-        .filter(({ name }) => !['@axia-js/apps'].includes(name))
+        .filter(({ name }) => !['lily-web'].includes(name))
         .reduce((modules, { dir, name }) => {
           modules[`${name}(.*)$`] = `<rootDir>/packages/${dir}/src/$1`;
 
           return modules;
         }, {})
     ),
-    '@axia-js/apps/(.*)$': '<rootDir>/packages/apps/src/$1',
+    'lily-web/(.*)$': '<rootDir>/packages/lily-web/src/$1',
     '\\.(css|less)$': 'empty/object',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': 'empty/object',
     '\\.(md)$': '<rootDir>/jest/mocks/empty.js'
@@ -24,5 +24,5 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest/jest-setup.ts'],
   testEnvironment: 'jsdom',
   testTimeout: 90000,
-  transformIgnorePatterns: ['/node_modules/(?!@axia|@babel/runtime/helpers/esm/|@substrate|smoldot)']
+  transformIgnorePatterns: ['/node_modules/(?!@lily|@babel/runtime/helpers/esm/|@substrate|smoldot)']
 };

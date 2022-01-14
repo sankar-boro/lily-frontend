@@ -1,4 +1,4 @@
-// Copyright 2017-2021 @axia-js/apps authors & contributors
+// Copyright 2021 @lily authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 const base = require('./config/eslint.cjs');

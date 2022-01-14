@@ -1,4 +1,4 @@
-// Copyright 2017-2021 lily authors & contributors
+// Copyright 2021 @lily authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
   includeDeclarations: false,
   module: 'commonjs',
   moduleResolution: 'node',
-  name: 'axia{.js}',
+  name: 'lily{.js}',
   out: 'docs',
   stripInternal: 'true',
   theme: 'markdown'

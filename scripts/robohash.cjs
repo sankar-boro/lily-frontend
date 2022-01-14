@@ -1,10 +1,10 @@
-// Copyright 2017-2021 @lily/react-components authors & contributors
+// Copyright 2021 @lily authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 const fs = require('fs');
 const path = require('path');
 
-const HEADER = `// Copyright 2017-2021 @lily/react-components authors & contributors
+const HEADER = `// Copyright 2021 @lily authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 // Automatically generated, do not edit`;

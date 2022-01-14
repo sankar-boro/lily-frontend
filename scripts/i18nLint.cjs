@@ -1,4 +1,4 @@
-// Copyright 2021 @lily/frontend authors & contributors
+// Copyright 2021 @lily authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 const fs = require('fs');

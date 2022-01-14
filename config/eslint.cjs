@@ -1,4 +1,4 @@
-// Copyright 2017-2021 lily authors & contributors
+// Copyright 2021 @lily authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 // ordering here important (at least from a rule maintenance pov)
@@ -60,7 +60,7 @@ module.exports = {
     'arrow-parens': ['error', 'always'],
     'default-param-last': [0], // conflicts with TS version (this one doesn't allow TS ?)
     'header/header': [2, 'line', [
-      { pattern: ' Copyright \\d{4}(-\\d{4})? @lily/' },
+      { pattern: ' Copyright \\d{4} @lily' },
       ' SPDX-License-Identifier: Apache-2.0'
     ], 2],
     'import-newlines/enforce': ['error', 2048],
@@ -110,9 +110,9 @@ module.exports = {
     'simple-import-sort/imports': [2, {
       groups: [
         ['^\u0000'], // all side-effects (0 at start)
-        ['\u0000$', '^@axia.*\u0000$', '^\\..*\u0000$'], // types (0 at end)
-        ['^[^/\\.]'], // non-axia
-        ['^@axia'], // axia
+        ['\u0000$', '^@lily.*\u0000$', '^\\..*\u0000$'], // types (0 at end)
+        ['^[^/\\.]'], // non-lily
+        ['^@lily'], // lily
         ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'] // local (. last)
       ]
     }],

@@ -1,4 +1,4 @@
-// Copyright 2017-2021 lily authors & contributors
+// Copyright 2021 @lily authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -12,11 +12,11 @@ import fs from 'fs';
 import path from 'path';
 
 function sanitizePkg (pkg) {
-  return pkg.replace('@axia-js/', '');
+  return pkg.replace('lily-web/', '');
 }
 
 function createName (input) {
-  return `axia-${sanitizePkg(input)}`
+  return `lily-${sanitizePkg(input)}`
     .toLowerCase()
     .replace(/[^a-zA-Z0-9]+(.)/g, (_, c) => c.toUpperCase());
 }
@@ -40,7 +40,7 @@ export function createOutput (_pkg, external, globals) {
   const pkg = sanitizePkg(_pkg);
 
   return {
-    file: `packages/${pkg}/build/bundle-axia-${pkg}.js`,
+    file: `packages/${pkg}/build/bundle-lily-${pkg}.js`,
     format: 'iife',
     globals: external.reduce((all, pkg) => ({
       [pkg]: createName(pkg),
